@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มข้อมูลรถยนต์</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <form action="">
+            <h2>ข้อมูลรถยนต์</h2>
+            <form action="/action_page.php">
+            <div class="input-box">
+                <label for="lname">หมายเลขทะเบียน:</label>
+                <input type="text" id="carnumber" name="carnumber" required>
+            </div>
+            <div class="input-box">
+                <label for="lname">ยี่ห้อ:</label>
+                <input type="text" id="brand" name="brand" required>
+            </div>
+            <div class="input-box">
+                <label for="lname">รุ่น:</label>
+                <input type="text" id="model" name="model" required>
+            </div>
+            <div class="input-file">
+                <label for="profile">รูปภาพ:</label>
+                <input type="file" id="carpicture" name="carpicture" required>
+            </div><br><hr><br>
+            <h2>ข้อมูลตำแหน่งที่ซ่อมแซม</h2>
+            <div class="input-box">
+                <label for="lname">รายละเอียดตำแหน่ง:</label>
+                <input type="text" id="details" name="details" required>
+            </div>
+            <div class="input-file">
+                <label for="profile">รูปภาพ:</label>
+                <input type="file" id="carpicture" name="carpicture" required>
+            </div><br><hr><br>
+            <h2>ข้อมูลพนักงานช่าง</h2>
+            <div class="input-box">
+                <label for="cars">ชื่อพนักงานช่าง:</label>
+                    <select id="cars" name="cars">
+                        <option value="" disabled selected>เลือกพนักงาน</option>
+                        <option value="Knocker">ชัยวัฒน์ บุญเนียม</option>
+                        <option value="Color">นพรัตน์ ม่านแมน</option>
+                        <option value="Mechanic">วิท ทองเจียม</option>
+                        <option value="Tires">ศรัญญา บุตรดารัตน์</option>
+            </div>
+                    </select>
+            <div class="input-box">
+                <label for="cars">แผนก:</label>
+                    <select id="cars" name="cars">
+                        <option value="" disabled selected>เลือกแผนก</option>
+                        <option value="Knocker">เคาะ</option>
+                        <option value="Color">พ่นสี</option>
+                        <option value="Mechanic">เครื่องยนต์</option>
+                        <option value="Tires">ยางและล้อ</option>
+            </div>
+                    </select><br><br>
+                <button type="submit" class="btn">บันทึก</button>
+                <button type="reset" class="reset">ยกเลิก</button>
+    
+</body>
+</html>

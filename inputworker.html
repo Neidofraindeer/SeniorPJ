@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มข้อมูลพนักงานช่าง</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <form action="">
+            <h1>เพิ่มข้อมูลพนักงานช่าง</h1>
+            <form action="/action_page.php">
+            <div class="input-box">
+                <label for="fname">ชื่อ</label><br>
+                <input type="text" placeholder="กรอกชื่อจริง" required><br>
+            </div>
+            <div class="input-box">
+                <label for="lname">นามสกุล</label><br>
+                <input type="text" placeholder="กรอกนามสกุล" required><br>
+            </div>
+            <div class="input-box">
+                <label for="lname">ชื่อเล่น</label><br>
+                <input type="text" placeholder="กรอกชื่อเล่น" required><br>
+            </div>
+            <div class="input-box">
+                <label for="lname">เบอร์โทรศัพท์</label><br>
+                <input type="text" placeholder="กรอกเบอร์โทรศัพท์" required>  
+            </div><br>
+            <div class="input-file">
+                <label for="profile">รูปภาพ</label>
+                <input type="file" id="profile" name="profile" required>
+            </div>
+            <div class="input-box">
+                <label for="department">แผนก</label>
+                    <select id="department" name="department">
+                        <option value="" disabled selected>เลือกแผนก</option>
+                        <option value="Knocker">เคาะ</option>
+                        <option value="Color">พ่นสี</option>
+                        <option value="Mechanic">เครื่องยนต์</option>
+                        <option value="Tires">ยางและล้อ</option>
+            </div>
+                    </select><br><br>
+                <button type="submit" class="btn">บันทึก</button>
+                <button type="reset" class="reset">ยกเลิก</button>
+              </form>
+
+        </form>
+    </div>
+    
+</body>
+</html>
