@@ -22,7 +22,11 @@
                 <li>ประวัติการซ่อมแซม</li>
             </ul>
         </div>
-        <div class="logout">ออกจากระบบ</div>
+            <ul><br>
+                <li>การตั้งค่า</li>
+                <li>ออกจากระบบ</li>
+            </ul>
+        
     </div>
 
     <!-- Content -->

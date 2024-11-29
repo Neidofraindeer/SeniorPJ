@@ -55,19 +55,6 @@ body {
     text-decoration: underline;
 }
 
-.logout {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    color: white;
-    opacity: 0.8;
-}
-
-.logout:hover {
-    opacity: 1;
-}
-
 /* Content */
 .content {
     flex: 1;
@@ -107,11 +94,11 @@ body {
     margin-right: 10px;
 }
 
-.search-bar button:hover {
-    background-color: #45a049;
+.btn-search:hover {
+    background-color: #3474ea;
 }
 .btn-add {
-    background-color: #32CD32; /* สีเขียว */
+    background-color: #4CAF50; /* สีเขียว */
     color: white;
     padding: 10px 20px;
     border: none;
