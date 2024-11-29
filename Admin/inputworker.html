@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เพิ่มข้อมูลพนักงานช่าง</title>
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="style/style1.css">
 </head>
 
 <body>
     <div class="wrapper">
         <form action="">
             <h1>เพิ่มข้อมูลพนักงานช่าง</h1>
-            <form action="/action_page.php">
+            <form action="/action_page.php"><br>
+            <div class="input-file">
+                <label for="profile">รูปภาพ</label><br>
+                <input type="file" id="profile" name="profile" required>
+            </div>
             <div class="input-box">
                 <label for="fname">ชื่อ</label><br>
                 <input type="text" placeholder="กรอกชื่อจริง" required><br>
@@ -27,10 +31,6 @@
             <div class="input-box">
                 <label for="lname">เบอร์โทรศัพท์</label><br>
                 <input type="text" placeholder="กรอกเบอร์โทรศัพท์" required>  
-            </div><br>
-            <div class="input-file">
-                <label for="profile">รูปภาพ</label>
-                <input type="file" id="profile" name="profile" required>
             </div>
             <div class="input-box">
                 <label for="department">แผนก</label>
