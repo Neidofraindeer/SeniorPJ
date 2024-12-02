@@ -3,52 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เพิ่มข้อมูลพนักงานช่าง</title>
+    <title>เพิ่มข้อมูลผู้ใช้งาน</title>
     <link rel="stylesheet" href="style/style1.css">
 </head>
-
 <body>
-    <div class="wrapper">
-        <form action="">
-            <h1>เพิ่มข้อมูลพนักงานช่าง</h1>
-            <form action="/action_page.php"><br>
-            <div class="input-file">
-                <label for="profile">รูปภาพ</label><br>
-                <input type="file" id="profile" name="profile" required>
+    <div class="form-title">
+        <a onclick="document.location='mainpage.php'" class="back-link">&lt;  </a>
+        <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
+    </div>
+    <div class="form-container">
+        <form action="process.php" method="post" enctype="multipart/form-data"><br>
+            <div class="form-group">
+                <label for="photo">รูป:</label>
+                <input type="file" id="photo" name="photo">
             </div>
-            <div class="input-box">
-                <label for="fname">ชื่อ</label><br>
-                <input type="text" placeholder="กรอกชื่อจริง" required><br>
+            <div class="form-group">
+                <label for="first_name">ชื่อ:</label>
+                <input type="text" id="first_name" name="first_name" required>
             </div>
-            <div class="input-box">
-                <label for="lname">นามสกุล</label><br>
-                <input type="text" placeholder="กรอกนามสกุล" required><br>
+            <div class="form-group">
+                <label for="last_name">นามสกุล:</label>
+                <input type="text" id="last_name" name="last_name" required>
             </div>
-            <div class="input-box">
-                <label for="lname">ชื่อเล่น</label><br>
-                <input type="text" placeholder="กรอกชื่อเล่น" required><br>
+            <div class="form-group">
+                <label for="nickname">ชื่อเล่น:</label>
+                <input type="text" id="nickname" name="nickname">
             </div>
-            <div class="input-box">
-                <label for="lname">เบอร์โทรศัพท์</label><br>
-                <input type="text" placeholder="กรอกเบอร์โทรศัพท์" required>  
+            <div class="form-group">
+                <label for="phone">เบอร์โทร:</label>
+                <input type="text" id="phone" name="phone" required>
             </div>
-            <div class="input-box">
-                <label for="department">แผนก</label>
-                    <select id="department" name="department">
-                        <option value="" disabled selected>เลือกแผนก</option>
-                        <option value="Knocker">เคาะ</option>
-                        <option value="Color">พ่นสี</option>
-                        <option value="Mechanic">เครื่องยนต์</option>
-                        <option value="Tires">ยางและล้อ</option>
-                    
+            <div class="form-group">
+                <label for="department">แผนก:</label>
+                <select id="department" name="department">
+                    <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
+                    <option value="พนักงานออฟฟิศ">พนักงานออฟฟิศ</option>
+                    <option value="เครื่องยนต์">เครื่องยนต์</option>
+                    <option value="เคาะ">เคาะ</option>
+                    <option value="สี">สี</option>
+                    <option value="ประกอบ">ประกอบ</option>
+                </select>
             </div>
-                    </select><br><br>
-                <button type="submit" class="btn">บันทึก</button>
-                <button type="reset" class="reset">ยกเลิก</button>
-              </form>
-
+            <div class="form-group">
+                <label for="username">ชื่อผู้ใช้:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">รหัสผ่าน:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-actions"><br>
+                <button type="submit" class="btn-save">บันทึก</button>
+                <button type="reset" class="btn-cancel">ยกเลิก</button>
+            </div>
         </form>
     </div>
-    
 </body>
 </html>
