@@ -201,10 +201,10 @@ td {
             </div>
             <ul><br>
                 <li>การแจ้งเตือน</li>
-                <li>ข้อมูลผู้ใช้งาน</li>
-                <li>ติดตามผล</li>
-                <li>รายงานอนุมัติ</li>
-                <li>ประวัติการซ่อมแซม</li>
+                <li onclick="document.location='Ad-user.html'">ข้อมูลผู้ใช้งาน</li>
+                <li onclick="document.location='Ad-status.html'">ติดตามผล</li>
+                <li onclick="document.location='Ad-approve.html'">รายงานอนุมัติ</li>
+                <li onclick="document.location='Ad-history.html'">ประวัติการซ่อมแซม</li>
             </ul>
         </div>
             <ul><br>
@@ -222,7 +222,7 @@ td {
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
             <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='inputcar.html'">เพิ่มรายการ</button>
+            <button class="btn-add" onclick="document.location='Ad-inputcar.html'">เพิ่มรายการ</button>
         </div>
         <!-- Table -->
         <table>
@@ -250,6 +250,29 @@ td {
                     </td>
                 </tr>
                 <tr>
+                    <td>21-03-2567</td>
+                    <td>0002</td>
+                    <td>Mitsubishi</td>
+                    <td>กข 1234 กท</td>
+                    <td>ช่าง B</td>
+                    <td><div class="status-container">
+                        <span class="status-approved">อนุมัติ</span>
+                        <label for="option1" class="label-options">...</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>21-03-2567</td>
+                    <td>0002</td>
+                    <td>Mitsubishi</td>
+                    <td>กข 1234 กท</td>
+                    <td>ช่าง B</td>
+                    <td><div class="status-container">
+                        <span class="status-approved">อนุมัติ</span>
+                        <label for="option1" class="label-options">...</label>
+                        </div>
+                    </td>
+                </tr><tr>
                     <td>21-03-2567</td>
                     <td>0002</td>
                     <td>Mitsubishi</td>
