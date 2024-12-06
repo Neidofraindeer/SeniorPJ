@@ -4,8 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เพิ่มข้อมูลรถยนต์</title>
-    <link rel="stylesheet" href="style/style2.css">
 </head>
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif; /* นำเข้า font จาก Google Fonts */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #835EB7; /* สีพื้นหลัง */
+    color: #333; /* สีข้อความทั่วไป */
+}
+
+.wrapper {
+    width: 90%; /* กำหนดความกว้างของ wrapper */
+    max-width: 800px; /* กำหนดความกว้างสูงสุดของ wrapper */
+    background: #fff; /* สีพื้นหลังของ wrapper */
+    border-radius: 10px;
+    padding: 30px;
+    margin: 30px auto; /* จัดให้ wrapper อยู่กึ่งกลางทั้งแนวนอนและแนวตั้ง */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* เงาของ wrapper */
+}
+
+.wrapper h2 {
+    font-size: 24px; /* ขนาดตัวอักษรของหัวข้อระดับ 2 */
+    margin-bottom: 20px; /* ระยะห่างด้านล่างของหัวข้อ */
+}
+
+.input-box {
+    margin-bottom: 20px; /* ระยะห่างด้านล่างของ input box */
+}
+
+.input-box label {
+    font-weight: bold; /* ตัวหนาของข้อความ label */
+    display: block; /* แสดงเป็น block element เพื่อให้ label ขึ้นบรรทัดใหม่ */
+    margin-bottom: 5px; /* ระยะห่างด้านล่างของ label */
+}
+
+.input-box :where(input, select) {
+    width: 100%; /* ทำให้ input และ select ขยายตัวเต็มขอบเขตของ input-box */
+    padding: 10px; /* การระดับ input และ select */
+    font-size: 16px; /* ขนาดตัวอักษรของ input และ select */
+    border: 1px solid #ccc; /* ช่องของกล่องข้อความ */
+    border-radius: 5px;
+}
+.wrapper .btn {
+    width: 30%;
+    height: 30px;
+    background: #1daf1b;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color:#fff;
+    font-weight: 600;
+}
+
+.wrapper .reset {
+    width: 30%;
+    height: 30px;
+    background: #ff0000;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color:#fff;
+    font-weight: 600;
+}
+</style>
 <body>
     <div class="wrapper">
         <form action="">
