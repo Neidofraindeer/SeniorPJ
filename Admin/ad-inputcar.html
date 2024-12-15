@@ -3,140 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เพิ่มข้อมูลรถยนต์</title>
+    <title>เพิ่มรายการ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        /* กรอปหัวข้อฟอร์ม */
+        .form-title{
+            width: 100%;
+            height: 35px;
+            padding: 10px;
+        }
+        /* หัวข้อฟอร์ม */
+        .form-title .head {
+            color: #835EB7; 
+            font-size: 24px;
+        }
+
+        /* < กลับ */
+        .form-title .back-link{
+            color: #90879c;
+            font-size: 24px;
+            font-style: oblique;
+        }
+        .header {
+            font-size: 24px;
+            color: #5A47AB;
+            margin-bottom: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        .form-section h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            width: 150px;
+            font-size: 14px;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group textarea {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: none;
+            height: 80px;
+        }
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .form-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .form-buttons .btn-save {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .form-buttons .btn-save:hover {
+            background-color: #45a049;
+        }
+        .form-buttons .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+        .form-buttons .btn-cancel:hover {
+            background-color: #e53935;
+        }
+    </style>
 </head>
-<style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif; /* นำเข้า font จาก Google Fonts */
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #835EB7; /* สีพื้นหลัง */
-    color: #333; /* สีข้อความทั่วไป */
-}
-
-.wrapper {
-    width: 90%; /* กำหนดความกว้างของ wrapper */
-    max-width: 800px; /* กำหนดความกว้างสูงสุดของ wrapper */
-    background: #fff; /* สีพื้นหลังของ wrapper */
-    border-radius: 10px;
-    padding: 30px;
-    margin: 30px auto; /* จัดให้ wrapper อยู่กึ่งกลางทั้งแนวนอนและแนวตั้ง */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* เงาของ wrapper */
-}
-
-.wrapper h2 {
-    font-size: 24px; /* ขนาดตัวอักษรของหัวข้อระดับ 2 */
-    margin-bottom: 20px; /* ระยะห่างด้านล่างของหัวข้อ */
-}
-
-.input-box {
-    margin-bottom: 20px; /* ระยะห่างด้านล่างของ input box */
-}
-
-.input-box label {
-    font-weight: bold; /* ตัวหนาของข้อความ label */
-    display: block; /* แสดงเป็น block element เพื่อให้ label ขึ้นบรรทัดใหม่ */
-    margin-bottom: 5px; /* ระยะห่างด้านล่างของ label */
-}
-
-.input-box :where(input, select) {
-    width: 100%; /* ทำให้ input และ select ขยายตัวเต็มขอบเขตของ input-box */
-    padding: 10px; /* การระดับ input และ select */
-    font-size: 16px; /* ขนาดตัวอักษรของ input และ select */
-    border: 1px solid #ccc; /* ช่องของกล่องข้อความ */
-    border-radius: 5px;
-}
-.wrapper .btn {
-    width: 30%;
-    height: 30px;
-    background: #1daf1b;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-    cursor: pointer;
-    font-size: 16px;
-    color:#fff;
-    font-weight: 600;
-}
-
-.wrapper .reset {
-    width: 30%;
-    height: 30px;
-    background: #ff0000;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-    cursor: pointer;
-    font-size: 16px;
-    color:#fff;
-    font-weight: 600;
-}
-</style>
 <body>
-    <div class="wrapper">
-        <form action="">
-            <h2>ข้อมูลรถยนต์</h2>
-            <form action="/action_page.php">
-            <div class="input-box">
-                <label for="lname">หมายเลขทะเบียน:</label>
-                <input type="text" id="carnumber" name="carnumber" required>
-            </div>
-            <div class="input-box">
-                <label for="lname">ยี่ห้อ:</label>
-                <input type="text" id="brand" name="brand" required>
-            </div>
-            <div class="input-box">
-                <label for="lname">รุ่น:</label>
-                <input type="text" id="model" name="model" required>
-            </div>
-            <div class="input-file">
-                <label for="profile">รูปภาพ:</label>
-                <input type="file" id="carpicture" name="carpicture" required>
-            </div><br><hr><br>
-            <h2>ข้อมูลตำแหน่งที่ซ่อมแซม</h2>
-            <div class="input-box">
-                <label for="lname">รายละเอียดตำแหน่ง:</label>
-                <input type="text" id="details" name="details" required>
-            </div>
-            <div class="input-file">
-                <label for="profile">รูปภาพ:</label>
-                <input type="file" id="carpicture" name="carpicture" required>
-            </div><br><hr><br>
-            <h2>ข้อมูลพนักงานช่าง</h2>
-            <div class="input-box">
-                <label for="cars">ชื่อพนักงานช่าง:</label>
-                    <select id="cars" name="cars">
-                        <option value="" disabled selected>เลือกพนักงาน</option>
-                        <option value="Knocker">ชัยวัฒน์ บุญเนียม</option>
-                        <option value="Color">นพรัตน์ ม่านแมน</option>
-                        <option value="Mechanic">วิท ทองเจียม</option>
-                        <option value="Tires">ศรัญญา บุตรดารัตน์</option>
-            </div>
-                    </select>
-            <div class="input-box">
-                <label for="cars">แผนก:</label>
-                    <select id="cars" name="cars">
-                        <option value="" disabled selected>เลือกแผนก</option>
-                        <option value="Knocker">เคาะ</option>
-                        <option value="Color">พ่นสี</option>
-                        <option value="Mechanic">เครื่องยนต์</option>
-                        <option value="Tires">ยางและล้อ</option>
-            </div>
-                    </select><br><br>
-                <button type="submit" class="btn">บันทึก</button>
-                <button type="reset" class="reset">ยกเลิก</button>
     
+    <div class="container">
+        <div class="form-title">
+            <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt; </a>
+            <a class="head"> เพิ่มรายการ</a>
+        </div>
+        <form>
+            <!-- ข้อมูลรถยนต์ -->
+            <div class="form-section">
+                <h3>ข้อมูลรถยนต์</h3>
+                <div class="form-group">
+                    <label for="photo">รูป:</label>
+                    <input type="file" id="photo" name="photo">
+                </div>
+                <div class="form-group">
+                    <label>หมายเลขทะเบียน:</label>
+                    <input type="text" placeholder="กรอกหมายเลขทะเบียน">
+                </div>
+                <div class="form-group">
+                    <label>ยี่ห้อ:</label>
+                    <input type="text" placeholder="กรอกยี่ห้อ">
+                </div>
+                <div class="form-group">
+                    <label>รุ่น:</label>
+                    <input type="text" placeholder="กรอกรุ่น">
+                </div>
+            </div>
+
+            <!-- ข้อมูลตำแหน่งซ่อมแซม -->
+            <div class="form-section">
+                <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
+                <div class="form-group">
+                    <label for="photo">รูป:</label>
+                    <input type="file" id="photo" name="photo">
+                </div>
+                <div class="form-group">
+                    <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
+                    <textarea placeholder="กรอกรายละเอียดตำแหน่งที่ซ่อมแซม"></textarea>
+                </div>
+            </div>
+
+            <!-- ข้อมูลพนักงานช่าง -->
+            <div class="form-section">
+                <h3>ข้อมูลพนักงานช่าง</h3>
+                <div class="form-group">
+                    <label>ชื่อพนักงานช่าง:</label>
+                    <select>
+                        <option value="">-- เลือกพนักงานช่าง --</option>
+                        <option value="1">พนักงานช่าง 1</option>
+                        <option value="2">พนักงานช่าง 2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>แผนก:</label>
+                    <select>
+                        <option value="">-- เลือกแผนก --</option>
+                        <option value="A">แผนก A</option>
+                        <option value="B">แผนก B</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ปุ่มบันทึกและยกเลิก -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">บันทึก</button>
+                <button type="button" class="btn-cancel">ยกเลิก</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
