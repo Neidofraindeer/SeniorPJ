@@ -201,8 +201,8 @@ td {
             </div>
             <ul><br>
                 <li>การแจ้งเตือน</li>
-                <li>ข้อมูลพนักงานช่าง</li>
-                <li>ติดตามผล</li>
+                <li>ข้อมูลผู้ใช้งาน</li>
+                <li>ติดตามสถานะ</li>
                 <li>ประวัติการซ่อมแซม</li>
             </ul>
         </div>
@@ -220,7 +220,7 @@ td {
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
             <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='inputcar.html'">เพิ่มรายการ</button>
+            <button class="btn-add" onclick="document.location='Of-inputcar.html'">เพิ่มรายการ</button>
         </div>
         <!-- Table -->
         <table>

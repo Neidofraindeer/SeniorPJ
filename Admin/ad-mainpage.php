@@ -202,7 +202,7 @@ td {
             <ul><br>
                 <li>การแจ้งเตือน</li>
                 <li onclick="document.location='Ad-user.html'">ข้อมูลผู้ใช้งาน</li>
-                <li onclick="document.location='Ad-status.html'">ติดตามผล</li>
+                <li onclick="document.location='Ad-status.html'">ติดตามสถานะ</li>
                 <li onclick="document.location='Ad-approve.html'">รายงานอนุมัติ</li>
                 <li onclick="document.location='Ad-history.html'">ประวัติการซ่อมแซม</li>
             </ul>
