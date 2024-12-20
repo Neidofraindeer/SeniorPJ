@@ -92,6 +92,7 @@ th, td {
 th {
     background-color:  #835eb7;
     color: white;
+    text-align: center;
 }
 
 td {
@@ -108,7 +109,7 @@ td {
     font-weight: bold;
 }
 .btn {
-     background-color: #6495ED; 
+    background-color: #6495ED; 
     color: white;
     padding: 7px 20px;
     border: none;
@@ -133,6 +134,7 @@ td {
             </div>
         </div>
             <ul><br>
+                <li onclick="document.location='Mc-history.html'">ประวัติการซ่อมแซม</li>
                 <li>การแจ้งเตือน</li>
                 <li>การตั้งค่า</li>
                 <li>ออกจากระบบ</li>
@@ -146,7 +148,7 @@ td {
         <!-- Table -->
         <table>
             <thead>
-                <tr>
+                <tr class="main">
                     <th>วันที่</th>
                     <th>รหัส</th>
                     <th>ยี่ห้อ</th>

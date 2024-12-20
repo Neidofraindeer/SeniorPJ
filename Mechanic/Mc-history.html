@@ -29,13 +29,27 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 10px;
         }
-        .search-bar input[type="text"] {
+        .search-bar input[type="text"]{
             width: 70%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+        .search-bar input[type="date"]{
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #726b7c;
+        }
+
+        .search-bar label {
+            align-items: center;
+            white-space: nowrap;
+            color: #646168;
+        }
+
         .btn-search {
             background-color: #6495ED; /* สีน้ำเงิน */
             color: white;
@@ -44,22 +58,10 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin-right: 150px;
+            margin-right: 10px;
         }   
         .btn-search:hover {
             background-color: #3474ea;
-        }
-        .btn-add {
-            background-color: #4CAF50; /* สีเขียว */
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .btn-add:hover {
-            background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
         }
         table {
             width: 100%;
@@ -109,20 +111,26 @@
 <body>
     <div class="container">
         <div class="form-title">
-            <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt;  </a>
-            <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
+            <a onclick="document.location='Mc-mainpage.php'" class="back-link">&lt;  </a>
+            <a class="head"> ประวัติการซ่อมแซ่ม</a>
         </div><br>
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
+            <label for="start-date"> วันที่: </label>
+            <input type="date" id="start-date">
+            <label for="end-date"> ถึง: </label>
+            <input type="date" id="end-date">
             <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='Ad-inputuser.html'">เพิ่มรายการ</button>
         </div>
         <table>
             <thead>
                 <tr>
+                    <th>วันที่สำเร็จ</th>
                     <th>รหัส</th>
-                    <th>รายการพนักงานช่าง</th>
-                    <th>แผนก</th>
+                    <th>วันที่มอบหมาย</th>
+                    <th>ยี่ห้อ</th>
+                    <th>ทะเบียนรถ</th>
+        
                 </tr>
             </thead>
             <tbody>

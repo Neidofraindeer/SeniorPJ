@@ -137,6 +137,7 @@ th, td {
 th {
     background-color:  #835eb7;
     color: white;
+    text-align: center;
 }
 
 td {
