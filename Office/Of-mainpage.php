@@ -201,8 +201,8 @@ td {
             </div>
             <ul><br>
                 <li>การแจ้งเตือน</li>
-                <li>ข้อมูลผู้ใช้งาน</li>
-                <li>ติดตามสถานะ</li>
+                <li onclick="document.location='Of-user.html'">ข้อมูลผู้ใช้งาน</li>
+                <li onclick="document.location='Of-status.html'">ติดตามสถานะ</li>
                 <li>ประวัติการซ่อมแซม</li>
             </ul>
         </div>
