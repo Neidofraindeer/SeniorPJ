@@ -102,7 +102,7 @@ body {
 </style>
 <body>
     <div class="form-title">
-        <a onclick="document.location='Ad-user.html'" class="back-link">&lt; </a>
+        <a onclick="document.location='Ad-user.php'" class="back-link">&lt; </a>
         <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
     </div>
     <div class="form-container">

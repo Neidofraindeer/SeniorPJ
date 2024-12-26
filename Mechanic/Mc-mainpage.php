@@ -134,7 +134,7 @@ td {
             </div>
         </div>
             <ul><br>
-                <li onclick="document.location='Mc-history.html'">ประวัติการซ่อมแซม</li>
+                <li onclick="document.location='Mc-history.php'">ประวัติการซ่อมแซม</li>
                 <li>การแจ้งเตือน</li>
                 <li>การตั้งค่า</li>
                 <li>ออกจากระบบ</li>

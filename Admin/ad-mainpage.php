@@ -202,10 +202,10 @@ td {
             </div>
             <ul><br>
                 <li>การแจ้งเตือน</li>
-                <li onclick="document.location='Ad-user.html'">ข้อมูลผู้ใช้งาน</li>
-                <li onclick="document.location='Ad-status.html'">ติดตามสถานะ</li>
-                <li onclick="document.location='Ad-approve.html'">รายงานอนุมัติ</li>
-                <li onclick="document.location='Ad-history.html'">ประวัติการซ่อมแซม</li>
+                <li onclick="document.location='Ad-user.php'">ข้อมูลผู้ใช้งาน</li>
+                <li onclick="document.location='Ad-status.php'">ติดตามสถานะ</li>
+                <li onclick="document.location='Ad-approve.php'">รายงานอนุมัติ</li>
+                <li onclick="document.location='Ad-history.php'">ประวัติการซ่อมแซม</li>
             </ul>
         </div>
             <ul><br>
@@ -223,7 +223,7 @@ td {
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
             <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='Ad-inputcar.html'">เพิ่มรายการ</button>
+            <button class="btn-add" onclick="document.location='Ad-inputcar.php'">เพิ่มรายการ</button>
         </div>
         <!-- Table -->
         <table>

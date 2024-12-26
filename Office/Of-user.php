@@ -115,7 +115,7 @@
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
             <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='Of-inputuser.html'">เพิ่มรายการ</button>
+            <button class="btn-add" onclick="document.location='Of-inputuser.php'">เพิ่มรายการ</button>
         </div>
         <table>
             <thead>
