@@ -205,6 +205,7 @@ td {
                 <li onclick="document.location='Of-user.html'">ข้อมูลผู้ใช้งาน</li>
                 <li onclick="document.location='Of-status.html'">ติดตามสถานะ</li>
                 <li onclick="document.location='Of-history.html'">ประวัติการซ่อมแซม</li>
+                <li onclick="document.location='Of-confirm.html'">ยืนยันซ่อมเสร็จ</li>
             </ul>
         </div>
             <ul><br>
