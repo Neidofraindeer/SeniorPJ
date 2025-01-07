@@ -102,34 +102,35 @@ body {
 </style>
 <body>
     <div class="form-title">
-        <a onclick="document.location='Ad-user.php'" class="back-link">&lt; </a>
+        <a onclick="document.location='Of-user.php'" class="back-link">&lt; </a>
         <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
     </div>
     <div class="form-container">
         <form action="process.php" method="post" enctype="multipart/form-data"><br>
             <div class="form-group">
                 <label for="photo">รูป:</label>
-                <input type="file" id="photo" name="photo">
+                <input type="file" id="photo" name="User_Picture">
             </div>
             <div class="form-group">
                 <label for="first_name">ชื่อ:</label>
-                <input type="text" id="first_name" name="first_name" required>
+                <input type="text" id="first_name" name="User_Firstname" required>
             </div>
             <div class="form-group">
                 <label for="last_name">นามสกุล:</label>
-                <input type="text" id="last_name" name="last_name" required>
+                <input type="text" id="last_name" name="User_Lastname	" required>
             </div>
             <div class="form-group">
                 <label for="nickname">ชื่อเล่น:</label>
-                <input type="text" id="nickname" name="nickname">
+                <input type="text" id="nickname" name="User_Nickname">
             </div>
             <div class="form-group">
                 <label for="phone">เบอร์โทร:</label>
-                <input type="text" id="phone" name="phone" required>
+                <input type="text" id="phone" name="User_Tel" required>
             </div>
             <div class="form-group">
                 <label for="department">แผนก:</label>
-                <select id="department" name="department">
+                <select id="department" name="Department_Name">
+                    <option value="">-- เลือกแผนก --</option>
                     <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
                     <option value="พนักงานออฟฟิศ">พนักงานออฟฟิศ</option>
                     <option value="เครื่องยนต์">พนักงานช่างเครื่องยนต์</option>
@@ -140,12 +141,15 @@ body {
             </div>
             <div class="form-group">
                 <label for="username">ชื่อผู้ใช้:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="Username" required>
             </div>
             <div class="form-group">
                 <label for="password">รหัสผ่าน:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="Password" required>
             </div>
+            
+        /* ยศในการเข้าหน้าpage */
+
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>
                 <button type="reset" class="btn-cancel">ยกเลิก</button>

@@ -120,19 +120,27 @@
                 <h3>ข้อมูลรถยนต์</h3>
                 <div class="form-group">
                     <label for="photo">รูป:</label>
-                    <input type="file" id="photo" name="photo">
+                    <input type="file" id="photo" name="CarPicture">
                 </div>
                 <div class="form-group">
                     <label>หมายเลขทะเบียน:</label>
-                    <input type="text" placeholder="กรอกหมายเลขทะเบียน">
+                    <input type="text" name="CarNumber" placeholder="กรอกหมายเลขทะเบียน">
                 </div>
                 <div class="form-group">
                     <label>ยี่ห้อ:</label>
-                    <input type="text" placeholder="กรอกยี่ห้อ">
+                    <input type="text" name="CarBrand" placeholder="กรอกยี่ห้อ">
                 </div>
                 <div class="form-group">
                     <label>รุ่น:</label>
-                    <input type="text" placeholder="กรอกรุ่น">
+                    <input type="text" name="CarModel" placeholder="กรอกรุ่น">
+                </div>
+                <div class="form-group">
+                    <label>สีรถ:</label>
+                    <input type="text" name="CarColor" placeholder="กรอกสี">
+                </div>
+                <div class="form-group">
+                    <label>บริษัทประกัน:</label>
+                    <input type="text" name="CarInsurance" placeholder="กรอกบริษัทประกัน">
                 </div>
             </div>
 
@@ -141,11 +149,11 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="photo">รูป:</label>
-                    <input type="file" id="photo" name="photo">
+                    <input type="file" id="photo" name="RepairPicture">
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
-                    <textarea placeholder="กรอกรายละเอียดตำแหน่งที่ซ่อมแซม"></textarea>
+                    <textarea name="CarDetail" placeholder="กรอกรายละเอียดตำแหน่งที่ซ่อมแซม"></textarea>
                 </div>
             </div>
 
@@ -154,7 +162,7 @@
                 <h3>ข้อมูลพนักงานช่าง</h3>
                 <div class="form-group">
                     <label>ชื่อพนักงานช่าง:</label>
-                    <select>
+                    <select >
                         <option value="">-- เลือกพนักงานช่าง --</option>
                         <option value="1">พนักงานช่าง 1</option>
                         <option value="2">พนักงานช่าง 2</option>
@@ -162,10 +170,14 @@
                 </div>
                 <div class="form-group">
                     <label>แผนก:</label>
-                    <select>
-                        <option value="">-- เลือกแผนก --</option>
-                        <option value="A">แผนก A</option>
-                        <option value="B">แผนก B</option>
+                    <select name="Department_Name">
+                    <option value="">-- เลือกแผนก --</option>
+                    <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
+                    <option value="พนักงานออฟฟิศ">พนักงานออฟฟิศ</option>
+                    <option value="เครื่องยนต์">พนักงานช่างเครื่องยนต์</option>
+                    <option value="เคาะ">พนักงานช่างเคาะ</option>
+                    <option value="สี">พนักงานช่างสี</option>
+                    <option value="ประกอบ">พนักงานช่างประกอบ</option>
                     </select>
                 </div>
             </div>
