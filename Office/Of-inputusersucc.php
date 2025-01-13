@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
     $password = password_hash($_POST['Password'], PASSWORD_BCRYPT);
 
     // จัดการอัปโหลดรูปภาพ
-    $target_dir = "uploads/"; // กำหนดโฟลเดอร์ที่จะเก็บไฟล์
+    $target_dir = "../uploads/"; // กำหนดโฟลเดอร์ที่จะเก็บไฟล์
     $target_file = $target_dir . basename($_FILES['User_Picture']['name']); // เก็บตำแหน่งไฟล์ที่อัปโหลด
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION)); // เช็คประเภทไฟล์
 

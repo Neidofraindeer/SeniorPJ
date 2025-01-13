@@ -34,7 +34,6 @@ $total_pages = ceil($total_records / $limit);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ข้อมูลผู้ใช้งาน</title>
     <style>
-        /* สไตล์เหมือนเดิม */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -75,7 +74,7 @@ $total_pages = ceil($total_records / $limit);
             font-size: 16px;
             cursor: pointer;
             margin-right: 150px;
-        }
+        }   
         .btn-search:hover {
             background-color: #3474ea;
         }
@@ -115,6 +114,25 @@ $total_pages = ceil($total_records / $limit);
         .actions button:hover {
             background-color: #ccc;
         }
+        /* กรอปหัวข้อฟอร์ม */
+        .form-title{
+            width: 100%;
+            height: 35px;
+            padding: 10px;
+        }
+        /* หัวข้อฟอร์ม */
+        .form-title .head {
+            width: 90%;
+            color: #835eb7; 
+            font-size: 24px;
+        }
+
+        /* < กลับ */
+        .form-title .back-link{
+            color: #90879c;
+            font-size: 24px;
+            font-style: oblique;
+        }
         .pagination {
             display: flex;
             justify-content: center;
@@ -134,7 +152,7 @@ $total_pages = ceil($total_records / $limit);
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <div class="form-title">
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
             <a class="head">ข้อมูลผู้ใช้งาน</a>
@@ -148,7 +166,8 @@ $total_pages = ceil($total_records / $limit);
             <thead>
                 <tr>
                     <th>รหัส</th>
-                    <th>ชื่อผู้ใช้งาน</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
                     <th>แผนก</th>
                 </tr>
             </thead>
@@ -159,7 +178,8 @@ $total_pages = ceil($total_records / $limit);
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>
                                 <td>" . $row['User_ID'] . "</td>
-                                <td>" . $row['User_Firstname'] . " " . $row['User_Lastname'] . "</td>
+                                <td>" . $row['User_Firstname'] . "</td>
+                                <td>" . $row['User_Lastname'] . "</td>
                                 <td>" . $row['Department_Name'] . "</td>
                               </tr>";
                     }
