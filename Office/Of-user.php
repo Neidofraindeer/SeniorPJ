@@ -1,3 +1,32 @@
+<?php
+require '../conn.php'; // เชื่อมต่อกับฐานข้อมูล
+
+// กำหนดจำนวนแถวที่แสดงในแต่ละหน้า
+$limit = 10;
+
+// ตรวจสอบว่า URL มีค่า `page` หรือไม่
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // ถ้าไม่มีให้เริ่มที่หน้า 1
+
+// คำนวณตำแหน่งเริ่มต้น
+$start = ($page - 1) * $limit;
+
+// ดึงข้อมูลผู้ใช้จาก tb_user และแผนกจาก tb_department พร้อมกับ LIMIT
+$sql = "SELECT u.User_ID, u.User_Firstname, u.User_Lastname, d.Department_Name 
+        FROM tb_user u
+        LEFT JOIN tb_department d ON u.Department_ID = d.Department_ID
+        LIMIT $start, $limit";
+
+$result = $conn->query($sql); // ดำเนินการ query
+
+// คำนวณจำนวนหน้า
+$count_sql = "SELECT COUNT(*) AS total FROM tb_user";
+$count_result = $conn->query($count_sql);
+$row = $count_result->fetch_assoc();
+$total_records = $row['total'];
+$total_pages = ceil($total_records / $limit);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +34,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ข้อมูลผู้ใช้งาน</title>
     <style>
+        /* สไตล์เหมือนเดิม */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -45,7 +75,7 @@
             font-size: 16px;
             cursor: pointer;
             margin-right: 150px;
-        }   
+        }
         .btn-search:hover {
             background-color: #3474ea;
         }
@@ -85,24 +115,21 @@
         .actions button:hover {
             background-color: #ccc;
         }
-        /* กรอปหัวข้อฟอร์ม */
-        .form-title{
-            width: 100%;
-            height: 35px;
-            padding: 10px;
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
-        /* หัวข้อฟอร์ม */
-        .form-title .head {
-            width: 90%;
-            color: #835eb7; 
-            font-size: 24px;
+        .pagination a {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #6495ED;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
         }
-
-        /* < กลับ */
-        .form-title .back-link{
-            color: #90879c;
-            font-size: 24px;
-            font-style: oblique;
+        .pagination a:hover {
+            background-color: #3474ea;
         }
     </style>
 </head>
@@ -110,7 +137,7 @@
     <div class="container">
         <div class="form-title">
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
-            <a class="head">เพิ่มข้อมูลผู้ใช้งาน</a>
+            <a class="head">ข้อมูลผู้ใช้งาน</a>
         </div><br>
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
@@ -121,38 +148,46 @@
             <thead>
                 <tr>
                     <th>รหัส</th>
-                    <th>รายการพนักงานช่าง</th>
+                    <th>ชื่อผู้ใช้งาน</th>
                     <th>แผนก</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก A</td>
-                </tr>
-                <tr>
-                    <td>000002</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก B</td>
-                </tr>
-                <tr>
-                    <td>000003</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก C</td>
-                </tr>
-                <tr>
-                    <td>000004</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก D</td>
-                </tr>
-                <tr>
-                    <td>000004</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก D</td>
-                </tr>
+                <?php
+                if ($result->num_rows > 0) {
+                    // แสดงข้อมูลในตาราง
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>" . $row['User_ID'] . "</td>
+                                <td>" . $row['User_Firstname'] . " " . $row['User_Lastname'] . "</td>
+                                <td>" . $row['Department_Name'] . "</td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='3'>ไม่มีข้อมูล</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
+
+        <!-- การแสดง pagination -->
+        <div class="pagination">
+            <?php
+            // ปุ่มก่อนหน้า
+            if ($page > 1) {
+                echo "<a href='?page=" . ($page - 1) . "'>ก่อนหน้า</a>";
+            }
+
+            // ปุ่มหน้าถัดไป
+            if ($page < $total_pages) {
+                echo "<a href='?page=" . ($page + 1) . "'>ถัดไป</a>";
+            }
+            ?>
+        </div>
     </div>
 </body>
 </html>
+
+<?php
+$conn->close(); // ปิดการเชื่อมต่อ
+?>

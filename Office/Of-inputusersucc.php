@@ -1,0 +1,67 @@
+<?php 
+require '../conn.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
+    // รับค่าจากฟอร์ม
+    $firstname = $_POST['User_Firstname'];
+    $lastname = $_POST['User_Lastname'];
+    $nickname = $_POST['User_Nickname'];
+    $phone = $_POST['User_Tel'];
+    $department_id = $_POST['Department_ID'];  // Department ID จากฟอร์ม
+    $username = $_POST['Username'];
+    $password = password_hash($_POST['Password'], PASSWORD_BCRYPT);
+
+    // จัดการอัปโหลดรูปภาพ
+    $target_dir = "uploads/"; // กำหนดโฟลเดอร์ที่จะเก็บไฟล์
+    $target_file = $target_dir . basename($_FILES['User_Picture']['name']); // เก็บตำแหน่งไฟล์ที่อัปโหลด
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION)); // เช็คประเภทไฟล์
+
+    // กำหนดประเภทไฟล์ที่รองรับ
+    $valid_extensions = array("jpg", "jpeg", "png", "gif");
+
+    // ตรวจสอบประเภทไฟล์
+    if (in_array($imageFileType, $valid_extensions)) {
+        // ตรวจสอบการอัปโหลดไฟล์
+        if (move_uploaded_file($_FILES['User_Picture']['tmp_name'], $target_file)) {
+            // บันทึกข้อมูลใน tb_user
+            $sql_user = "INSERT INTO tb_user (User_Firstname, User_Lastname, User_Nickname, User_Tel, User_Picture, Department_ID)
+                         VALUES ('$firstname', '$lastname', '$nickname', '$phone', '$target_file', '$department_id')";
+            if ($conn->query($sql_user) === TRUE) {
+                $user_id = $conn->insert_id; // ดึง User_ID ที่เพิ่งบันทึก
+
+                // กำหนดสิทธิ์การเข้าถึง
+                $role = 2; // ค่าเริ่มต้นสำหรับพนักงานช่าง
+
+                // กำหนด role ตามแผนก
+                if ($department_id == 0) {
+                    $role = 0; // ผู้ดูแลระบบ
+                } elseif ($department_id == 1) {
+                    $role = 1; // พนักงานออฟฟิศ
+                } elseif ($department_id == 2) {
+                    $role = 2; // พนักงานช่าง
+                }
+
+                // บันทึกข้อมูลใน tb_login
+                $sql_login = "INSERT INTO tb_login (Username, Password, User_ID, Role)
+                              VALUES ('$username', '$password', '$user_id', '$role')";
+                if ($conn->query($sql_login) === TRUE) {
+                    echo "บันทึกข้อมูลสำเร็จ!";
+                    header("refresh: 2; url= Of-user.php");
+                } else {
+                    echo "เกิดข้อผิดพลาดในการบันทึกข้อมูลใน tb_login: " . $conn->error;
+                }
+            } else {
+                echo "เกิดข้อผิดพลาดในการบันทึกข้อมูลใน tb_user: " . $conn->error;
+            }
+        } else {
+            echo "เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ";
+        }
+    } else {
+        echo "ประเภทไฟล์รูปภาพไม่ถูกต้อง";
+    }
+} else {
+    echo "ข้อมูลไม่ครบถ้วน";
+}
+
+$conn->close();
+?>
