@@ -151,6 +151,15 @@ body {
                 <label for="password">รหัสผ่าน:</label>
                 <input type="password" id="password" name="Password" required>
             </div>
+            <div class="form-group">
+            <label for="role">บทบาท:</label>
+                <select id="role" name="Role" required>
+                    <option value="">-- เลือกบทบาท --</option>
+                    <option value="0">ผู้ดูแลระบบ</option>
+                    <option value="1">พนักงานออฟฟิศ</option>
+                    <option value="2">พนักงานช่าง</option>
+                </select>
+            </div>
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>
                 <button type="reset" class="btn-cancel">ยกเลิก</button>

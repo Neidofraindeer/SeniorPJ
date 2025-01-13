@@ -1,4 +1,4 @@
-<?php 
+<?php
 require '../conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
     $nickname = $_POST['User_Nickname'];
     $phone = $_POST['User_Tel'];
     $department_id = $_POST['Department_ID'];  // Department ID จากฟอร์ม
+    $role = $_POST['Role']; // รับค่า Role จากฟอร์ม
     $username = $_POST['Username'];
     $password = password_hash($_POST['Password'], PASSWORD_BCRYPT);
 
@@ -28,18 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
                          VALUES ('$firstname', '$lastname', '$nickname', '$phone', '$target_file', '$department_id')";
             if ($conn->query($sql_user) === TRUE) {
                 $user_id = $conn->insert_id; // ดึง User_ID ที่เพิ่งบันทึก
-
-                // กำหนดสิทธิ์การเข้าถึง
-                $role = 2; // ค่าเริ่มต้นสำหรับพนักงานช่าง
-
-                // กำหนด role ตามแผนก
-                if ($department_id == 0) {
-                    $role = 0; // ผู้ดูแลระบบ
-                } elseif ($department_id == 1) {
-                    $role = 1; // พนักงานออฟฟิศ
-                } elseif ($department_id == 2) {
-                    $role = 2; // พนักงานช่าง
-                }
 
                 // บันทึกข้อมูลใน tb_login
                 $sql_login = "INSERT INTO tb_login (Username, Password, User_ID, Role)
