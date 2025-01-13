@@ -154,10 +154,10 @@ body {
             <div class="form-group">
             <label for="role">บทบาท:</label>
                 <select id="role" name="Role" required>
-                    <option value="">-- เลือกบทบาท --</option>
-                    <option value="0">ผู้ดูแลระบบ</option>
-                    <option value="1">พนักงานออฟฟิศ</option>
-                    <option value="2">พนักงานช่าง</option>
+                <option value="">-- เลือกบทบาท --</option>
+                <option value="0">ผู้ดูแลระบบ</option>
+                <option value="1">พนักงานออฟฟิศ</option>
+                <option value="2">พนักงานช่าง</option>
                 </select>
             </div>
             <div class="form-actions"><br>
