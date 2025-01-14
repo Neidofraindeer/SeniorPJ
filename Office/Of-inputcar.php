@@ -108,39 +108,38 @@
     </style>
 </head>
 <body>
-    
-    <div class="container">
+<div class="container">
         <div class="form-title">
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt; </a>
             <a class="head">เพิ่มรายการ</a>
         </div>
-        <form>
+        <form action="Of-inputcarsucc.php" method="POST" enctype="multipart/form-data">
             <!-- ข้อมูลรถยนต์ -->
             <div class="form-section">
                 <h3>ข้อมูลรถยนต์</h3>
                 <div class="form-group">
                     <label for="photo">รูป:</label>
-                    <input type="file" id="photo" name="CarPicture">
+                    <input type="file" id="photo" name="CarPicture" required>
                 </div>
                 <div class="form-group">
                     <label>หมายเลขทะเบียน:</label>
-                    <input type="text" name="CarNumber" placeholder="กรอกหมายเลขทะเบียน">
+                    <input type="text" name="CarNumber" placeholder="กรอกหมายเลขทะเบียน" required>
                 </div>
                 <div class="form-group">
                     <label>ยี่ห้อ:</label>
-                    <input type="text" name="CarBrand" placeholder="กรอกยี่ห้อ">
+                    <input type="text" name="CarBrand" placeholder="กรอกยี่ห้อ" required>
                 </div>
                 <div class="form-group">
                     <label>รุ่น:</label>
-                    <input type="text" name="CarModel" placeholder="กรอกรุ่น">
+                    <input type="text" name="CarModel" placeholder="กรอกรุ่น" required>
                 </div>
                 <div class="form-group">
                     <label>สีรถ:</label>
-                    <input type="text" name="CarColor" placeholder="กรอกสี">
+                    <input type="text" name="CarColor" placeholder="กรอกสี" required>
                 </div>
                 <div class="form-group">
                     <label>บริษัทประกัน:</label>
-                    <input type="text" name="CarInsurance" placeholder="กรอกบริษัทประกัน">
+                    <input type="text" name="CarInsurance" placeholder="กรอกบริษัทประกัน" required>
                 </div>
             </div>
 
@@ -148,44 +147,40 @@
             <div class="form-section">
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
-                    <label for="photo">รูป:</label>
-                    <input type="file" id="photo" name="RepairPicture">
+                    <label for="repair_photo">รูป:</label>
+                    <input type="file" id="repair_photo" name="RepairPicture" required>
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
-                    <textarea name="CarDetail" placeholder="กรอกรายละเอียดตำแหน่งที่ซ่อมแซม"></textarea>
+                    <textarea name="CarDetail" placeholder="กรอกรายละเอียดตำแหน่งที่ซ่อมแซม" required></textarea>
                 </div>
             </div>
-
-            <!-- ข้อมูลพนักงานช่าง -->
-            <div class="form-section">
-                <h3>ข้อมูลพนักงานช่าง</h3>
-                <div class="form-group">
-                    <label>ชื่อพนักงานช่าง:</label>
-                    <select >
-                        <option value="">-- เลือกพนักงานช่าง --</option>
-                        <option value="1">พนักงานช่าง 1</option>
-                        <option value="2">พนักงานช่าง 2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>แผนก:</label>
-                    <select name="Department_Name">
-                    <option value="">-- เลือกแผนก --</option>
-                    <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
-                    <option value="พนักงานออฟฟิศ">พนักงานออฟฟิศ</option>
-                    <option value="เครื่องยนต์">พนักงานช่างเครื่องยนต์</option>
-                    <option value="เคาะ">พนักงานช่างเคาะ</option>
-                    <option value="สี">พนักงานช่างสี</option>
-                    <option value="ประกอบ">พนักงานช่างประกอบ</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label>ชื่อพนักงานช่าง:</label>
+                <select name="User_ID" required>
+                    <option value="">-- เลือกพนักงานช่าง --</option>
+                    <?php
+                    include '../conn.php';
+                    // เลือกพนักงานที่มี Role = 2 (พนักงานช่าง) และ Department_ID เป็น 2, 3, 4 หรือ 5 จาก tb_user
+                    // และ JOIN กับ tb_department เพื่อดึงชื่อแผนก
+                    $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
+                            FROM tb_user u 
+                            JOIN tb_login l ON u.User_ID = l.User_ID
+                            JOIN tb_department d ON u.Department_ID = d.Department_ID
+                            WHERE l.Role = '2' AND u.Department_ID IN (2, 3, 4, 5)";
+                    $result = $conn->query($sql);
+                    while ($row = $result->fetch_assoc()) {
+                        // แสดงชื่อพนักงานและชื่อแผนก
+                        echo "<option value='{$row['User_ID']}'>{$row['FullName']} - {$row['Department_name']}</option>";
+                    }
+                    ?>
+                </select>
             </div>
 
             <!-- ปุ่มบันทึกและยกเลิก -->
             <div class="form-buttons">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <button type="button" class="btn-cancel">ยกเลิก</button>
+                <button type="button" class="btn-cancel" onclick="window.history.back()">ยกเลิก</button>
             </div>
         </form>
     </div>
