@@ -204,7 +204,7 @@ td {
                 <li>การแจ้งเตือน</li>
                 <li onclick="document.location='Ad-user.php'">ข้อมูลผู้ใช้งาน</li>
                 <li onclick="document.location='Ad-status.php'">ติดตามสถานะ</li>
-                <li onclick="document.location='Ad-approve.php'">รายงานอนุมัติ</li>
+                <li onclick="document.location='Ad-approve.php'">รายการอนุมัติ</li>
                 <li onclick="document.location='Ad-history.php'">ประวัติการซ่อมแซม</li>
             </ul>
         </div>

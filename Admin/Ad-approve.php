@@ -24,6 +24,7 @@
             font-weight: bold;
             color: #835eb7;
             margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .search-bar {
             display: flex;
@@ -37,21 +38,27 @@
             border-radius: 5px;
         }
         .btn-search {
-            background-color: #6495ED; /* สีน้ำเงิน */
+            background-color: #6495ED;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin-right: 255px;
-        }   
+        }
         .btn-search:hover {
             background-color: #3474ea;
+        }
+        /* < กลับ */
+        .container .back-link{
+            color: #90879c;
+            font-size: 24px;
+            font-style: oblique;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
             text-align: left;
@@ -63,80 +70,70 @@
             color: white;
             text-align: center;
         }
-        .actions button {
-            background-color: #ddd;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .actions button:hover {
-            background-color: #ccc;
-        }
-        /* กรอปหัวข้อฟอร์ม */
-        .form-title{
-            width: 100%;
-            height: 35px;
-            padding: 10px;
-        }
-        /* หัวข้อฟอร์ม */
-        .form-title .head {
-            width: 90%;
-            color: #835eb7; 
-            font-size: 24px;
-        }
-
-        /* < กลับ */
-        .form-title .back-link{
-            color: #90879c;
-            font-size: 24px;
-            font-style: oblique;
-        }
-        .btn {
-            background-color: #4CAF50; /* สีเขียว */
+        .btn-approve {
+            background-color: #4CAF50;
             color: white;
-            padding: 7px 20px;
+            padding: 5px 10px;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
         }
-        .btn:hover {
-            background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+        .btn-approve:hover {
+            background-color: #45a049;
+        }
+        /* จัดปุ่มอนุมัติให้กลาง */
+        .btn-approve-wrapper {
+            display: flex;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-title">
-            <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt;  </a>
-            <a class="head">รายการอนุมัติ</a>
-        </div><br>
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <button class="btn-search">ค้นหา</button>
-        </div>
+    <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt; </a>
+    <a class="header">  รายการอนุมัติ</a>
         <table>
             <thead>
                 <tr>
                     <th>วันที่</th>
-                    <th>รหัส</th>
-                    <th>ยี่ห้อ</th>
+                    <th>เวลา</th>
+                    <th>รหัสรถ</th>
                     <th>ทะเบียนรถ</th>
-                    <th>พนักงานช่าง</th>
+                    <th>ยี่ห้อ</th>
+                    <th>ชื่อพนักงานช่าง</th>
                     <th>สถานะ</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td><button class="btn">อนุมัติ</button></td>
-                </tr>
-            
+                <?php
+                include '../conn.php';
+
+                // Query ดึงข้อมูลจากตาราง tb_work และ tb_car
+                $sql = "SELECT w.CarRepair_Date, w.CarRepair_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+                               CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName 
+                        FROM tb_work w
+                        JOIN tb_car c ON w.Car_ID = c.Car_ID
+                        JOIN tb_user u ON w.User_ID = u.User_ID";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['CarRepair_Date'] . "</td>";
+                        echo "<td>" . $row['CarRepair_Time'] . "</td>";
+                        echo "<td>" . $row['Car_ID'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['CarBrand'] . "</td>";
+                        echo "<td>" . $row['FullName'] . "</td>";
+                        echo "<td><div class='btn-approve-wrapper'><button class='btn-approve'>อนุมัติ</button></div></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                }
+
+                $conn->close();
+                ?>
             </tbody>
         </table>
     </div>
