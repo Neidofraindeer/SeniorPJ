@@ -105,35 +105,51 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
-                include '../conn.php';
+            <?php
+            include('../conn.php');
+            // ดึงข้อมูลจากฐานข้อมูล
+            $sql = "SELECT w.CarRepair_Date, w.CarRepair_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+                        CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status, a.Approve_ID, u.User_ID
+                    FROM tb_work w
+                    JOIN tb_car c ON w.Car_ID = c.Car_ID
+                    JOIN tb_user u ON w.User_ID = u.User_ID
+                    LEFT JOIN tb_approve a ON u.User_ID = a.User_ID";
 
-                // Query ดึงข้อมูลจากตาราง tb_work และ tb_car
-                $sql = "SELECT w.CarRepair_Date, w.CarRepair_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                               CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName 
-                        FROM tb_work w
-                        JOIN tb_car c ON w.Car_ID = c.Car_ID
-                        JOIN tb_user u ON w.User_ID = u.User_ID";
-                $result = $conn->query($sql);
 
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['CarRepair_Date'] . "</td>";
-                        echo "<td>" . $row['CarRepair_Time'] . "</td>";
-                        echo "<td>" . $row['Car_ID'] . "</td>";
-                        echo "<td>" . $row['CarNumber'] . "</td>";
-                        echo "<td>" . $row['CarBrand'] . "</td>";
-                        echo "<td>" . $row['FullName'] . "</td>";
-                        echo "<td><div class='btn-approve-wrapper'><button class='btn-approve'>อนุมัติ</button></div></td>";
-                        echo "</tr>";
+
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row['CarRepair_Date'] . "</td>";
+                    echo "<td>" . $row['CarRepair_Time'] . "</td>";
+                    echo "<td>" . $row['Car_ID'] . "</td>";
+                    echo "<td>" . $row['CarNumber'] . "</td>";
+                    echo "<td>" . $row['CarBrand'] . "</td>";
+                    echo "<td>" . $row['FullName'] . "</td>";
+
+                    // ตัวอย่างการแสดงปุ่มอนุมัติในกรณีที่ยังไม่อนุมัติ
+                    if ($row['Approve_Status'] === 'approved') {
+                        echo "<td><div class='status-approved'>อนุมัติแล้ว</div></td>";
+                    } else {
+                        echo "<td>
+                                <div class='btn-approve-wrapper'>
+                                    <form action='update-status.php' method='POST'>
+                                        <input type='hidden' name='Approve_ID' value='" . $row['Approve_ID'] . "'>
+                                        <input type='hidden' name='User_ID' value='" . $row['User_ID'] . "'> <!-- เพิ่ม User_ID -->
+                                        <button type='submit' class='btn-approve'>อนุมัติ</button>
+                                    </form>
+                                </div>
+                            </td>";
                     }
-                } else {
-                    echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                    echo "</tr>";
                 }
+            } else {
+                echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+            }
+            ?>
 
-                $conn->close();
-                ?>
             </tbody>
         </table>
     </div>
