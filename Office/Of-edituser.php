@@ -191,7 +191,6 @@
         </div>
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>
-                <button type="reset" class="btn-cancel">ยกเลิก</button>
             </div>
         </form>
     </div>

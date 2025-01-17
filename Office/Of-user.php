@@ -215,7 +215,7 @@ $total_pages = ceil($total_records / $limit);
                             <td>" . $row['Department_Name'] . "</td>
                             <td class='actions'>
                                 <button onclick=\"document.location='Of-edituser.php?id=" . $row['User_ID'] . "'\">แก้ไข</button>
-                                <button onclick=\"if(confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')) { document.location='Of-deleteuser.php?id=" . $row['User_ID'] . "'; }\">ลบ</button>
+                                 <button onclick=\"deleteUser(" . $row['User_ID'] . ")\">ลบ</button>
                             </td>
                         </tr>";
                 }
@@ -244,6 +244,13 @@ $total_pages = ceil($total_records / $limit);
             ?>
         </div>
     </div>
+    <script>
+        function deleteUser(userId) {
+            if (confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')) {
+                window.location.href = 'Of-deleteuser.php?id=' + userId;
+            }
+        }
+    </script>
 </body>
 </html>
 
