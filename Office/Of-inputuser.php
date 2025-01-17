@@ -113,7 +113,6 @@ body {
         <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
     </div>
     <div class="form-container">
-        <form action="process.php" method="post" enctype="multipart/form-data"><br>
             <div class="form-group">
                 <label for="photo">รูป:</label>
                 <input type="file" id="photo" name="User_Picture"  required>
@@ -132,7 +131,7 @@ body {
             </div>
             <div class="form-group">
                 <label for="phone">เบอร์โทร:</label>
-                <input type="text" id="phone" name="User_Tel" required>
+                <input type="text" id="phone" name="User_Tel" required pattern="^\d{10}$">
             </div>
             <div class="form-group">
                 <label for="department">แผนก:</label>
@@ -149,7 +148,7 @@ body {
             </div>
             <div class="form-group">
                 <label for="password">รหัสผ่าน:</label>
-                <input type="password" id="password" name="Password" required>
+                <input type="password" id="password" name="Password" minlength="8"  required>
             </div>
             <div class="form-group">
             <label for="role">บทบาท:</label>
