@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $approveID);
 
+
+    
     if ($stmt->execute()) {
         // หลังจากอนุมัติแล้ว ให้ redirect กลับไปหน้า Ad_approve.php
         header("Location: Ad_approve.php");

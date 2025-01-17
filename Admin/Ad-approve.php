@@ -117,9 +117,6 @@
                     WHERE a.Approve_Status IS NULL OR a.Approve_Status = 'pending'
                     ORDER BY w.CarRepair_Date ASC, w.CarRepair_Time ASC";
 
-
-
-
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
