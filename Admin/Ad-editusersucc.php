@@ -58,7 +58,7 @@ if (isset($_POST['User_Firstname'], $_POST['User_Lastname'], $_POST['User_Tel'],
 
         if ($login_stmt->execute()) {
             echo "ข้อมูลผู้ใช้งานได้ถูกอัพเดทเรียบร้อยแล้ว";
-            header("refresh: 1; url= Of-user.php");
+            header("refresh: 1; url= Ad-user.php");
         } else {
             echo "เกิดข้อผิดพลาดในการอัพเดทข้อมูลใน tb_login";
         }

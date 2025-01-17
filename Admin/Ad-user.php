@@ -1,3 +1,34 @@
+<?php
+require '../conn.php'; // เชื่อมต่อกับฐานข้อมูล
+
+// กำหนดจำนวนแถวที่แสดงในแต่ละหน้า
+$limit = 10;
+
+// ตรวจสอบว่า URL มีค่า `page` หรือไม่
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // ถ้าไม่มีให้เริ่มที่หน้า 1
+
+// คำนวณตำแหน่งเริ่มต้น
+$start = ($page - 1) * $limit;
+
+// ดึงข้อมูลผู้ใช้จาก tb_user และแผนกจาก tb_department พร้อมกับ LIMIT
+$sql = "SELECT u.User_ID, l.Username, u.User_Firstname, u.User_Lastname, d.Department_Name 
+        FROM tb_user u
+        LEFT JOIN tb_login l ON u.User_ID = l.User_ID
+        LEFT JOIN tb_department d ON u.Department_ID = d.Department_ID
+        ORDER BY u.User_ID ASC
+        LIMIT $start, $limit";
+
+
+$result = $conn->query($sql); // ดำเนินการ query
+
+// คำนวณจำนวนหน้า
+$count_sql = "SELECT COUNT(*) AS total FROM tb_user";
+$count_result = $conn->query($count_sql);
+$row = $count_result->fetch_assoc();
+$total_records = $row['total'];
+$total_pages = ceil($total_records / $limit);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,16 +106,42 @@
             color: white;
             text-align: center;
         }
+        th:first-child, td:first-child {
+            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+            width: 100px; /* กำหนดความกว้าง (ถ้าต้องการ) */
+        }
+        th:last-child, td:last-child {
+            width: 120px; /* กำหนดความกว้าง */
+            text-align: center; /* จัดให้อยู่ตรงกลาง */
+        }
         .actions button {
-            background-color: #ddd;
+            padding: 5px 8px; /* ลดขนาด padding */
+            font-size: 14px; /* ลดขนาดตัวอักษร */
+            margin: 2px; /* ลดช่องว่างระหว่างปุ่ม */
+        }
+        .actions button {
+            background-color:rgb(233, 155, 45); /* สีน้ำเงิน */
+            color: white;
             border: none;
             padding: 5px 10px;
+            margin: 0 5px;
             border-radius: 5px;
             cursor: pointer;
         }
+
         .actions button:hover {
-            background-color: #ccc;
+            background-color: rgb(189, 118, 19);
         }
+
+        .actions button:nth-child(2) {
+            background-color: #E74C3C; /* สีแดง */
+        }
+
+        .actions button:nth-child(2):hover {
+            background-color: #c0392b; /* สีแดงเข้มเมื่อ hover */
+        }
+
+        
         /* กรอปหัวข้อฟอร์ม */
         .form-title{
             width: 100%;
@@ -104,13 +161,30 @@
             font-size: 24px;
             font-style: oblique;
         }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #6495ED;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #3474ea;
+        }
+        
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <div class="form-title">
             <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt;  </a>
-            <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
+            <a class="header">ข้อมูลผู้ใช้งาน</a>
         </div><br>
         <div class="search-bar">
             <input type="text" placeholder="ค้นหา...">
@@ -118,41 +192,68 @@
             <button class="btn-add" onclick="document.location='Ad-inputuser.php'">เพิ่มรายการ</button>
         </div>
         <table>
-            <thead>
-                <tr>
-                    <th>รหัส</th>
-                    <th>รายการพนักงานช่าง</th>
-                    <th>แผนก</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก A</td>
-                </tr>
-                <tr>
-                    <td>000002</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก B</td>
-                </tr>
-                <tr>
-                    <td>000003</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก C</td>
-                </tr>
-                <tr>
-                    <td>000004</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก D</td>
-                </tr>
-                <tr>
-                    <td>000004</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก D</td>
-                </tr>
-            </tbody>
+        <thead>
+            <tr>
+                <th>รหัส</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>ชื่อ</th>
+                <th>นามสกุล</th>
+                <th>แผนก</th>
+                <th>การจัดการ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if ($result->num_rows > 0) {
+                // แสดงข้อมูลในตาราง
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td style='text-align: center;'>" . $row['User_ID'] . "</td>
+                            <td>" . $row['Username'] . "</td>
+                            <td>" . $row['User_Firstname'] . "</td>
+                            <td>" . $row['User_Lastname'] . "</td>
+                            <td>" . $row['Department_Name'] . "</td>
+                            <td class='actions'>
+                                <button onclick=\"document.location='Ad-edituser.php?id=" . $row['User_ID'] . "'\">แก้ไข</button>
+                                 <button onclick=\"deleteUser(" . $row['User_ID'] . ")\">ลบ</button>
+                            </td>
+                        </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='6'>ไม่มีข้อมูล</td></tr>";
+            }
+            ?>
+        </tbody>
         </table>
+        <!-- การแสดง pagination -->
+        <div class="pagination">
+            <?php
+            if ($page > 1) {
+                echo "<a href='?page=" . ($page - 1) . "'>ก่อนหน้า</a>";
+            }
+            for ($i = 1; $i <= $total_pages; $i++) {
+                if ($i == $page) {
+                    echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
+                } else {
+                    echo "<a href='?page=$i'>$i</a>";
+                }
+            }
+            if ($page < $total_pages) {
+                echo "<a href='?page=" . ($page + 1) . "'>ถัดไป</a>";
+            }
+            ?>
+        </div>
     </div>
+    <script>
+        function deleteUser(userId) {
+            if (confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')) {
+                window.location.href = 'Ad-deleteuser.php?id=' + userId;
+            }
+        }
+    </script>
 </body>
 </html>
+
+<?php
+$conn->close(); // ปิดการเชื่อมต่อ
+?>

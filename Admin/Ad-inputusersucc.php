@@ -10,22 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
     $department_id = $_POST['Department_ID'];  // Department ID จากฟอร์ม
     $role = $_POST['Role']; // รับค่า Role จากฟอร์ม
     $username = $_POST['Username'];
-    $password = $_POST['Password'];
-
-    // ตรวจสอบเบอร์โทรศัพท์
-    if (!preg_match("/^\d{10}$/", $phone)) {
-        echo "เบอร์โทรต้องประกอบด้วยตัวเลข 10 หลัก";
-        exit;
-    }
-
-    // ตรวจสอบรหัสผ่าน (ต้องมีอย่างน้อย 8 ตัวอักษร)
-    if (strlen($password) < 8) {
-        echo "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร";
-        exit;
-    }
-
-    // ถ้ารหัสผ่านถูกกรอกมา ให้ทำการเข้ารหัสรหัสผ่าน
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    $password = password_hash($_POST['Password'], PASSWORD_BCRYPT);
 
     // จัดการอัปโหลดรูปภาพ
     $target_dir = "../uploads/"; // กำหนดโฟลเดอร์ที่จะเก็บไฟล์
@@ -47,10 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
 
                 // บันทึกข้อมูลใน tb_login
                 $sql_login = "INSERT INTO tb_login (Username, Password, User_ID, Role)
-                              VALUES ('$username', '$hashed_password', '$user_id', '$role')";
+                              VALUES ('$username', '$password', '$user_id', '$role')";
                 if ($conn->query($sql_login) === TRUE) {
                     echo "บันทึกข้อมูลสำเร็จ!";
-                    header("refresh: 1; url= Of-user.php");
+                    header("refresh: 1; url= Ad-user.php");
                 } else {
                     echo "เกิดข้อผิดพลาดในการบันทึกข้อมูลใน tb_login: " . $conn->error;
                 }

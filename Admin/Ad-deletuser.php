@@ -5,7 +5,7 @@ require '../conn.php'; // เชื่อมต่อกับฐานข้อ
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $user_id = $_GET['id']; // รับค่า User_ID จาก URL
 
-    // เช็คการเชื่อมต่อฐานข้อมูล
+    // เช็คการเชื่อมต่อฐานข้อมูล 
     if ($conn) {
         // เริ่มต้นการลบข้อมูลในฐานข้อมูล
         // ลบข้อมูลใน tb_user
@@ -21,7 +21,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
             if ($login_stmt->execute()) {
                 // ถ้าลบสำเร็จให้กลับไปที่หน้าข้อมูลผู้ใช้
-                header("refresh: 1; url= Of-user.php");
+                header("refresh: 1; url= Ad-user.php");
                 exit();
             } else {
                 echo "เกิดข้อผิดพลาดในการลบข้อมูลจาก tb_login";

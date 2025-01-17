@@ -120,7 +120,7 @@ $total_pages = ceil($total_records / $limit);
             margin: 2px; /* ลดช่องว่างระหว่างปุ่ม */
         }
         .actions button {
-            background-color: #6495ED; /* สีน้ำเงิน */
+            background-color:rgb(233, 155, 45); /* สีน้ำเงิน */
             color: white;
             border: none;
             padding: 5px 10px;
@@ -130,7 +130,7 @@ $total_pages = ceil($total_records / $limit);
         }
 
         .actions button:hover {
-            background-color: #3474ea;
+            background-color: rgb(174, 107, 12);
         }
 
         .actions button:nth-child(2) {

@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
                               VALUES ('$username', '$password', '$user_id', '$role')";
                 if ($conn->query($sql_login) === TRUE) {
                     echo "บันทึกข้อมูลสำเร็จ!";
-                    header("refresh: 2; url= Of-user.php");
+                    header("refresh: 1; url= Of-user.php");
                 } else {
                     echo "เกิดข้อผิดพลาดในการบันทึกข้อมูลใน tb_login: " . $conn->error;
                 }

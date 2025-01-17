@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,7 @@ body {
 /* กรอบฟอร์ม */
 .form-container {
     max-width: 900px;
-    height: 465px;
+    height: 515px;
     margin: auto;
     border: 1px solid #ccc;
     padding: 20px;
@@ -101,15 +101,21 @@ body {
 }
 </style>
 <body>
+
+<?php
+    require '../conn.php';
+    $departments = $conn->query("SELECT * FROM tb_department");
+    ?>
+
+<form method="post" action="Ad-inputusersucc.php" enctype="multipart/form-data">
     <div class="form-title">
-        <a onclick="document.location='Of-user.php'" class="back-link">&lt; </a>
+        <a onclick="document.location='Ad-user.php'" class="back-link">&lt; </a>
         <a class="head"> เพิ่มข้อมูลผู้ใช้งาน</a>
     </div>
     <div class="form-container">
-        <form action="process.php" method="post" enctype="multipart/form-data"><br>
             <div class="form-group">
                 <label for="photo">รูป:</label>
-                <input type="file" id="photo" name="User_Picture">
+                <input type="file" id="photo" name="User_Picture"  required>
             </div>
             <div class="form-group">
                 <label for="first_name">ชื่อ:</label>
@@ -117,7 +123,7 @@ body {
             </div>
             <div class="form-group">
                 <label for="last_name">นามสกุล:</label>
-                <input type="text" id="last_name" name="User_Lastname	" required>
+                <input type="text" id="last_name" name="User_Lastname" required>
             </div>
             <div class="form-group">
                 <label for="nickname">ชื่อเล่น:</label>
@@ -125,18 +131,15 @@ body {
             </div>
             <div class="form-group">
                 <label for="phone">เบอร์โทร:</label>
-                <input type="text" id="phone" name="User_Tel" required>
+                <input type="text" id="phone" name="User_Tel" required pattern="^\d{10}$">
             </div>
             <div class="form-group">
                 <label for="department">แผนก:</label>
-                <select id="department" name="Department_Name">
+                <select id="department" name="Department_ID" required>
                     <option value="">-- เลือกแผนก --</option>
-                    <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
-                    <option value="พนักงานออฟฟิศ">พนักงานออฟฟิศ</option>
-                    <option value="เครื่องยนต์">พนักงานช่างเครื่องยนต์</option>
-                    <option value="เคาะ">พนักงานช่างเคาะ</option>
-                    <option value="สี">พนักงานช่างสี</option>
-                    <option value="ประกอบ">พนักงานช่างประกอบ</option>
+                    <?php while ($row = $departments->fetch_assoc()): ?>
+                        <option value="<?= $row['Department_ID'] ?>"><?= $row['Department_Name'] ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
             <div class="form-group">
@@ -145,11 +148,17 @@ body {
             </div>
             <div class="form-group">
                 <label for="password">รหัสผ่าน:</label>
-                <input type="password" id="password" name="Password" required>
+                <input type="password" id="password" name="Password" minlength="8"  required>
             </div>
-            
-        /* ยศในการเข้าหน้าpage */
-
+            <div class="form-group">
+            <label for="role">บทบาท:</label>
+                <select id="role" name="Role" required>
+                <option value="">-- เลือกบทบาท --</option>
+                <option value="0">ผู้ดูแลระบบ</option>
+                <option value="1">พนักงานออฟฟิศ</option>
+                <option value="2">พนักงานช่าง</option>
+                </select>
+            </div>
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>
                 <button type="reset" class="btn-cancel">ยกเลิก</button>
