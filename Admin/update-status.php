@@ -1,22 +1,24 @@
 <?php
-// เชื่อมต่อกับฐานข้อมูล
-include '../conn.php';
-if (isset($_POST['Approve_ID']) && isset($_POST['User_ID'])) {
-    $approve_id = $_POST['Approve_ID'];
-    $user_id = $_POST['User_ID'];
+include('../conn.php');
 
-    $approve_status = 'approved'; // กำหนดสถานะเป็นอนุมัติ
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $approveID = $_POST['Approve_ID'];
+    $userID = $_POST['User_ID'];
 
-    $sql = "INSERT INTO tb_approve (User_ID, Approve_Status) VALUES ('$user_id', '$approve_status') 
-            ON DUPLICATE KEY UPDATE Approve_Status = '$approve_status'";
-    if ($conn->query($sql) === TRUE) {
-        echo "บันทึกข้อมูลการอนุมัติสำเร็จ";
-        header("refresh: 1; url= Ad-mainpage.php");
+    // อัปเดตสถานะเป็น 'approved'
+    $sql = "UPDATE tb_approve SET Approve_Status = 'approved' WHERE Approve_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $approveID);
+
+    if ($stmt->execute()) {
+        // หลังจากอนุมัติแล้ว ให้ redirect กลับไปหน้า Ad_approve.php
+        header("Location: Ad_approve.php");
+        exit();
     } else {
         echo "เกิดข้อผิดพลาด: " . $conn->error;
     }
-} else {
-    echo "ข้อมูลไม่ครบถ้วน: กรุณาส่งทั้ง Approve_ID และ User_ID";
+
+    $stmt->close();
+    $conn->close();
 }
-$conn->close();
 ?>

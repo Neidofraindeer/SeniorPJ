@@ -113,7 +113,10 @@
                     FROM tb_work w
                     JOIN tb_car c ON w.Car_ID = c.Car_ID
                     JOIN tb_user u ON w.User_ID = u.User_ID
-                    LEFT JOIN tb_approve a ON u.User_ID = a.User_ID";
+                    LEFT JOIN tb_approve a ON u.User_ID = a.User_ID
+                    WHERE a.Approve_Status IS NULL OR a.Approve_Status = 'pending'
+                    ORDER BY w.CarRepair_Date ASC, w.CarRepair_Time ASC";
+
 
 
 
@@ -128,26 +131,20 @@
                     echo "<td>" . $row['CarNumber'] . "</td>";
                     echo "<td>" . $row['CarBrand'] . "</td>";
                     echo "<td>" . $row['FullName'] . "</td>";
-
-                    // ตัวอย่างการแสดงปุ่มอนุมัติในกรณีที่ยังไม่อนุมัติ
-                    if ($row['Approve_Status'] === 'approved') {
-                        echo "<td><div class='status-approved'>อนุมัติแล้ว</div></td>";
-                    } else {
-                        echo "<td>
-                                <div class='btn-approve-wrapper'>
-                                    <form action='update-status.php' method='POST'>
-                                        <input type='hidden' name='Approve_ID' value='" . $row['Approve_ID'] . "'>
-                                        <input type='hidden' name='User_ID' value='" . $row['User_ID'] . "'> <!-- เพิ่ม User_ID -->
-                                        <button type='submit' class='btn-approve'>อนุมัติ</button>
-                                    </form>
-                                </div>
-                            </td>";
-                    }
+                    echo "<td>
+                            <div class='btn-approve-wrapper'>
+                                <form action='update-status.php' method='POST'>
+                                    <input type='hidden' name='Approve_ID' value='" . $row['Approve_ID'] . "'>
+                                    <input type='hidden' name='User_ID' value='" . $row['User_ID'] . "'>
+                                    <button type='submit' class='btn-approve'>อนุมัติ</button>
+                                </form>
+                            </div>
+                        </td>";
                     echo "</tr>";
                 }
             } else {
                 echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
-            }
+            }            
             ?>
 
             </tbody>
