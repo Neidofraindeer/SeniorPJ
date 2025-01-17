@@ -111,7 +111,7 @@
 <div class="container">
         <div class="form-title">
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt; </a>
-            <a class="head">เพิ่มรายการ</a>
+            <a class="header">เพิ่มรายการ</a>
         </div>
         <form action="Of-inputcarsucc.php" method="POST" enctype="multipart/form-data">
             <!-- ข้อมูลรถยนต์ -->
