@@ -188,7 +188,7 @@
         <div>
             <div class="profile">
                 <img src="https://via.placeholder.com/100" alt="User Profile">
-                <h3>ปัญญา ผู้นำ</h3>
+                <h3>Admin</h3>
             </div>
             <ul><br>
                 <li>การแจ้งเตือน</li>
