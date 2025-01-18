@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายการมอบหมายงาน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* Icon ปากกา */
+        .fa-pencil-alt {
+            color: rgb(144, 127, 201); /* สีน้ำเงิน */
+            font-size: 18px; /* ขนาดไอคอน */
+            transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
+        }
+
+        .fa-pencil-alt:hover {
+            color: #835EB7; /* สีเข้มเมื่อ hover */
+        }
+
         /* Reset CSS */
         * {
             margin: 0;
@@ -238,6 +250,7 @@
                     <th>ยี่ห้อ</th>
                     <th>พนักงานช่าง</th>
                     <th>สถานะ</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -288,7 +301,8 @@
                 } else {
                     echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
                 }
-                echo "</tr>";
+                    echo "<td><a href='edit.php?id=" . $row['Car_ID'] . "'><i class='fa fa-pencil-alt'></i></a></td>";  // ปุ่มแก้ไข
+                    echo "</tr>";
             }
         } else {
             echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
