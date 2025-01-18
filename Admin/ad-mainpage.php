@@ -182,6 +182,7 @@
     </style>
 </head>
 <body>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div>
@@ -211,8 +212,6 @@
             <button class="btn-search">ค้นหา</button>
             <button class="btn-add" onclick="document.location='Ad-inputcar.php'">เพิ่มรายการ</button>
         </div>
-
-        <!-- Table -->
         <table>
             <thead>
                 <tr>
