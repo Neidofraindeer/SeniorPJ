@@ -1,26 +1,30 @@
 <?php
 include('../conn.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $approveID = $_POST['Approve_ID'];
-    $userID = $_POST['User_ID'];
+// รับค่าจากฟอร์ม
+$approveID = $_POST['Approve_ID'];
+$userID = $_POST['User_ID'];
 
-    // อัปเดตสถานะเป็น 'approved'
-    $sql = "UPDATE tb_approve SET Approve_Status = 'approved' WHERE Approve_ID = ?";
+// ตรวจสอบว่ามีการส่งข้อมูลมาอย่างถูกต้องหรือไม่
+if (isset($approveID) && isset($userID)) {
+    // อัพเดตสถานะการอนุมัติในตาราง tb_approve
+    $sql = "UPDATE tb_approve SET Approve_Status = 'approved' WHERE Approve_ID = ? AND User_ID = ?";
+    
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $approveID);
-
-
+    $stmt->bind_param("ii", $approveID, $userID);  // i = integer
     
     if ($stmt->execute()) {
-        // หลังจากอนุมัติแล้ว ให้ redirect กลับไปหน้า Ad_approve.php
-        header("Location: Ad_approve.php");
+        // ถ้าการอัพเดตสำเร็จ ก็จะไปที่หน้ารายการอนุมัติอีกครั้ง
+        header("Location: Ad-approve.php");
         exit();
     } else {
-        echo "เกิดข้อผิดพลาด: " . $conn->error;
+        echo "Error: " . $stmt->error;
     }
-
+    
     $stmt->close();
-    $conn->close();
+} else {
+    echo "ข้อมูลไม่ครบถ้วน";
 }
+
+$conn->close();
 ?>
