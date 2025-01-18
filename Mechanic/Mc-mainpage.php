@@ -136,8 +136,8 @@ td {
             <ul><br>
                 <li onclick="document.location='Mc-history.php'">ประวัติการซ่อมแซม</li>
                 <li>การแจ้งเตือน</li>
-                <li>การตั้งค่า</li>
-                <li>ออกจากระบบ</li>
+                <li onclick="document.location='Mc-setting.php'">การตั้งค่า</li>
+                <li onclick="document.location='/SeniorPJ/index.php'">ออกจากระบบ</li>
             </ul>
         
     </div>

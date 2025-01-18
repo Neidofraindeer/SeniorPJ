@@ -111,16 +111,33 @@
         }
         th, td {
             border: 1px solid #ddd;
-            text-align: left;
-            padding: 10px;
+            text-align: left; /* ทำให้ข้อความอยู่ตรงกลาง */
+            padding: 8px; /* ลดขนาด Padding เพื่อให้ช่องไม่กว้างเกินไป */
         }
+
         th {
-            background-color:  #835eb7;
+            background-color: #835eb7;
             color: white;
             text-align: center;
+            white-space: nowrap; /* ป้องกันข้อความล้นบรรทัด */
+            font-size: 16px; /* ลดขนาดตัวอักษรในหัวข้อ */
         }
+
         td {
-            font-size: 14px;
+            font-size: 14px; /* ขนาดตัวอักษรสำหรับข้อมูล */
+            white-space: nowrap; /* ป้องกันข้อความล้นบรรทัด */
+        }
+
+        th:nth-child(1), td:nth-child(1),
+        th:nth-child(2), td:nth-child(2) {
+            text-align: center; /* ทำให้วันที่และรหัสอยู่ตรงกลาง */
+            width: 150px; /* กำหนดความกว้างให้พอดี */
+        }
+        
+        th:nth-child(5), 
+        td:nth-child(5) {
+            width: 245px; /* กำหนดความกว้างคอลัมน์พนักงานช่าง */
+            
         }
         .status-approved {
             color: green;
@@ -199,8 +216,8 @@
             </ul>
         </div>
         <ul><br>
-            <li>การตั้งค่า</li>
-            <li>ออกจากระบบ</li>
+            <li onclick="document.location='Ad-setting.php'">การตั้งค่า</li>
+            <li onclick="document.location='/SeniorPJ/index.php'">ออกจากระบบ</li>
         </ul>
     </div>
     <!-- Content -->
@@ -217,8 +234,8 @@
                 <tr>
                     <th>วันที่</th>
                     <th>รหัส</th>
-                    <th>ยี่ห้อ</th>
                     <th>ทะเบียนรถ</th>
+                    <th>ยี่ห้อ</th>
                     <th>พนักงานช่าง</th>
                     <th>สถานะ</th>
                 </tr>
@@ -239,12 +256,18 @@
 
             // ดึงข้อมูลจากฐานข้อมูล
             $sql = "SELECT w.CarRepair_Date, w.CarRepair_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                        CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status, a.Approve_ID, u.User_ID
-                    FROM tb_work w
-                    JOIN tb_car c ON w.Car_ID = c.Car_ID
-                    JOIN tb_user u ON w.User_ID = u.User_ID
-                    LEFT JOIN tb_approve a ON u.User_ID = a.User_ID
-                    LIMIT $start, $limit";  // เพิ่ม LIMIT สำหรับการแสดงเฉพาะหน้าปัจจุบัน
+                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
+                    a.Approve_Status, a.Approve_ID, a.Approve_Date, u.User_ID
+                FROM tb_work w
+                JOIN tb_car c ON w.Car_ID = c.Car_ID
+                JOIN tb_user u ON w.User_ID = u.User_ID
+                LEFT JOIN tb_approve a ON u.User_ID = a.User_ID
+                ORDER BY 
+                    CASE WHEN a.Approve_Status = 'approved' THEN 1 ELSE 2 END, -- อนุมัติแล้วมาก่อน
+                    a.Approve_Date DESC, -- วันที่อนุมัติเรียงจากล่าสุดไปหาเก่าสุด
+                    w.CarRepair_Date DESC, -- วันที่ซ่อมเรียงจากล่าสุด
+                    w.CarRepair_Time DESC -- เวลาซ่อมเรียงจากล่าสุด
+                LIMIT $start, $limit";
 
             $result = $conn->query($sql);
 
@@ -254,8 +277,8 @@
                     echo "<tr>";
                     echo "<td>" . $row['CarRepair_Date'] . "</td>";
                     echo "<td>" . $row['Car_ID'] . "</td>";
-                    echo "<td>" . $row['CarBrand'] . "</td>";
                     echo "<td>" . $row['CarNumber'] . "</td>";
+                    echo "<td>" . $row['CarBrand'] . "</td>";
                     echo "<td>" . $row['FullName'] . "</td>";
 
                     // แสดงสถานะการอนุมัติ
