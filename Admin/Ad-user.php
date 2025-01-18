@@ -35,6 +35,7 @@ $total_pages = ceil($total_records / $limit);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ข้อมูลผู้ใช้งาน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -114,34 +115,39 @@ $total_pages = ceil($total_records / $limit);
             width: 120px; /* กำหนดความกว้าง */
             text-align: center; /* จัดให้อยู่ตรงกลาง */
         }
-        .actions button {
-            padding: 5px 8px; /* ลดขนาด padding */
-            font-size: 14px; /* ลดขนาดตัวอักษร */
-            margin: 2px; /* ลดช่องว่างระหว่างปุ่ม */
-        }
-        .actions button {
-            background-color:rgb(233, 155, 45); /* สีน้ำเงิน */
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin: 0 5px;
-            border-radius: 5px;
-            cursor: pointer;
+        .actions a {
+        padding: 5px 8px; /* ลดขนาด padding */
+        font-size: 14px; /* ลดขนาดตัวอักษร */
+        margin: 2px; /* ลดช่องว่างระหว่างปุ่ม */
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none; /* ลบเส้นใต้ */
         }
 
-        .actions button:hover {
-            background-color: rgb(189, 118, 19);
+        .actions a i {
+            margin-right: 5px; /* เพิ่มระยะห่างระหว่างไอคอน */
         }
 
-        .actions button:nth-child(2) {
-            background-color: #E74C3C; /* สีแดง */
+        .fa-pencil-alt {
+            color: rgb(144, 127, 201); /* สีน้ำเงิน */
+            font-size: 18px; /* ขนาดไอคอน */
+            transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
         }
 
-        .actions button:nth-child(2):hover {
-            background-color: #c0392b; /* สีแดงเข้มเมื่อ hover */
+        .fa-pencil-alt:hover {
+            color: #835EB7;
         }
-
         
+        .fa-trash-alt {
+            color: #E74C3C;
+            font-size: 18px; /* ขนาดไอคอน */
+            transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
+        }
+
+        .fa-trash-alt:hover {
+           color: #c0392b; 
+        }
+
         /* กรอปหัวข้อฟอร์ม */
         .form-title{
             width: 100%;
@@ -169,15 +175,14 @@ $total_pages = ceil($total_records / $limit);
         .pagination a {
             padding: 8px 16px;
             margin: 0 5px;
-            background-color: rgb(144, 127, 201);
+            background-color: #6495ED;
             color: white;
             border-radius: 5px;
             text-decoration: none;
         }
         .pagination a:hover {
-            background-color: #835EB7;
+            background-color: #3474ea;
         }
-        
     </style>
 </head>
 <body>
@@ -214,8 +219,8 @@ $total_pages = ceil($total_records / $limit);
                             <td>" . $row['User_Lastname'] . "</td>
                             <td>" . $row['Department_Name'] . "</td>
                             <td class='actions'>
-                                <button onclick=\"document.location='Ad-edituser.php?id=" . $row['User_ID'] . "'\">แก้ไข</button>
-                                 <button onclick=\"deleteUser(" . $row['User_ID'] . ")\">ลบ</button>
+                                <a href='Ad-edituser.php?id=" . $row['User_ID'] . "'><i class='fas fa-pencil-alt'></i></a>
+                                <a href='javascript:void(0)' onclick='deleteUser(" . $row['User_ID'] . ")'><i class='fas fa-trash-alt'></i></a>
                             </td>
                         </tr>";
                 }
