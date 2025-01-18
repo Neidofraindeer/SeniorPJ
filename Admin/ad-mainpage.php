@@ -299,7 +299,7 @@
                     } else {
                         echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
                     }
-                        echo "<td><a href='edit.php?id=" . $row['Car_ID'] . "'><i class='fa fa-pencil-alt'></i></a></td>";  // ปุ่มแก้ไข
+                        echo "<td><a href='Ad-editcar.php?id=" . $row['Car_ID'] . "'><i class='fa fa-pencil-alt'></i></a></td>";  // ปุ่มแก้ไข
                         echo "</tr>";
                 }
             } else {
