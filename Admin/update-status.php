@@ -15,7 +15,7 @@ if (isset($approveID) && isset($userID)) {
     
     if ($stmt->execute()) {
         // ถ้าการอัพเดตสำเร็จ ก็จะไปที่หน้ารายการอนุมัติอีกครั้ง
-        header("Location: Ad-approve.php");
+        echo "<script>alert('อนุมัติสำเร็จ!'); window.location.href='Ad-approve.php';</script>";
         exit();
     } else {
         echo "Error: " . $stmt->error;

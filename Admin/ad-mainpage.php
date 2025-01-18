@@ -324,16 +324,21 @@
             </table>
             <div class="pagination">
             <?php
+            // ปุ่มก่อนหน้า
             if ($page > 1) {
                 echo "<a href='?page=" . ($page - 1) . "'>ก่อนหน้า</a>";
             }
-            for ($i = 1; $i <= $total_pages; $i++) {
+            // แสดงเลขหน้า
+            $start_page = max(1, $page - 1);  // หน้าที่เริ่มต้นแสดง
+            $end_page = min($total_pages, $page + 1);  // หน้าสุดท้ายแสดง
+            for ($i = $start_page; $i <= $end_page; $i++) {
                 if ($i == $page) {
                     echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
                 } else {
                     echo "<a href='?page=$i'>$i</a>";
                 }
             }
+            // ปุ่มถัดไป
             if ($page < $total_pages) {
                 echo "<a href='?page=" . ($page + 1) . "'>ถัดไป</a>";
             }
