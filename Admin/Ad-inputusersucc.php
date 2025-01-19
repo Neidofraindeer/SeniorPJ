@@ -8,9 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
     $nickname = $_POST['User_Nickname'];
     $phone = $_POST['User_Tel'];
     $department_id = $_POST['Department_ID'];  // Department ID จากฟอร์ม
-    $role = $_POST['Role']; // รับค่า Role จากฟอร์ม
+    $role = $_POST['Role_ID']; // รับค่า Role จากฟอร์ม
     $username = $_POST['Username'];
     $password = password_hash($_POST['Password'], PASSWORD_BCRYPT);
+
 
     // จัดการอัปโหลดรูปภาพ
     $target_dir = "../uploads/"; // กำหนดโฟลเดอร์ที่จะเก็บไฟล์
@@ -31,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
                 $user_id = $conn->insert_id; // ดึง User_ID ที่เพิ่งบันทึก
 
                 // บันทึกข้อมูลใน tb_login
-                $sql_login = "INSERT INTO tb_login (Username, Password, User_ID, Role)
+                $sql_login = "INSERT INTO tb_login (Username, Password, User_ID, Role_ID)
                               VALUES ('$username', '$password', '$user_id', '$role')";
                 if ($conn->query($sql_login) === TRUE) {
                     echo "บันทึกข้อมูลสำเร็จ!";

@@ -118,10 +118,12 @@
             // ดึงข้อมูลแผนกจากฐานข้อมูล
             $dept_sql = "SELECT * FROM tb_department";
             $departments = $conn->query($dept_sql);  // ดึงข้อมูลแผนกทั้งหมด
+            $role_sql = "SELECT * FROM tb_role";
+            $role = $conn->query($role_sql); 
             // ดึงข้อมูลจาก tb_login สำหรับชื่อผู้ใช้และรหัสผ่าน
             $login_sql = "SELECT * FROM tb_login WHERE User_ID = ?";
             $login_stmt = $conn->prepare($login_sql);
-            $login_stmt->bind_param("i", $user_id);
+            $login_stmt->bind_param("i", $user_id );
             $login_stmt->execute();
             $login_result = $login_stmt->get_result();
             if ($login_result->num_rows > 0) {
@@ -136,7 +138,6 @@
         echo "ไม่มีข้อมูล User_ID";
     }
     ?>
-
 <form method="post" action="Ad-editusersucc.php?id=<?= $user['User_ID']; ?>" enctype="multipart/form-data">
     <div class="form-title">
         <a onclick="document.location='Ad-user.php'" class="back-link">&lt; </a>
@@ -181,17 +182,21 @@
                 <input type="text" id="username" name="Username" value="<?= $login_data['Username']; ?>" required>
             </div>
             <div class="form-group">
-            <label for="role">บทบาท:</label>
-            <select id="role" name="Role" required>
-                <option value="">-- เลือกบทบาท --</option>
-                <option value="0" <?= $login_data['Role'] == 0 ? 'selected' : '' ?>>ผู้ดูแลระบบ</option>
-                <option value="1" <?= $login_data['Role'] == 1 ? 'selected' : '' ?>>พนักงานออฟฟิศ</option>
-                <option value="2" <?= $login_data['Role'] == 2 ? 'selected' : '' ?>>พนักงานช่าง</option>
-            </select>
-        </div>
+                <label for="role">สิทธิ์เข้าถึง:</label>
+                <select id="role" name="Role_ID" required>
+                    <option value="">-- เลือกสิทธิ์เข้าถึง --</option>
+                    <?php while ($row = $role->fetch_assoc()): ?>
+                        <option value="<?= $row['Role_ID'] ?>" <?= $row['Role_ID'] == $login_data['Role_ID'] ? 'selected' : '' ?>>
+                            <?= $row['Role'] ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>
             </div>
+        </div>
+            
         </form>
     </div>
 </body>

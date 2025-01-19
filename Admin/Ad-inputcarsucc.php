@@ -36,15 +36,15 @@ if ($conn->query($sqlCar) === TRUE) {
     $carID = $conn->insert_id;
 
     // INSERT ข้อมูลลงใน tb_work
-    $carRepairDate = date("Y-m-d");
-    $carRepairTime = date("H:i:s");
+    $workDate = date("Y-m-d");
+    $workTime = date("H:i:s");
 
-    $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, CarRepair_Date, CarRepair_Time)
-                VALUES ('$carID', '$userID', '$carRepairDate', '$carRepairTime')";
+    $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Work_Date, Work_Time)
+                VALUES ('$carID', '$userID', '$workDate', '$workTime')";
     if ($conn->query($sqlWork) === TRUE) {
         
         // INSERT ข้อมูลลงใน tb_approve (ตั้งค่า Approve_Status เป็น pending)
-        $sqlApprove = "INSERT INTO tb_approve (Car_ID, User_ID, Approve_Status) 
+        $sqlApprove = "INSERT INTO tb_approve (WoekCar_ID, User_ID, Approve_Status) 
                        VALUES ('$carID', '$userID', 'pending')";
         if ($conn->query($sqlApprove) === TRUE) {
             echo "บันทึกข้อมูลสำเร็จ";

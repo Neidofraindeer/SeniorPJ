@@ -1,69 +1,39 @@
 <?php
-session_start(); // เริ่มต้น session เพื่อเก็บข้อมูลผู้ใช้
+// รวมไฟล์เชื่อมต่อฐานข้อมูล
+include 'conn.php';
 
-// เชื่อมต่อกับฐานข้อมูล
-include('conn.php'); // รวมไฟล์เชื่อมต่อฐานข้อมูลที่คุณสร้างไว้ก่อนหน้านี้
+// รับค่า username และ password จากฟอร์ม
+$username = $_POST['Username'];
+$password = $_POST['Password'];
 
-// ตรวจสอบว่าเป็นการส่งฟอร์มหรือไม่
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // ตรวจสอบว่าได้รับค่าจากฟอร์มหรือไม่
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        // รับค่าจากฟอร์ม
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+// เตรียมคำสั่ง SQL สำหรับตรวจสอบข้อมูล
+$sql = "SELECT * FROM tb_login WHERE Username = ? AND Password = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $username, $password);
+$stmt->execute();
+$result = $stmt->get_result();
 
-        // ตรวจสอบว่าไม่ว่าง
-        if (empty($username) || empty($password)) {
-            echo "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
-        } else {
-            // คำสั่ง SQL เพื่อค้นหาผู้ใช้จากตาราง tb_login
-            $sql = "SELECT * FROM tb_login WHERE username = ?";
+if ($result->num_rows > 0) {
+    // หากพบข้อมูลผู้ใช้
+    $row = $result->fetch_assoc();
+    $roleId = $row['Role_ID'];
 
-            // เตรียมคำสั่ง SQL
-            if ($stmt = $conn->prepare($sql)) {
-                // ผูกค่าพารามิเตอร์
-                $stmt->bind_param("s", $username);
-                // รันคำสั่ง SQL
-                $stmt->execute();
-                // เก็บผลลัพธ์
-                $result = $stmt->get_result();
-
-                // ถ้าพบผู้ใช้
-                if ($result->num_rows > 0) {
-                    // ดึงข้อมูลของผู้ใช้
-                    $user = $result->fetch_assoc();
-
-                    // ตรวจสอบรหัสผ่าน (หากใช้ password_hash())
-                    if (password_verify($password, $user['password'])) {
-                        // ตั้งค่า session สำหรับผู้ใช้ที่ล็อกอิน
-                        $_SESSION['username'] = $user['username'];
-                        $_SESSION['role'] = $user['role'];
-
-                        // เปลี่ยนหน้าไปยังหน้าที่เหมาะสมตาม role
-                        if ($user['role'] == 0) {
-                            header("Location: Ad-mainpage.php");
-                        } elseif ($user['role'] == 1) {
-                            header("Location: Of-mainpage.php");
-                        } elseif ($user['role'] == 2) {
-                            header("Location: Mc-mainpage.php");
-                        }
-                        exit;
-                    } else {
-                        echo "รหัสผ่านไม่ถูกต้อง";
-                    }
-                } else {
-                    echo "ชื่อผู้ใช้ไม่ถูกต้อง";
-                }
-                $stmt->close();
-            }
-        }
-    } else {
-        echo "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
+    // ตรวจสอบสิทธิ์ตาม Role_ID
+    if ($roleId == 0) { // Admin
+        // Redirect ไปยังหน้า Admin
+        header("Location: Ad-mainpage.php");
+    } elseif ($roleId == 1) { // Office
+        // Redirect ไปยังหน้า Office
+        header("Location: Of-mainpage.php");
+    } else { // Mechanic หรืออื่นๆ
+        // Redirect ไปยังหน้าอื่นๆ
+        header("Location: Mc-mainpage.php");
     }
-
-    // ปิดการเชื่อมต่อฐานข้อมูล
-    $conn->close();
+} else {
+    echo "Username หรือ Password ไม่ถูกต้อง";
 }
+
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">

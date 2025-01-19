@@ -267,19 +267,13 @@
             $start = ($page - 1) * $limit;
 
             // ดึงข้อมูลจากฐานข้อมูล
-            $sql = "SELECT w.CarRepair_Date, w.CarRepair_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
-                    a.Approve_Status, a.Approve_ID, a.Approve_Date, u.User_ID
-                FROM tb_work w
-                JOIN tb_car c ON w.Car_ID = c.Car_ID
-                JOIN tb_user u ON w.User_ID = u.User_ID
-                LEFT JOIN tb_approve a ON u.User_ID = a.User_ID
-                ORDER BY 
-                    CASE WHEN a.Approve_Status = 'approved' THEN 1 ELSE 2 END, -- อนุมัติแล้วมาก่อน
-                    a.Approve_Date DESC, -- วันที่อนุมัติเรียงจากล่าสุดไปหาเก่าสุด
-                    w.CarRepair_Date DESC, -- วันที่ซ่อมเรียงจากล่าสุด
-                    w.CarRepair_Time DESC -- เวลาซ่อมเรียงจากล่าสุด
-                LIMIT $start, $limit";
+            $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+                        CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
+                    FROM tb_work w
+                    JOIN tb_car c ON w.Car_ID = c.Car_ID
+                    JOIN tb_user u ON w.User_ID = u.User_ID
+                    LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+                    WHERE a.Approve_Status IN ('approved', 'pending')";
 
             $result = $conn->query($sql);
 
@@ -287,7 +281,7 @@
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . $row['CarRepair_Date'] . "</td>";
+                    echo "<td>" . $row['Work_Date'] . "</td>";
                     echo "<td>" . $row['Car_ID'] . "</td>";
                     echo "<td>" . $row['CarNumber'] . "</td>";
                     echo "<td>" . $row['CarBrand'] . "</td>";

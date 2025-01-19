@@ -105,7 +105,9 @@ body {
 <?php
     require '../conn.php';
     $departments = $conn->query("SELECT * FROM tb_department");
+    $role = $conn->query("SELECT * FROM tb_role");
     ?>
+
 
 <form method="post" action="Ad-inputusersucc.php" enctype="multipart/form-data">
     <div class="form-title">
@@ -151,12 +153,12 @@ body {
                 <input type="password" id="password" name="Password" minlength="8"  required>
             </div>
             <div class="form-group">
-            <label for="role">บทบาท:</label>
-                <select id="role" name="Role" required>
-                <option value="">-- เลือกบทบาท --</option>
-                <option value="0">ผู้ดูแลระบบ</option>
-                <option value="1">พนักงานออฟฟิศ</option>
-                <option value="2">พนักงานช่าง</option>
+                <label for="role">สิทธิ์เข้าถึง:</label>
+                <select id="role" name="Role_ID" required>
+                    <option value="">-- เลือกสิทธิ์เข้าถึง --</option>
+                    <?php while ($row = $role->fetch_assoc()): ?>
+                        <option value="<?= $row['Role_ID'] ?>"><?= $row['Role'] ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
             <div class="form-actions"><br>
