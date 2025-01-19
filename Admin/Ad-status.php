@@ -108,7 +108,7 @@
             <thead>
                 <tr>
                     <th>วันที่</th>
-                    <th>รหัส</th>
+                    <th>รหัสรถ</th>
                     <th>ยี่ห้อ</th>
                     <th>ทะเบียนรถ</th>
                     <th>พนักงานช่าง</th>
@@ -116,70 +116,47 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td>สถานะ A</td>
-                </tr>
+            <?php
+                // เชื่อมต่อฐานข้อมูล
+                include('../conn.php');
+
+                // Query ข้อมูล
+                $sql = "SELECT w.Work_Date, c.Car_ID, c.CarBrand, c.CarNumber, 
+                               CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
+                               d.Department_ID, 
+                               CASE 
+                                   WHEN d.Department_ID = 2 THEN 'เครื่องยนต์'
+                                   WHEN d.Department_ID = 3 THEN 'เคาะ'
+                                   WHEN d.Department_ID = 4 THEN 'ทำสี'
+                                   WHEN d.Department_ID = 5 THEN 'ประกอบ'
+                                   ELSE 'ไม่ทราบสถานะ'
+                               END AS Status_Car
+                        FROM tb_work w
+                        JOIN tb_car c ON w.Car_ID = c.Car_ID
+                        JOIN tb_user u ON w.User_ID = u.User_ID
+                        JOIN tb_department d ON w.Department_ID = d.Department_ID
+                        LEFT JOIN tb_status s ON d.Department_ID = s.Department_ID
+                        ORDER BY w.Work_Date DESC";
+
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['Work_Date'] . "</td>";
+                        echo "<td>" . $row['Car_ID'] . "</td>";
+                        echo "<td>" . $row['CarBrand'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['FullName'] . "</td>";
+                        echo "<td>" . $row['Status_Car'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                }
+
+                $conn->close();
+                ?>
             </tbody>
         </table>
     </div>

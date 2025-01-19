@@ -165,9 +165,9 @@
                     // และ JOIN กับ tb_department เพื่อดึงชื่อแผนก
                     $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
                             FROM tb_user u 
-                            JOIN tb_login l ON u.User_ID = l.User_ID
+                            JOIN tb_role r
                             JOIN tb_department d ON u.Department_ID = d.Department_ID
-                            WHERE l.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
+                            WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
                     $result = $conn->query($sql);
                     while ($row = $result->fetch_assoc()) {
                         // แสดงชื่อพนักงานและชื่อแผนก

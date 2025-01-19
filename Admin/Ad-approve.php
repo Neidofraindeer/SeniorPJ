@@ -128,10 +128,10 @@
                         echo "<td>" . $row['FullName'] . "</td>";
                         echo "<td>
                             <form action='update-status.php' method='POST'>
-                                <input type='hidden' name='Work_ID' value='" . $row['Work_ID'] . "'>
                                 <button type='submit' class='btn-approve'>อนุมัติ</button>
                             </form>
                         </td>";
+                        echo "</tr>";
                     }
                 } else {
                     echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";

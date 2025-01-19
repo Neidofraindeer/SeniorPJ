@@ -29,23 +29,26 @@ if (!move_uploaded_file($repairPictureTmp, $repairPicturePath)) {
 }
 
 // INSERT ข้อมูลลงใน tb_car
-$sqlCar = "INSERT INTO tb_car (CarNumber, User_ID, CarBrand, CarModel, CarColor, CarInsurance, CarDetail, CarPicture, RepairPicture)
-           VALUES ('$carNumber', '$userID', '$carBrand', '$carModel', '$carColor', '$carInsurance', '$carDetail', '$carPicturePath', '$repairPicturePath')";
+$sqlCar = "INSERT INTO tb_car (User_ID, CarNumber, CarModel,  CarBrand,  CarColor, CarDetail, CarInsurance,  CarPicture, RepairPicture)
+           VALUES ('$userID', '$carNumber', '$carModel', '$carBrand', '$carColor', '$carDetail', '$carInsurance', '$carPicturePath', '$repairPicturePath')";
 if ($conn->query($sqlCar) === TRUE) {
     // ดึง Car_ID ที่เพิ่งเพิ่ม
     $carID = $conn->insert_id;
 
     // INSERT ข้อมูลลงใน tb_work
-    $workDate = date("Y-m-d");
-    $workTime = date("H:i:s");
+    $datetime = new DateTime(); 
+    $workDate = new DateTimeZone('Asia/Bangkok'); 
+    $datetime->setTimezone($workDate); 
+    $workDate = $datetime->format('Y-m-d'); 
+    $workTime = $datetime->format('H-i-s'); 
 
     $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Work_Date, Work_Time)
                 VALUES ('$carID', '$userID', '$workDate', '$workTime')";
     if ($conn->query($sqlWork) === TRUE) {
         
         // INSERT ข้อมูลลงใน tb_approve (ตั้งค่า Approve_Status เป็น pending)
-        $sqlApprove = "INSERT INTO tb_approve (WoekCar_ID, User_ID, Approve_Status) 
-                       VALUES ('$carID', '$userID', 'pending')";
+        $sqlApprove = "INSERT INTO tb_approve (User_ID, Car_ID, Approve_Status) 
+                       VALUES ('$userID','$carID', 'pending')";
         if ($conn->query($sqlApprove) === TRUE) {
             echo "บันทึกข้อมูลสำเร็จ";
             header("refresh: 1; url= Ad-mainpage.php");
@@ -58,6 +61,5 @@ if ($conn->query($sqlCar) === TRUE) {
 } else {
     echo "ข้อผิดพลาดในการบันทึกข้อมูล tb_car: " . $conn->error;
 }
-
 $conn->close();
 ?>
