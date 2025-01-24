@@ -8,12 +8,11 @@ $status = $_POST['status'];
 
 if ($status == 'approve') {
     // อัปเดตสถานะใน tb_approve
-    $sql_approve = "UPDATE tb_approve SET Approve_Status = 'approve' WHERE Approve_ID = ?";
+    $sql_approve = "UPDATE tb_approve SET Approve_Status = 'approved' WHERE Approve_ID = ?";
     $stmt = $conn->prepare($sql_approve);
     $stmt->bind_param("i", $approve_id);
     $stmt->execute();
 
-    // ย้อนกลับไปยังหน้า Approve.php
     header("Location: Ad-approve.php");
     exit();
 }
