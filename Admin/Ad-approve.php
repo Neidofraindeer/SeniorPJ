@@ -107,14 +107,15 @@
             <tbody>
             <?php
             include('../conn.php');
-            // Query ดึงข้อมูลจากตาราง tb_work และ tb_car
+            
             $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                            CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName 
+                            CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_ID, a.Approve_Status 
                     FROM tb_work w
                     JOIN tb_car c ON w.Car_ID = c.Car_ID
                     JOIN tb_user u ON w.User_ID = u.User_ID
                     LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
                     WHERE a.Approve_Status = 'pending'";
+
             $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -126,18 +127,24 @@
                         echo "<td>" . $row['CarNumber'] . "</td>";
                         echo "<td>" . $row['CarBrand'] . "</td>";
                         echo "<td>" . $row['FullName'] . "</td>";
-                        echo "<td>
-                            <form action='update-status.php' method='POST'>
-                                <button type='submit' class='btn-approve'>อนุมัติ</button>
-                            </form>
-                        </td>";
+
+                        $status = $row['Approve_Status'] ?? 'pending';
+                        if ($status == 'pending') {
+                            echo "<td>
+                                    <form action='update-status.php' method='POST'>
+                                        <input type='hidden' name='Approve_ID' value='" . $row['Approve_ID'] . "'>
+                                        <button type='submit' name='status' value='approve' class='btn-approve'>อนุมัติ</button>
+                                    </form>
+                                </td>";
+                        } else {
+                            echo "<td style='text-align: center;'>" . ucfirst($status) . "</td>";
+                        }
                         echo "</tr>";
                     }
                 } else {
                     echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
-                }           
-            ?>
-
+                }
+                ?>
             </tbody>
         </table>
     </div>

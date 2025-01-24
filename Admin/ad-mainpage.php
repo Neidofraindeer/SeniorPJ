@@ -268,13 +268,13 @@
 
             // ดึงข้อมูลจากฐานข้อมูล
             $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                        CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
-                    FROM tb_work w
-                    JOIN tb_car c ON w.Car_ID = c.Car_ID
-                    JOIN tb_user u ON w.User_ID = u.User_ID
-                    LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
-                    WHERE a.Approve_Status IN ('approved', 'pending')
-                    LIMIT $limit OFFSET $start";
+                CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
+            FROM tb_work w
+            JOIN tb_car c ON w.Car_ID = c.Car_ID
+            JOIN tb_user u ON w.User_ID = u.User_ID
+            LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+            WHERE a.Approve_Status IN ('approve', 'pending')   -- ดึงสถานะ approved และ pending
+            LIMIT $limit OFFSET $start";
 
             $result = $conn->query($sql);
 
@@ -302,14 +302,10 @@
             }
 
             // คำนวณจำนวนหน้าทั้งหมด
-                        $sql_count = "SELECT COUNT(*) AS total 
-                        FROM tb_work w
-                        JOIN tb_car c ON w.Car_ID = c.Car_ID
-                        JOIN tb_user u ON w.User_ID = u.User_ID
-                        LEFT JOIN tb_approve a ON u.User_ID = a.User_ID";
-                $result_count = $conn->query($sql_count);
-                $row_count = $result_count->fetch_assoc();
-                $total_records = $row_count['total'];
+            $sql_count = "SELECT COUNT(*) AS total FROM tb_work";
+            $result_count = $conn->query($sql_count);
+            $row_count = $result_count->fetch_assoc();
+            $total_records = $row_count['total'];
 
                 // คำนวณจำนวนหน้าทั้งหมด
                 $total_pages = ceil($total_records / $limit);

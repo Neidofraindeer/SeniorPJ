@@ -46,9 +46,10 @@ if ($conn->query($sqlCar) === TRUE) {
                 VALUES ('$carID', '$userID', '$workDate', '$workTime')";
     if ($conn->query($sqlWork) === TRUE) {
         
+        $workID = $conn->insert_id;
         // INSERT ข้อมูลลงใน tb_approve (ตั้งค่า Approve_Status เป็น pending)
-        $sqlApprove = "INSERT INTO tb_approve (User_ID, Car_ID, Approve_Status) 
-                       VALUES ('$userID','$carID', 'pending')";
+        $sqlApprove = "INSERT INTO tb_approve (Work_ID, Approve_Status) 
+                       VALUES ('$workID','pending')";
         if ($conn->query($sqlApprove) === TRUE) {
             echo "บันทึกข้อมูลสำเร็จ";
             header("refresh: 1; url= Ad-mainpage.php");
