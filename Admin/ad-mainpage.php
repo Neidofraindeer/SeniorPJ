@@ -244,6 +244,7 @@
             <thead>
                 <tr>
                     <th>วันที่</th>
+                    <th>เวลา</th>
                     <th>รหัสรถ</th>
                     <th>ทะเบียนรถ</th>
                     <th>ยี่ห้อ</th>
@@ -273,7 +274,7 @@
             JOIN tb_car c ON w.Car_ID = c.Car_ID
             JOIN tb_user u ON w.User_ID = u.User_ID
             LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
-            WHERE a.Approve_Status IN ('approved', 'pending')   -- ดึงสถานะ approved และ pending
+            WHERE a.Approve_Status IN ('approved', 'pending') 
             LIMIT $limit OFFSET $start";
 
             $result = $conn->query($sql);
@@ -287,7 +288,7 @@
                     echo "<td>" . $row['Car_ID'] . "</td>";
                     echo "<td>" . $row['CarNumber'] . "</td>";
                     echo "<td>" . $row['CarBrand'] . "</td>";
-                    echo "<td>" . $row['FullName'] . "</td>";
+                    echo "<td>" . $row['FullName']. "</td>";
 
                     // แสดงสถานะการอนุมัติ
                     if ($row['Approve_Status'] == 'approved') {
