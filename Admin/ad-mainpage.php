@@ -283,6 +283,7 @@
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . $row['Work_Date'] . "</td>";
+                    echo "<td>" . $row['Work_Time'] . "</td>";
                     echo "<td>" . $row['Car_ID'] . "</td>";
                     echo "<td>" . $row['CarNumber'] . "</td>";
                     echo "<td>" . $row['CarBrand'] . "</td>";
