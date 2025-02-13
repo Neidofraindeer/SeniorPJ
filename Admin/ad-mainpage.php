@@ -204,9 +204,12 @@
             border-radius: 5px;
             text-decoration: none;
         }
+        
         .pagination a:hover {
             background-color: #835EB7;
         }
+
+
     </style>
 </head>
 <body>
