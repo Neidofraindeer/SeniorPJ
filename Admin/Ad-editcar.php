@@ -152,8 +152,8 @@
                 <h3>ข้อมูลรถยนต์</h3>
                 <div class="form-group">
                     <label for="photo">รูป:</label>
-                    <img src="../uploads/car/<?= $row['CarPicture']; ?> "  alt="Car Image" width="100">
-                    <input type="file" id="photo" name="CarPicture" >
+                    <img src="../uploads/car/<?= $row['CarPicture']; ?>" alt="Car Image" width="100">
+                    <input type="file" id="photo" name="CarPicture">
                 </div>
                 <div class="form-group">
                     <label>หมายเลขทะเบียน:</label>
@@ -182,8 +182,8 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <img src="../uploads/repair/<?= $row['RepairPicture']; ?> "   alt="Repair Image" width="100">
-                    <input type="file" id="repair_photo" name="RepairPicture" >
+                    <img src="../uploads/repair/<?= $row['RepairPicture']; ?>" alt="Repair Image" width="100">
+                    <input type="file" id="repair_photo" name="RepairPicture" multiple>
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
@@ -195,19 +195,19 @@
                 <select name="User_ID" required>
                     <option value="">-- เลือกพนักงานช่าง --</option>
                     <?php
-            // ดึงข้อมูลพนักงานจาก tb_user
-            $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
-                    FROM tb_user u 
-                    JOIN tb_role r
-                    JOIN tb_department d ON u.Department_ID = d.Department_ID
-                    WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
-            $result = $conn->query($sql);
-            while ($row_emp = $result->fetch_assoc()) {
-                // หาก User_ID ตรงกับข้อมูลที่โหลดมา ให้เลือกค่า default
-                $selected = ($row_emp['User_ID'] == $row['User_ID']) ? 'selected' : '';
-                echo "<option value='{$row_emp['User_ID']}' $selected>{$row_emp['FullName']} - {$row_emp['Department_name']}</option>";
-            }
-            ?>
+                    // ดึงข้อมูลพนักงานจาก tb_user
+                    $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
+                            FROM tb_user u 
+                            JOIN tb_role r
+                            JOIN tb_department d ON u.Department_ID = d.Department_ID
+                            WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
+                    $result = $conn->query($sql);
+                    while ($row_emp = $result->fetch_assoc()) {
+                        // หาก User_ID ตรงกับข้อมูลที่โหลดมา ให้เลือกค่า default
+                        $selected = ($row_emp['User_ID'] == $row['User_ID']) ? 'selected' : '';
+                        echo "<option value='{$row_emp['User_ID']}' $selected>{$row_emp['FullName']} - {$row_emp['Department_name']}</option>";
+                    }
+                    ?>
                 </select>
             </div>
 
