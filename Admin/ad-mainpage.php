@@ -236,7 +236,7 @@
         <h1>รายการมอบหมายงาน</h1>
         <!-- Search Bar -->
         <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
+            <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
             <button class="btn-search">ค้นหา</button>
             <button class="btn-add" onclick="document.location='Ad-inputcar.php'">เพิ่มรายการ</button>
         </div>
