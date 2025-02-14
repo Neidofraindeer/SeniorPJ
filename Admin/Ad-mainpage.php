@@ -11,9 +11,22 @@
             color: rgb(144, 127, 201); /* สีน้ำเงิน */
             font-size: 18px; /* ขนาดไอคอน */
             transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
+            
         }
         .fa-pencil-alt:hover {
             color: #835EB7; /* สีเข้มเมื่อ hover */
+        }
+        .fa-trash-alt {
+            color: #E74C3C;
+            font-size: 18px; /* ขนาดไอคอน */
+            transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
+            
+        }
+        .fa-trash-alt:hover {
+           color: #c0392b; 
+        }
+        .actions a i {
+            margin-left: 5px; /* เพิ่มระยะห่างระหว่างไอคอน */
         }
         /* Reset CSS */
         * {
@@ -203,6 +216,12 @@
         .pagination a:hover {
             background-color: #835EB7;
         }
+        tr:hover {
+            background-color:rgb(247, 242, 254);
+            transition: 0.2s;
+        }
+        
+
     </style>
 </head>
 <body>
@@ -270,25 +289,30 @@
             // แสดงข้อมูลในตาราง
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
+                    echo "<tr onclick=\"window.location='Ad-editcar.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
                     echo "<td>" . $row['Work_Date'] . "</td>";
                     echo "<td>" . $row['Work_Time'] . "</td>";
                     echo "<td>" . $row['Car_ID'] . "</td>";
                     echo "<td>" . $row['CarNumber'] . "</td>";
                     echo "<td>" . $row['CarBrand'] . "</td>";
-                    echo "<td>" . $row['FullName']. "</td>";
+                    echo "<td>" . $row['FullName']. "</td>"; 
                     // แสดงสถานะการอนุมัติ
                     if ($row['Approve_Status'] == 'approved') {
                         echo "<td><div class='status-approved'>อนุมัติ</div></td>";
                     } else {
                         echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
                     }
-                        echo "<td><a href='Ad-editcar.php?id=" . $row['Car_ID'] . "'><i class='fa fa-pencil-alt'></i></a></td>";  // ปุ่มแก้ไข
-                        echo "</tr>";
+                    echo "<td class='actions'>";
+                    echo "<a href='Ad-editcar.php?id=" . $row['Car_ID'] . "' onclick='event.stopPropagation();'><i class='fa fa-pencil-alt'></i></a> ";
+                    echo "<a href='javascript:void(0)' onclick='event.stopPropagation(); deletework(" . $row['Car_ID'] . ")'><i class='fas fa-trash-alt'></i></a>";
+                    echo "</td>";
+            
+                    echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                echo "<tr><td colspan='8' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
             }
+            
             // คำนวณจำนวนหน้าทั้งหมด
             $sql_count = "SELECT COUNT(*) AS total FROM tb_work";
             $result_count = $conn->query($sql_count);
@@ -323,6 +347,13 @@
                 ?>
         </div>
     </div>
+    <script>
+        function deletework(workId) {
+            if (confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')) {
+                window.location.href = 'Ad-deletework.php?id=' + workId;
+            } 
+        }
+    </script>
 </body>
 </html>      
         

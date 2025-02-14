@@ -149,10 +149,11 @@
 
         <!-- ข้อมูลรถยนต์ -->
             <div class="form-section">
+                <h4>วันที่มอบหมายงาน : <?php echo $row['Work_Date']; ?></h4>
                 <h3>ข้อมูลรถยนต์</h3>
                 <div class="form-group">
                     <label for="photo">รูป:</label>
-                    <img src="../uploads/car/<?= $row['CarPicture']; ?>" alt="Car Image" width="100">
+                    <img src="<?= htmlspecialchars($row['CarPicture']); ?>" alt="รูปภาพรถยนต์" width="200">
                     <input type="file" id="photo" name="CarPicture">
                 </div>
                 <div class="form-group">
@@ -182,8 +183,8 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <img src="../uploads/repair/<?= $row['RepairPicture']; ?>" alt="Repair Image" width="100">
-                    <input type="file" id="repair_photo" name="RepairPicture" multiple>
+                    <img src="<?= htmlspecialchars($row['RepairPicture']); ?>" alt="รูปตำแหน่งซ่อมแซม" width="200"> 
+                    <input type="file" id="repair_photo" name="RepairPicture" multiple >
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>

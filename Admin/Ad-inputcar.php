@@ -148,7 +148,7 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <input type="file" id="repair_photo" name="RepairPicture" required>
+                    <input type="file" id="repair_photo" name="RepairPicture" multiple required>
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>

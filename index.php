@@ -1,39 +1,6 @@
 <?php
 // รวมไฟล์เชื่อมต่อฐานข้อมูล
 include 'conn.php';
-
-// รับค่า username และ password จากฟอร์ม
-$username = $_POST['Username'];
-$password = $_POST['Password'];
-
-// เตรียมคำสั่ง SQL สำหรับตรวจสอบข้อมูล
-$sql = "SELECT * FROM tb_login WHERE Username = ? AND Password = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $username, $password);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows > 0) {
-    // หากพบข้อมูลผู้ใช้
-    $row = $result->fetch_assoc();
-    $roleId = $row['Role_ID'];
-
-    // ตรวจสอบสิทธิ์ตาม Role_ID
-    if ($roleId == 0) { // Admin
-        // Redirect ไปยังหน้า Admin
-        header("Location: Ad-mainpage.php");
-    } elseif ($roleId == 1) { // Office
-        // Redirect ไปยังหน้า Office
-        header("Location: Of-mainpage.php");
-    } else { // Mechanic หรืออื่นๆ
-        // Redirect ไปยังหน้าอื่นๆ
-        header("Location: Mc-mainpage.php");
-    }
-} else {
-    echo "Username หรือ Password ไม่ถูกต้อง";
-}
-
-$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">

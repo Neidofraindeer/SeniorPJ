@@ -86,6 +86,11 @@
             display: flex;
             justify-content: center;
         }
+        tr:hover {
+            background-color:rgb(247, 242, 254); /* เปลี่ยนสีพื้นหลัง */
+            transition: 0.2s;
+        }
+
     </style>
 </head>
 <body>
@@ -113,14 +118,14 @@
                     FROM tb_work w
                     JOIN tb_car c ON w.Car_ID = c.Car_ID
                     JOIN tb_user u ON w.User_ID = u.User_ID
-                    LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+                    LEFT JOIN tb_approve a ON  a.Approve_ID = w.Work_ID
                     WHERE a.Approve_Status = 'pending'";
 
             $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
+                        echo "<tr onclick=\"window.location='Ad-approve-detail.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Work_Time'] . "</td>";
                         echo "<td>" . $row['Car_ID'] . "</td>";
