@@ -92,6 +92,10 @@
             font-size: 24px;
             font-style: oblique;
         }
+        tr:hover {
+            background-color:rgb(247, 242, 254); /* เปลี่ยนสีพื้นหลัง */
+            transition: 0.2s;
+        }
     </style>
 </head>
 <body>
@@ -121,28 +125,25 @@
                 include('../conn.php');
 
                 // Query ข้อมูล
-                $sql = "SELECT w.Work_Date, c.Car_ID, c.CarBrand, c.CarNumber, 
-                               CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
-                               d.Department_ID, 
-                               CASE 
-                                   WHEN d.Department_ID = 2 THEN 'เครื่องยนต์'
-                                   WHEN d.Department_ID = 3 THEN 'เคาะ'
-                                   WHEN d.Department_ID = 4 THEN 'ทำสี'
-                                   WHEN d.Department_ID = 5 THEN 'ประกอบ'
-                                   ELSE 'ไม่ทราบสถานะ'
-                               END AS Status_Car
-                        FROM tb_work w
-                        JOIN tb_car c ON w.Car_ID = c.Car_ID
-                        JOIN tb_user u ON w.User_ID = u.User_ID
-                        JOIN tb_department d ON w.Department_ID = d.Department_ID
-                        LEFT JOIN tb_status s ON d.Department_ID = s.Department_ID
-                        ORDER BY w.Work_Date DESC";
+                $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarBrand, c.CarNumber, 
+                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
+                    CASE 
+                        WHEN u.Department_ID = 2 THEN 'เครื่องยนต์'
+                        WHEN u.Department_ID = 3 THEN 'เคาะ'
+                        WHEN u.Department_ID = 4 THEN 'ทำสี'
+                        WHEN u.Department_ID = 5 THEN 'ประกอบ'
+                        ELSE 'ไม่ทราบสถานะ'
+                    END AS Status_Car
+                FROM tb_work w
+                JOIN tb_car c ON w.Car_ID = c.Car_ID
+                JOIN tb_user u ON w.User_ID = u.User_ID
+                ORDER BY w.Work_Date DESC;";
 
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
+                        echo "<tr onclick=\"window.location='Ad-status-detail.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Car_ID'] . "</td>";
                         echo "<td>" . $row['CarBrand'] . "</td>";
