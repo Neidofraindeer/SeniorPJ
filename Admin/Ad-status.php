@@ -146,7 +146,7 @@
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Car_ID'] . "</td>";
                         echo "<td>" . $row['CarBrand'] . "</td>";
-                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>"; 
                         echo "<td>" . $row['FullName'] . "</td>";
                         echo "<td>" . $row['Status_Car'] . "</td>";
                         echo "</tr>";
