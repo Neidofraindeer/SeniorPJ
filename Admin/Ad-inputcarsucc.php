@@ -65,17 +65,15 @@ if ($conn->query($sqlCar) === TRUE) {
     // ดึง Car_ID ที่เพิ่งเพิ่ม
     $carID = $conn->insert_id;
 
-    // INSERT ข้อมูลลงใน tb_work
-    $datetime = new DateTime(); 
-    $workDate = new DateTimeZone('Asia/Bangkok'); 
-    $datetime->setTimezone($workDate); 
-    $workDate = $datetime->format('Y-m-d'); 
-    $workTime = $datetime->format('H-i-s'); 
+    date_default_timezone_set('Asia/Bangkok');
+    $workDate = new DateTime();
+    $formattedDate = $workDate->format('Y-m-d');
+    $workTime = date('H:i:s'); 
 
     $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Status_ID, Department_ID, Work_Date, Work_Time)
-                VALUES ('$carID', '$userID', '$statusID', '$departmentID', '$workDate', '$workTime')";
+                VALUES ('$carID', '$userID', '$statusID', '$departmentID', '$formattedDate', '$workTime')";
+
     if ($conn->query($sqlWork) === TRUE) {
-        
         $workID = $conn->insert_id;
         // INSERT ข้อมูลลงใน tb_approve (ตั้งค่า Approve_Status เป็น pending)
         $sqlApprove = "INSERT INTO tb_approve (Work_ID, Approve_Status) 
