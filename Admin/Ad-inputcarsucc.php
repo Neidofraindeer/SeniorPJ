@@ -1,6 +1,5 @@
 <?php
 include '../conn.php';
-
 // รับค่าจากฟอร์ม
 $carNumber = $_POST['CarNumber'];
 $carBrand = $_POST['CarBrand'];
@@ -9,6 +8,37 @@ $carColor = $_POST['CarColor'];
 $carInsurance = $_POST['CarInsurance'];
 $carDetail = $_POST['CarDetail'];
 $userID = $_POST['User_ID'];
+
+// ดึง Department_ID ของพนักงานที่เลือก
+$sqlDept = "SELECT Department_ID FROM tb_user WHERE User_ID = '$userID'";
+$resultDept = $conn->query($sqlDept);
+$rowDept = $resultDept->fetch_assoc();
+$departmentID = $rowDept['Department_ID'];
+
+// กำหนด Status_ID ตาม Department_ID
+switch ($departmentID) {
+    case 2:
+        $statusID = 0;  // เครื่องยนต์
+        break;
+    case 3:
+        $statusID = 1;  // เคาะ
+        break;
+    case 4:
+        $statusID = 2;  // ทำสี
+        break;
+    case 5:
+        $statusID = 3;  // ประกอบ
+        break;
+    default:
+        $statusID = null; // ถ้าไม่ตรงกับใดๆ
+        echo "ไม่พบ Department_ID ที่ถูกต้อง";
+        exit;
+}
+// ดึงชื่อของ Status_Car ที่ตรงกับ Status_ID
+$sqlStatus = "SELECT Status_Car FROM tb_status WHERE Status_ID = '$statusID'";
+$resultStatus = $conn->query($sqlStatus);
+$rowStatus = $resultStatus->fetch_assoc();
+$statusCar = $rowStatus['Status_Car'];
 
 // อัปโหลดรูปภาพ CarPicture
 $carPicture = $_FILES['CarPicture']['name'];
@@ -42,8 +72,8 @@ if ($conn->query($sqlCar) === TRUE) {
     $workDate = $datetime->format('Y-m-d'); 
     $workTime = $datetime->format('H-i-s'); 
 
-    $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Work_Date, Work_Time)
-                VALUES ('$carID', '$userID', '$workDate', '$workTime')";
+    $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Status_ID, Department_ID, Work_Date, Work_Time)
+                VALUES ('$carID', '$userID', '$statusID', '$departmentID', '$workDate', '$workTime')";
     if ($conn->query($sqlWork) === TRUE) {
         
         $workID = $conn->insert_id;

@@ -171,17 +171,61 @@
                     $result = $conn->query($sql);
                     while ($row = $result->fetch_assoc()) {
                         // แสดงชื่อพนักงานและชื่อแผนก
-                        echo "<option value='{$row['User_ID']}'>{$row['FullName']} - {$row['Department_name']}</option>";
-                    }
+                        echo "<option value='{$row['User_ID']}'>{$row['FullName']} - {$row['Department_name']}</option>";}
                     ?>
                 </select>
             </div>
-
             <!-- ปุ่มบันทึกและยกเลิก -->
             <div class="form-buttons">
                 <button type="submit" class="btn-save">บันทึก</button>
                 <button type="button" class="btn-cancel" onclick="window.history.back()">ยกเลิก</button>
             </div>
+            <script>
+                function updateStatus() {
+                    // ดึง Department_ID จากตัวเลือก User_ID ที่เลือก
+                    var userSelect = document.querySelector('select[name="User_ID"]');
+                    var departmentID = userSelect.options[userSelect.selectedIndex].getAttribute('data-department-id');
+                    
+                    // กำหนด Status_ID ตาม Department_ID
+                    var statusID;
+                    var statusText = '';
+                    if (departmentID == '2') {
+                        statusID = '0';  // เครื่องยนต์
+                        statusText = 'เครื่องยนต์';
+                    } else if (departmentID == '3') {
+                        statusID = '1';  // เคาะ
+                        statusText = 'เคาะ';
+                    } else if (departmentID == '4') {
+                        statusID = '2';  // ทำสี
+                        statusText = 'ทำสี';
+                    } else if (departmentID == '5') {
+                        statusID = '3';  // ประกอบ
+                        statusText = 'ประกอบ';
+                    }
+
+                    // สร้าง input ซ่อนที่เก็บ Status_ID
+                    var statusInput = document.getElementById('statusID');
+                    if (!statusInput) {
+                        statusInput = document.createElement('input');
+                        statusInput.type = 'hidden';
+                        statusInput.name = 'Status_ID';
+                        statusInput.id = 'statusID';
+                        document.forms[0].appendChild(statusInput);
+                    }
+                    statusInput.value = statusID;
+
+                    // สร้าง input ซ่อนที่เก็บ Status_Car
+                    var statusCarInput = document.getElementById('statusCar');
+                    if (!statusCarInput) {
+                        statusCarInput = document.createElement('input');
+                        statusCarInput.type = 'hidden';
+                        statusCarInput.name = 'Status_Car';
+                        statusCarInput.id = 'statusCar';
+                        document.forms[0].appendChild(statusCarInput);
+                    }
+                    statusCarInput.value = statusText;
+                }
+            </script>
         </form>
     </div>
 </body>

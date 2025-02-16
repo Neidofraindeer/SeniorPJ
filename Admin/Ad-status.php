@@ -126,18 +126,14 @@
 
                 // Query ข้อมูล
                 $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarBrand, c.CarNumber, 
-                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
-                    CASE 
-                        WHEN u.Department_ID = 2 THEN 'เครื่องยนต์'
-                        WHEN u.Department_ID = 3 THEN 'เคาะ'
-                        WHEN u.Department_ID = 4 THEN 'ทำสี'
-                        WHEN u.Department_ID = 5 THEN 'ประกอบ'
-                        ELSE 'ไม่ทราบสถานะ'
-                    END AS Status_Car
+                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, s.Status_Car
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
                 JOIN tb_user u ON w.User_ID = u.User_ID
-                ORDER BY w.Work_Date DESC;";
+                JOIN tb_status s ON w.Status_ID = s.Status_ID
+                JOIN tb_approve a ON w.Work_ID = a.Work_ID
+                WHERE a.Approve_Status = 'approved'
+                ";
 
                 $result = $conn->query($sql);
 
