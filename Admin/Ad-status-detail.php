@@ -92,17 +92,11 @@
         // ดึงข้อมูลจาก tb_work และ tb_car
         $sql = "SELECT w.Work_ID, w.Car_ID, w.User_ID, w.Work_Date, w.Work_Time,
                     c.CarNumber, c.CarModel, c.CarBrand, c.CarColor, c.CarDetail,
-                    c.CarPicture, c.RepairPicture, c.CarInsurance,  
-                    CASE 
-                        WHEN u.Department_ID = 2 THEN 'เครื่องยนต์'
-                        WHEN u.Department_ID = 3 THEN 'เคาะ'
-                        WHEN u.Department_ID = 4 THEN 'ทำสี'
-                        WHEN u.Department_ID = 5 THEN 'ประกอบ'
-                        ELSE 'ไม่ทราบสถานะ'
-                    END AS Status_Car
+                    c.CarPicture, c.RepairPicture, c.CarInsurance,s.Status_Car  
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
                 JOIN tb_user u ON w.User_ID = u.User_ID
+                JOIN tb_status s ON w.Status_ID = s.Status_ID
                 WHERE w.Work_ID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $Work_ID);

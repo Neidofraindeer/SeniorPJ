@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แก้ไขรายการ</title>
+    <title>รายละเอียดรถ</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -79,38 +79,12 @@
             resize: none;
             height: 80px;
         }
-        .form-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        .form-buttons button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .form-buttons .btn-save {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .form-buttons .btn-save:hover {
-            background-color: #45a049;
-        }
-        .form-buttons .btn-cancel {
-            background-color: #f44336;
-            color: white;
-        }
-        .form-buttons .btn-cancel:hover {
-            background-color: #e53935;
-        }
+
     </style>
 </head>
 <body>
     <?php
     include '../conn.php';
-
     // ตรวจสอบว่ามี Work_ID ถูกส่งมาหรือไม่
     if (isset($_GET['id'])) {
         $Work_ID = $_GET['id'];
@@ -118,9 +92,11 @@
         // ดึงข้อมูลจาก tb_work และ tb_car
         $sql = "SELECT w.Work_ID, w.Car_ID, w.User_ID, w.Work_Date, w.Work_Time,
                     c.CarNumber, c.CarModel, c.CarBrand, c.CarColor, c.CarDetail,
-                    c.CarPicture, c.RepairPicture, c.CarInsurance
+                    c.CarPicture, c.RepairPicture, c.CarInsurance, s.Status_Car  
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
+                JOIN tb_user u ON w.User_ID = u.User_ID
+                JOIN tb_status s ON w.Status_ID = s.Status_ID
                 WHERE w.Work_ID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $Work_ID);
@@ -140,41 +116,37 @@
     ?>
 <div class="container">
         <div class="form-title">
-            <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt; </a>
-            <a class="header">แก้ไขรายการ</a>
+            <a onclick="document.location='Of-status.php'" class="back-link">&lt; </a>
         </div>
-        <form action="Of-editcarsucc.php?Work_ID=<?= $row['Work_ID']; ?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="Work_ID" value="<?php echo $row['Work_ID']; ?>">
-        <input type="hidden" name="Car_ID" value="<?php echo $row['Car_ID']; ?>">
-
+        <h2>สถานะ : <?php echo $row['Status_Car']; ?><h2>
+        <h4>วันที่มอบหมายงาน : <?php echo $row['Work_Date']; ?></h4>
         <!-- ข้อมูลรถยนต์ -->
             <div class="form-section">
-                <h4>วันที่มอบหมายงาน : <?php echo $row['Work_Date']; ?></h4>
                 <h3>ข้อมูลรถยนต์</h3>
                 <div class="form-group">
                     <label for="photo">รูป:</label>
                     <img src="<?= htmlspecialchars($row['CarPicture']); ?>" alt="รูปภาพรถยนต์" width="200">
-                    <input type="file" id="photo" name="CarPicture">
+
                 </div>
                 <div class="form-group">
                     <label>หมายเลขทะเบียน:</label>
-                    <input type="text" name="CarNumber" placeholder="กรอกหมายเลขทะเบียน" value="<?php echo $row['CarNumber']; ?>" required>
+                    <?php echo $row['CarNumber']; ?>
                 </div>
                 <div class="form-group">
                     <label>ยี่ห้อ:</label>
-                    <input type="text" name="CarBrand" placeholder="กรอกยี่ห้อ" value="<?php echo $row['CarBrand']; ?>" required>
+                    <?php echo $row['CarBrand']; ?>
                 </div>
                 <div class="form-group">
                     <label>รุ่น:</label>
-                    <input type="text" name="CarModel" placeholder="กรอกรุ่น" value="<?php echo $row['CarModel']; ?>" required>
+                    <?php echo $row['CarModel']; ?>
                 </div>
                 <div class="form-group">
                     <label>สีรถ:</label>
-                    <input type="text" name="CarColor" placeholder="กรอกสี" value="<?php echo $row['CarColor']; ?>" required>
+                    <?php echo $row['CarColor']; ?>
                 </div>
                 <div class="form-group">
                     <label>บริษัทประกัน:</label>
-                    <input type="text" name="CarInsurance" placeholder="กรอกบริษัทประกัน" value="<?php echo $row['CarInsurance']; ?>" required>
+                    <?php echo $row['CarInsurance']; ?>
                 </div>
             </div>
 
@@ -184,38 +156,31 @@
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
                     <img src="<?= htmlspecialchars($row['RepairPicture']); ?>" alt="รูปตำแหน่งซ่อมแซม" width="200"> 
-                    <input type="file" id="repair_photo" name="RepairPicture" multiple >
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
-                    <textarea name="CarDetail" placeholder="กรอกรายละเอียดตำแหน่งที่ซ่อมแซม"required> <?php echo $row['CarDetail']; ?> </textarea>
+                    <?php echo $row['CarDetail']; ?>
                 </div>
             </div>
             <div class="form-group">
                 <label>ชื่อพนักงานช่าง:</label>
-                <select name="User_ID" required>
-                    <option value="">-- เลือกพนักงานช่าง --</option>
-                    <?php
-                    // ดึงข้อมูลพนักงานจาก tb_user
-                    $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
-                            FROM tb_user u 
-                            JOIN tb_role r
+                <?php
+                $sql_emp = "SELECT CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
+                            FROM tb_user u
                             JOIN tb_department d ON u.Department_ID = d.Department_ID
-                            WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
-                    $result = $conn->query($sql);
-                    while ($row_emp = $result->fetch_assoc()) {
-                        // หาก User_ID ตรงกับข้อมูลที่โหลดมา ให้เลือกค่า default
-                        $selected = ($row_emp['User_ID'] == $row['User_ID']) ? 'selected' : '';
-                        echo "<option value='{$row_emp['User_ID']}' $selected>{$row_emp['FullName']} - {$row_emp['Department_name']}</option>";
-                    }
-                    ?>
-                </select>
+                            WHERE u.User_ID = ?";
+                $stmt_emp = $conn->prepare($sql_emp);
+                $stmt_emp->bind_param("i", $row['User_ID']);
+                $stmt_emp->execute();
+                $result_emp = $stmt_emp->get_result();
+                if ($row_emp = $result_emp->fetch_assoc()) {
+                    echo "<p>" . htmlspecialchars($row_emp['FullName'] . " - " . $row_emp['Department_name']) . "</p>";
+                } else {
+                    echo "<p>ไม่พบข้อมูลพนักงาน</p>";
+                }
+                ?>
             </div>
 
-            <!-- ปุ่มบันทึกและยกเลิก -->
-            <div class="form-buttons">
-                <button type="submit" class="btn-save">บันทึก</button>
-            </div>
         </form>
     </div>
 </body>

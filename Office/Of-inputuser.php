@@ -6,106 +6,106 @@
     <title>เพิ่มข้อมูลผู้ใช้งาน</title>
 </head>
 <style>
-    /* กำหนดรูปแบบพื้นฐาน */
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f9f9f9;
-}
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f9f9f9;
+    }
 
-/* กรอบฟอร์ม */
-.form-container {
-    max-width: 900px;
-    height: 515px;
-    margin: auto;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+    /* กรอบฟอร์ม */
+    .form-container {
+        max-width: 900px;
+        height: 515px;
+        margin: auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-/* กรอปหัวข้อฟอร์ม */
-.form-title{
-    width: 100%;
-    height: 35px;
-    padding: 10px;
-}
-/* หัวข้อฟอร์ม */
-.form-title .head {
-    color: #835EB7; 
-    font-size: 24px;
-}
+    /* กรอปหัวข้อฟอร์ม */
+    .form-title{
+        width: 100%;
+        height: 35px;
+        padding: 10px;
+    }
+    /* หัวข้อฟอร์ม */
+    .form-title .head {
+        color: #835EB7; 
+        font-size: 24px;
+    }
 
-/* < กลับ */
-.form-title .back-link{
-    color: #90879c;
-    font-size: 24px;
-    font-style: oblique;
-}
+    /* < กลับ */
+    .form-title .back-link{
+        color: #90879c;
+        font-size: 24px;
+        font-style: oblique;
+    }
 
-/* กลุ่มฟอร์ม */
-.form-group {
-    display: flex; 
-    align-items: center; 
-    margin-bottom: 15px;
-}
+    /* กลุ่มฟอร์ม */
+    .form-group {
+        display: flex; 
+        align-items: center; 
+        margin-bottom: 15px;
+    }
 
-.form-group label {
-    width: 25%; /* กำหนดความกว้างของ label */
-    margin-right: 10px; /* เพิ่มช่องว่างระหว่าง label และ input */
-    text-align: left; /* จัดข้อความให้ชิดขวา */
-}
+    .form-group label {
+        width: 25%; /* กำหนดความกว้างของ label */
+        margin-right: 10px; /* เพิ่มช่องว่างระหว่าง label และ input */
+        text-align: left; /* จัดข้อความให้ชิดขวา */
+    }
 
-.form-group input,
-.form-group select {
-    flex: 1; /* ให้ input/select ขยายเต็มพื้นที่ที่เหลือ */
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+    .form-group input,
+    .form-group select {
+        flex: 1; /* ให้ input/select ขยายเต็มพื้นที่ที่เหลือ */
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
 
-/* ปุ่มฟอร์ม */
-.form-actions {
-    text-align: right;
-    margin-top: 20px;
-}
+    /* ปุ่มฟอร์ม */
+    .form-actions {
+        text-align: right;
+        margin-top: 20px;
+    }
 
-.form-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-}
+    .form-actions button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
-/* ปุ่มบันทึก */
-.form-actions .btn-save {
-    background-color: #28a745;
-    color: white;
-    
-}
+    /* ปุ่มบันทึก */
+    .form-actions .btn-save {
+        background-color: #28a745;
+        color: white;
+        
+    }
 
-/* ปุ่มยกเลิก */
-.form-actions .btn-cancel {
-    background-color: #dc3545;
-    color: white;
-    margin-left: 10px;
-    
-}
+    /* ปุ่มยกเลิก */
+    .form-actions .btn-cancel {
+        background-color: #dc3545;
+        color: white;
+        margin-left: 10px;
+        
+    }
 
-/* การเพิ่มเอฟเฟกต์ */
-.form-actions button:hover {
-    opacity: 0.9;
-}
+    /* การเพิ่มเอฟเฟกต์ */
+    .form-actions button:hover {
+        opacity: 0.9;
+    }
 </style>
 <body>
-
 <?php
     require '../conn.php';
     $departments = $conn->query("SELECT * FROM tb_department");
+    $role = $conn->query("SELECT * FROM tb_role");
     ?>
+
 
 <form method="post" action="Of-inputusersucc.php" enctype="multipart/form-data">
     <div class="form-title">
@@ -151,12 +151,12 @@ body {
                 <input type="password" id="password" name="Password" minlength="8"  required>
             </div>
             <div class="form-group">
-            <label for="role">บทบาท:</label>
-                <select id="role" name="Role" required>
-                <option value="">-- เลือกบทบาท --</option>
-                <option value="0">ผู้ดูแลระบบ</option>
-                <option value="1">พนักงานออฟฟิศ</option>
-                <option value="2">พนักงานช่าง</option>
+                <label for="role">สิทธิ์เข้าถึง:</label>
+                <select id="role" name="Role_ID" required>
+                    <option value="">-- เลือกสิทธิ์เข้าถึง --</option>
+                    <?php while ($row = $role->fetch_assoc()): ?>
+                        <option value="<?= $row['Role_ID'] ?>"><?= $row['Role'] ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
             <div class="form-actions"><br>
@@ -165,6 +165,5 @@ body {
             </div>
         </form>
     </div>
-
 </body>
 </html>

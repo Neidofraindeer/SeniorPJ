@@ -148,7 +148,7 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <input type="file" id="repair_photo" name="RepairPicture" required>
+                    <input type="file" id="repair_photo" name="RepairPicture" multiple required>
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
@@ -165,18 +165,16 @@
                     // และ JOIN กับ tb_department เพื่อดึงชื่อแผนก
                     $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
                             FROM tb_user u 
-                            JOIN tb_login l ON u.User_ID = l.User_ID
+                            JOIN tb_role r
                             JOIN tb_department d ON u.Department_ID = d.Department_ID
-                            WHERE l.Role = '2' AND u.Department_ID IN (2, 3, 4, 5)";
+                            WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
                     $result = $conn->query($sql);
                     while ($row = $result->fetch_assoc()) {
                         // แสดงชื่อพนักงานและชื่อแผนก
-                        echo "<option value='{$row['User_ID']}'>{$row['FullName']} - {$row['Department_name']}</option>";
-                    }
+                        echo "<option value='{$row['User_ID']}'>{$row['FullName']} - {$row['Department_name']}</option>";}
                     ?>
                 </select>
             </div>
-
             <!-- ปุ่มบันทึกและยกเลิก -->
             <div class="form-buttons">
                 <button type="submit" class="btn-save">บันทึก</button>

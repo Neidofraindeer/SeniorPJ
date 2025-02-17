@@ -11,12 +11,23 @@
             color: rgb(144, 127, 201); /* สีน้ำเงิน */
             font-size: 18px; /* ขนาดไอคอน */
             transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
+            
         }
-
         .fa-pencil-alt:hover {
             color: #835EB7; /* สีเข้มเมื่อ hover */
         }
-
+        .fa-trash-alt {
+            color: #E74C3C;
+            font-size: 18px; /* ขนาดไอคอน */
+            transition: color 0.3s ease; /* เพิ่มเอฟเฟกต์การเปลี่ยนสี */
+            
+        }
+        .fa-trash-alt:hover {
+           color: #c0392b; 
+        }
+        .actions a i {
+            margin-left: 5px; /* เพิ่มระยะห่างระหว่างไอคอน */
+        }
         /* Reset CSS */
         * {
             margin: 0;
@@ -126,7 +137,6 @@
             text-align: left; /* ทำให้ข้อความอยู่ตรงกลาง */
             padding: 8px; /* ลดขนาด Padding เพื่อให้ช่องไม่กว้างเกินไป */
         }
-
         th {
             background-color: #835eb7;
             color: white;
@@ -134,12 +144,10 @@
             white-space: nowrap; /* ป้องกันข้อความล้นบรรทัด */
             font-size: 16px; /* ลดขนาดตัวอักษรในหัวข้อ */
         }
-
         td {
             font-size: 14px; /* ขนาดตัวอักษรสำหรับข้อมูล */
             white-space: nowrap; /* ป้องกันข้อความล้นบรรทัด */
         }
-
         th:nth-child(1), td:nth-child(1),
         th:nth-child(2), td:nth-child(2) {
             text-align: center; /* ทำให้วันที่และรหัสอยู่ตรงกลาง */
@@ -208,23 +216,28 @@
         .pagination a:hover {
             background-color: #835EB7;
         }
+        tr:hover {
+            background-color:rgb(247, 242, 254);
+            transition: 0.2s;
+        }
+        
+
     </style>
 </head>
 <body>
-
     <!-- Sidebar -->
     <div class="sidebar">
         <div>
             <div class="profile">
                 <img src="https://via.placeholder.com/100" alt="User Profile">
-                <h3>Office</h3>
+                <h3>Admin</h3>
             </div>
             <ul><br>
-                <li>การแจ้งเตือน</li>
                 <li onclick="document.location='Of-user.php'">ข้อมูลผู้ใช้งาน</li>
                 <li onclick="document.location='Of-status.php'">ติดตามสถานะ</li>
-                <li onclick="document.location='Of-history.php'">ประวัติการซ่อมแซม</li>
                 <li onclick="document.location='Of-confirm.php'">ยืนยันซ่อมเสร็จ</li>
+                <li onclick="document.location='Of-history.php'">ประวัติการซ่อมแซม</li>
+                
             </ul>
         </div>
         <ul><br>
@@ -237,7 +250,7 @@
         <h1>รายการมอบหมายงาน</h1>
         <!-- Search Bar -->
         <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
+            <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
             <button class="btn-search">ค้นหา</button>
             <button class="btn-add" onclick="document.location='Of-inputcar.php'">เพิ่มรายการ</button>
         </div>
@@ -245,6 +258,7 @@
             <thead>
                 <tr>
                     <th>วันที่</th>
+                    <th>เวลา</th>
                     <th>รหัสรถ</th>
                     <th>ทะเบียนรถ</th>
                     <th>ยี่ห้อ</th>
@@ -255,98 +269,92 @@
             </thead>
             <tbody>
             <?php
-        // เชื่อมต่อกับฐานข้อมูล
-        include '../conn.php';
-
-        // กำหนดจำนวนแถวที่ต้องการแสดง
-        $limit = 11;
-
-        // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-        // คำนวณเริ่มต้นของการแสดงข้อมูลในตาราง
-        $start = ($page - 1) * $limit;
-
-        // ดึงข้อมูลจากฐานข้อมูล
-        $sql = "SELECT w.CarRepair_Date, w.CarRepair_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, 
-                    a.Approve_Status, a.Approve_ID, a.Approve_Date, u.User_ID
-                FROM tb_work w
-                JOIN tb_car c ON w.Car_ID = c.Car_ID
-                JOIN tb_user u ON w.User_ID = u.User_ID
-                LEFT JOIN tb_approve a ON u.User_ID = a.User_ID
-                ORDER BY 
-                    CASE WHEN a.Approve_Status = 'approved' THEN 1 ELSE 2 END, -- อนุมัติแล้วมาก่อน
-                    a.Approve_Date DESC, -- วันที่อนุมัติเรียงจากล่าสุดไปหาเก่าสุด
-                    w.CarRepair_Date DESC, -- วันที่ซ่อมเรียงจากล่าสุด
-                    w.CarRepair_Time DESC -- เวลาซ่อมเรียงจากล่าสุด
-                LIMIT $start, $limit";
-
-
-        $result = $conn->query($sql);
-
-        // แสดงข้อมูลในตาราง
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row['CarRepair_Date'] . "</td>";
-                echo "<td>" . $row['Car_ID'] . "</td>";
-                echo "<td>" . $row['CarNumber'] . "</td>";
-                echo "<td>" . $row['CarBrand'] . "</td>";
-                echo "<td>" . $row['FullName'] . "</td>";
-
-                // แสดงสถานะการอนุมัติ
-                if ($row['Approve_Status'] == 'approved') {
-                    echo "<td><div class='status-approved'>อนุมัติ</div></td>";
-                } else {
-                    echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
-                }
-                    echo "<td><a href='Of-editcar.php?id=" . $row['Car_ID'] . "'><i class='fa fa-pencil-alt'></i></a></td>";  // ปุ่มแก้ไข
+            // เชื่อมต่อกับฐานข้อมูล
+            include '../conn.php';
+            // กำหนดจำนวนแถวที่ต้องการแสดง
+            $limit = 11;
+            // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            // คำนวณเริ่มต้นของการแสดงข้อมูลในตาราง
+            $start = ($page - 1) * $limit;
+            // ดึงข้อมูลจากฐานข้อมูล
+            $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+                CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
+            FROM tb_work w
+            JOIN tb_car c ON w.Car_ID = c.Car_ID
+            JOIN tb_user u ON w.User_ID = u.User_ID
+            LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+            WHERE a.Approve_Status IN ('approved', 'pending') 
+            LIMIT $limit OFFSET $start";
+            $result = $conn->query($sql);
+            // แสดงข้อมูลในตาราง
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr onclick=\"window.location='Of-editcar.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
+                    echo "<td>" . $row['Work_Date'] . "</td>";
+                    echo "<td>" . $row['Work_Time'] . "</td>";
+                    echo "<td>" . $row['Car_ID'] . "</td>";
+                    echo "<td>" . $row['CarNumber'] . "</td>";
+                    echo "<td>" . $row['CarBrand'] . "</td>";
+                    echo "<td>" . $row['FullName']. "</td>"; 
+                    // แสดงสถานะการอนุมัติ
+                    if ($row['Approve_Status'] == 'approved') {
+                        echo "<td><div class='status-approved'>อนุมัติ</div></td>";
+                    } else {
+                        echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
+                    }
+                    echo "<td class='actions'>";
+                    echo "<a href='Of-editcar.php?id=" . $row['Car_ID'] . "' onclick='event.stopPropagation();'><i class='fa fa-pencil-alt'></i></a> ";
+                    echo "<a href='javascript:void(0)' onclick='event.stopPropagation(); deletework(" . $row['Car_ID'] . ")'><i class='fas fa-trash-alt'></i></a>";
+                    echo "</td>";
+            
                     echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
-        }
-
-        // คำนวณจำนวนหน้าทั้งหมด
-        $sql_count = "SELECT COUNT(*) AS total FROM tb_work w
-                    JOIN tb_car c ON w.Car_ID = c.Car_ID
-                    JOIN tb_user u ON w.User_ID = u.User_ID
-                    LEFT JOIN tb_approve a ON u.User_ID = a.User_ID";
-        $result_count = $conn->query($sql_count);
-        $row_count = $result_count->fetch_assoc();
-        $total_records = $row_count['total'];
-
-        // คำนวณจำนวนหน้าทั้งหมด
-        $total_pages = ceil($total_records / $limit);
-
-        // ปิดการเชื่อมต่อฐานข้อมูล
-        $conn->close();
-        ?>
-
-            </table>
-            <div class="pagination">
-            <?php
-            // ปุ่มก่อนหน้า
-            if ($page > 1) {
-                echo "<a href='?page=" . ($page - 1) . "'>ก่อนหน้า</a>";
-            }
-            // แสดงเลขหน้า
-            $start_page = max(1, $page - 1);  // หน้าที่เริ่มต้นแสดง
-            $end_page = min($total_pages, $page + 1);  // หน้าสุดท้ายแสดง
-            for ($i = $start_page; $i <= $end_page; $i++) {
-                if ($i == $page) {
-                    echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
-                } else {
-                    echo "<a href='?page=$i'>$i</a>";
                 }
+            } else {
+                echo "<tr><td colspan='8' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
             }
-            // ปุ่มถัดไป
-            if ($page < $total_pages) {
-                echo "<a href='?page=" . ($page + 1) . "'>ถัดไป</a>";
-            }
-            ?>
+            
+            // คำนวณจำนวนหน้าทั้งหมด
+            $sql_count = "SELECT COUNT(*) AS total FROM tb_work";
+            $result_count = $conn->query($sql_count);
+            $row_count = $result_count->fetch_assoc();
+            $total_records = $row_count['total'];
+                // คำนวณจำนวนหน้าทั้งหมด
+                $total_pages = ceil($total_records / $limit);
+                // ปิดการเชื่อมต่อฐานข้อมูล
+                $conn->close();
+                ?>
+                </table>
+                <div class="pagination">
+                <?php
+                // ปุ่มก่อนหน้า
+                if ($page > 1) {
+                    echo "<a href='?page=1'>หน้าแรก</a>";
+                }
+                // แสดงเลขหน้า
+                $start_page = max(1, $page - 1);  // หน้าที่เริ่มต้นแสดง
+                $end_page = min($total_pages, $page + 1);  // หน้าสุดท้ายแสดง
+                for ($i = $start_page; $i <= $end_page; $i++) {
+                    if ($i == $page) {
+                        echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
+                    } else {
+                        echo "<a href='?page=$i'>$i</a>";
+                    }
+                }
+                // ปุ่มถัดไป
+                if ($page < $total_pages) {
+                    echo "<a href='?page=" . $total_pages . "'>สุดท้าย</a>";
+                }
+                ?>
         </div>
     </div>
+    <script>
+        function deletework(workId) {
+            if (confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')) {
+                window.location.href = 'Of-deletework.php?id=' + workId;
+            } 
+        }
+    </script>
 </body>
-</html>
+</html>      
+        

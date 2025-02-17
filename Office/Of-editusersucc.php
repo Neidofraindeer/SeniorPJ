@@ -8,7 +8,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 }
 
 // ตรวจสอบว่ามีข้อมูลจากฟอร์มหรือไม่
-if (isset($_POST['User_Firstname'], $_POST['User_Lastname'], $_POST['User_Tel'], $_POST['Department_ID'], $_POST['Username'], $_POST['Role'])) {
+if (isset($_POST['User_Firstname'], $_POST['User_Lastname'], $_POST['User_Tel'], $_POST['Department_ID'], $_POST['Username'], $_POST['Role_ID'])) {
     // ดึงค่าจากฟอร์ม
     $firstname = $_POST['User_Firstname'];
     $lastname = $_POST['User_Lastname'];
@@ -16,7 +16,7 @@ if (isset($_POST['User_Firstname'], $_POST['User_Lastname'], $_POST['User_Tel'],
     $tel = $_POST['User_Tel'];
     $department_id = $_POST['Department_ID'];
     $username = $_POST['Username'];
-    $role = $_POST['Role'];
+    $role = $_POST['Role_ID'];
     
     // ตรวจสอบเบอร์โทร
     if (!preg_match("/^\d{10}$/", $tel)) {
@@ -52,7 +52,7 @@ if (isset($_POST['User_Firstname'], $_POST['User_Lastname'], $_POST['User_Tel'],
     // อัพเดทข้อมูลใน tb_user
     if ($stmt->execute()) {
         // อัพเดทข้อมูลใน tb_login (ถ้ามีการเปลี่ยนแปลง Username หรือ Role)
-        $login_sql = "UPDATE tb_login SET Username = ?, Role = ? WHERE User_ID = ?";
+        $login_sql = "UPDATE tb_login SET Username = ?, Role_ID = ? WHERE User_ID = ?";
         $login_stmt = $conn->prepare($login_sql);
         $login_stmt->bind_param("sii", $username, $role, $user_id);
 

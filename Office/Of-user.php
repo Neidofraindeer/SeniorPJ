@@ -183,7 +183,6 @@ $total_pages = ceil($total_records / $limit);
         .pagination a:hover {
             background-color: #835EB7;
         }
-        
     </style>
 </head>
 <body>
