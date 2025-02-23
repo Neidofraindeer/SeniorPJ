@@ -313,55 +313,55 @@
             </thead>
             <tbody>
             <?php
-            // แสดงข้อมูลในตาราง
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr onclick=\"window.location='Of-editcar.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
-                    echo "<td>" . $row['Work_Date'] . "</td>";
-                    echo "<td>" . $row['Work_Time'] . "</td>";
-                    echo "<td>" . $row['Car_ID'] . "</td>";
-                    echo "<td>" . $row['CarNumber'] . "</td>";
-                    echo "<td>" . $row['CarBrand'] . "</td>";
-                    echo "<td>" . $row['FullName']. "</td>"; 
-                    // แสดงสถานะการอนุมัติ
-                    if ($row['Approve_Status'] == 'approved') {
-                        echo "<td><div class='status-approved'>อนุมัติ</div></td>";
-                    } else {
-                        echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
+                // แสดงข้อมูลในตาราง
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr onclick=\"window.location='Of-editcar.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
+                        echo "<td>" . $row['Work_Date'] . "</td>";
+                        echo "<td>" . $row['Work_Time'] . "</td>";
+                        echo "<td>" . $row['Car_ID'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['CarBrand'] . "</td>";
+                        echo "<td>" . $row['FullName']. "</td>"; 
+                        // แสดงสถานะการอนุมัติ
+                        if ($row['Approve_Status'] == 'approved') {
+                            echo "<td><div class='status-approved'>อนุมัติ</div></td>";
+                        } else {
+                            echo "<td><div class='status-pending'>รออนุมัติ</div></td>";
+                        }
+                        echo "<td class='actions'>";
+                        echo "<a href='Of-editcar.php?id=" . $row['Car_ID'] . "' onclick='event.stopPropagation();'><i class='fa fa-pencil-alt'></i></a> ";
+                        echo "<a href='javascript:void(0)' onclick='event.stopPropagation(); deletework(" . $row['Car_ID'] . ")'><i class='fas fa-trash-alt'></i></a>";
+                        echo "</td>";
+                
+                        echo "</tr>";
                     }
-                    echo "<td class='actions'>";
-                    echo "<a href='Of-editcar.php?id=" . $row['Car_ID'] . "' onclick='event.stopPropagation();'><i class='fa fa-pencil-alt'></i></a> ";
-                    echo "<a href='javascript:void(0)' onclick='event.stopPropagation(); deletework(" . $row['Car_ID'] . ")'><i class='fas fa-trash-alt'></i></a>";
-                    echo "</td>";
-            
-                    echo "</tr>";
+                } else {
+                    echo "<tr><td colspan='8' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='8' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
-            }
-                ?>
+            ?>
                 </table>
                 <div class="pagination">
                     <?php
-                    if ($page > 1) {
-                        echo "<a href='?page=1&search=$search'>หน้าแรก</a>";
-                    }
-                    $start_page = max(1, $page - 1);
-                    $end_page = min($total_pages, $page + 1);
-                    
-                    for ($i = $start_page; $i <= $end_page; $i++) {
-                        if ($i == $page) {
-                            echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
-                        } else {
-                            echo "<a href='?page=$i&search=$search'>$i</a>"; // เพิ่ม &search=$search เพื่อให้ค้นหาคงอยู่
+                        if ($page > 1) {
+                            echo "<a href='?page=1&search=$search'>หน้าแรก</a>";
                         }
-                    }
+                        $start_page = max(1, $page - 1);
+                        $end_page = min($total_pages, $page + 1);
+                        
+                        for ($i = $start_page; $i <= $end_page; $i++) {
+                            if ($i == $page) {
+                                echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
+                            } else {
+                                echo "<a href='?page=$i&search=$search'>$i</a>"; // เพิ่ม &search=$search เพื่อให้ค้นหาคงอยู่
+                            }
+                        }
 
-                    if ($page < $total_pages) {
-                        echo "<a href='?page=" . $total_pages . "&search=$search'>สุดท้าย</a>";
-                    }
+                        if ($page < $total_pages) {
+                            echo "<a href='?page=" . $total_pages . "&search=$search'>สุดท้าย</a>";
+                        }
                     ?>
-        </div>
+              </div>
     </div>
     <script>
         function deletework(workId) {
