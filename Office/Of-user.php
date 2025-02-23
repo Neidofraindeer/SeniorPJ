@@ -1,8 +1,10 @@
 <?php
 require '../conn.php'; // เชื่อมต่อกับฐานข้อมูล
 
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+
 // กำหนดจำนวนแถวที่แสดงในแต่ละหน้า
-$limit = 10;
+$limit = 8;
 
 // ตรวจสอบว่า URL มีค่า `page` หรือไม่
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // ถ้าไม่มีให้เริ่มที่หน้า 1
@@ -15,6 +17,11 @@ $sql = "SELECT u.User_ID, l.Username, u.User_Firstname, u.User_Lastname, d.Depar
         FROM tb_user u
         LEFT JOIN tb_login l ON u.User_ID = l.User_ID
         LEFT JOIN tb_department d ON u.Department_ID = d.Department_ID
+        WHERE 
+            u.User_Firstname LIKE '%$search%' 
+            OR u.User_Lastname LIKE '%$search%' 
+            OR l.Username LIKE '%$search%'
+            OR d.Department_Name LIKE '%$search%'
         ORDER BY u.User_ID ASC
         LIMIT $start, $limit";
 
@@ -22,7 +29,14 @@ $sql = "SELECT u.User_ID, l.Username, u.User_Firstname, u.User_Lastname, d.Depar
 $result = $conn->query($sql); // ดำเนินการ query
 
 // คำนวณจำนวนหน้า
-$count_sql = "SELECT COUNT(*) AS total FROM tb_user";
+$count_sql = "SELECT COUNT(*) AS total FROM tb_user 
+              LEFT JOIN tb_login l ON tb_user.User_ID = l.User_ID
+              LEFT JOIN tb_department d ON tb_user.Department_ID = d.Department_ID
+              WHERE 
+                  tb_user.User_Firstname LIKE '%$search%' 
+                  OR tb_user.User_Lastname LIKE '%$search%' 
+                  OR l.Username LIKE '%$search%'
+                  OR d.Department_Name LIKE '%$search%'";
 $count_result = $conn->query($count_sql);
 $row = $count_result->fetch_assoc();
 $total_records = $row['total'];
@@ -191,11 +205,11 @@ $total_pages = ceil($total_records / $limit);
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
             <a class="header">ข้อมูลผู้ใช้งาน</a>
         </div><br>
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='Of-inputuser.php'">เพิ่มรายการ</button>
-        </div>
+        <form method="GET" class="search-bar">
+            <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+            <button type="submit" class="btn-search" class="btn-search">ค้นหา</button>
+            <button type="button" class="btn-add" onclick="document.location='Of-inputuser.php'">เพิ่มรายการ</button>
+        </form>
         <table>
         <thead>
             <tr>
