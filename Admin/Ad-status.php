@@ -96,6 +96,22 @@
             background-color:rgb(247, 242, 254); /* เปลี่ยนสีพื้นหลัง */
             transition: 0.2s;
         }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: rgb(144, 127, 201);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #835EB7;
+        }
     </style>
 </head>
 <body>
@@ -103,11 +119,11 @@
         <div class="form-title">
             <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt;  </a>
             <a class="head">ติดตามสถานะ</a>
-        </div><br>
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <button class="btn-search">ค้นหา</button>
         </div>
+            <form method="GET" class="search-bar">
+                <input type="text" name="search" placeholder="ค้นหา..." value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>">
+                <button type="submit" class="btn-search">ค้นหา</button>
+            </form>
         <table>
             <thead>
                 <tr>
@@ -119,22 +135,38 @@
                     <th>สถานะ</th>
                 </tr>
             </thead>
-            <tbody>
             <?php
                 // เชื่อมต่อฐานข้อมูล
                 include('../conn.php');
 
+                $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+                // กำหนดจำนวนรายการต่อหน้า
+                $limit = 8;
+                // รับค่าหน้าปัจจุบัน ถ้าไม่มีให้เริ่มที่หน้า 1
+                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $start = ($page - 1) * $limit;
+
+                $search_query = "";
+                if (!empty($search)) {
+                    $search_query= " AND (c.CarBrand LIKE '%$search%' 
+                    OR c.CarNumber LIKE '%$search%' 
+                    OR s.Status_Car LIKE '%$search%'
+                    OR w.Work_Date LIKE '%$search%'
+                    OR w.Work_Time LIKE '%$search%' 
+                    OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')
+                    OR s.Status_Car LIKE '%$search%' ";
+                }
                 // Query ข้อมูล
                 $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarBrand, c.CarNumber, 
-                    CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, s.Status_Car
-                FROM tb_work w
-                JOIN tb_car c ON w.Car_ID = c.Car_ID
-                JOIN tb_user u ON w.User_ID = u.User_ID
-                JOIN tb_status s ON w.Status_ID = s.Status_ID
-                JOIN tb_approve a ON w.Work_ID = a.Work_ID
-                WHERE a.Approve_Status = 'approved'
-                ";
-
+                                CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, s.Status_Car
+                        FROM tb_work w
+                        JOIN tb_car c ON w.Car_ID = c.Car_ID
+                        JOIN tb_user u ON w.User_ID = u.User_ID
+                        JOIN tb_status s ON w.Status_ID = s.Status_ID
+                        JOIN tb_approve a ON w.Work_ID = a.Work_ID
+                        WHERE a.Approve_Status = 'approved'
+                $search_query
+                LIMIT $limit OFFSET $start";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -151,11 +183,44 @@
                 } else {
                     echo "<tr><td colspan='6' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
                 }
+                // คำนวณจำนวนหน้า
+                $sql_count = "SELECT COUNT(*) AS total FROM tb_work w
+                            JOIN tb_car c ON w.Car_ID = c.Car_ID
+                            JOIN tb_user u ON w.User_ID = u.User_ID
+                            JOIN tb_status s ON w.Status_ID = s.Status_ID
+                            JOIN tb_approve a ON w.Work_ID = a.Work_ID
+                            WHERE a.Approve_Status = 'approved'
+                            $search_query";
+                $result_count = $conn->query($sql_count);
+                $row_count = $result_count->fetch_assoc();
+                $total_records = $row_count['total'];
+                $total_pages = ceil($total_records / $limit);
 
                 $conn->close();
-                ?>
-            </tbody>
+            ?>
         </table>
+        <div class="pagination">
+        <?php
+            // ปุ่มก่อนหน้า
+            if ($page > 1) {
+                echo "<a href='?page=" . ($page - 1) . "'>ก่อนหน้า</a>";
+            }
+            // แสดงเลขหน้า
+            $start_page = max(1, $page - 1);  // หน้าที่เริ่มต้นแสดง
+            $end_page = min($total_pages, $page + 1);  // หน้าสุดท้ายแสดง
+            for ($i = $start_page; $i <= $end_page; $i++) {
+                if ($i == $page) {
+                    echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
+                } else {
+                    echo "<a href='?page=$i'>$i</a>";
+                }
+            }
+            // ปุ่มถัดไป
+            if ($page < $total_pages) {
+                echo "<a href='?page=" . ($page + 1) . "'>ถัดไป</a>";
+            }
+        ?>
+        </div>
     </div>
 </body>
 </html>

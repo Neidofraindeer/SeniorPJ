@@ -287,6 +287,8 @@
                 if (!empty($search)) {
                     $search_query = " AND (c.CarNumber LIKE '%$search%' 
                                         OR c.CarBrand LIKE '%$search%' 
+                                        OR w.Work_Date LIKE '%$search%'
+                                        OR w.Work_Time LIKE '%$search%'
                                         OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
                 }
                 // ดึงข้อมูลจากฐานข้อมูล
