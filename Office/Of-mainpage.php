@@ -249,11 +249,11 @@
     <div class="content">
         <h1>รายการมอบหมายงาน</h1>
         <!-- Search Bar -->
-        <div class="search-bar">
+        <form method="GET" class="search-bar">
             <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-            <button class="btn-search">ค้นหา</button>
-            <button class="btn-add" onclick="document.location='Of-inputcar.php'">เพิ่มรายการ</button>
-        </div>
+            <button type="submit" class="btn-search">ค้นหา</button>
+            <button type="button" class="btn-add" onclick="document.location='Of-inputcar.php'">เพิ่มรายการ</button>
+        </form>
         <table>
             <thead>
                 <tr>
@@ -271,12 +271,21 @@
             <?php
             // เชื่อมต่อกับฐานข้อมูล
             include '../conn.php';
+            // รับค่าค้นหาจาก GET
+            $search = isset($_GET['search']) ? trim($_GET['search']) : '';
             // กำหนดจำนวนแถวที่ต้องการแสดง
             $limit = 11;
             // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             // คำนวณเริ่มต้นของการแสดงข้อมูลในตาราง
             $start = ($page - 1) * $limit;
+            // เงื่อนไขการค้นหา
+            $search_query = "";
+            if (!empty($search)) {
+                $search_query = " AND (c.CarNumber LIKE '%$search%' 
+                                    OR c.CarBrand LIKE '%$search%' 
+                                    OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
+            }
             // ดึงข้อมูลจากฐานข้อมูล
             $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
                 CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
@@ -285,6 +294,7 @@
             JOIN tb_user u ON w.User_ID = u.User_ID
             LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
             WHERE a.Approve_Status IN ('approved', 'pending') 
+            $search_query
             LIMIT $limit OFFSET $start";
             $result = $conn->query($sql);
             // แสดงข้อมูลในตาราง
@@ -315,37 +325,41 @@
             }
             
             // คำนวณจำนวนหน้าทั้งหมด
-            $sql_count = "SELECT COUNT(*) AS total FROM tb_work";
+            $sql_count = "SELECT COUNT(*) AS total FROM tb_work w
+                        JOIN tb_car c ON w.Car_ID = c.Car_ID
+                        JOIN tb_user u ON w.User_ID = u.User_ID
+                        LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+                        WHERE a.Approve_Status IN ('approved', 'pending') 
+                        $search_query";
             $result_count = $conn->query($sql_count);
             $row_count = $result_count->fetch_assoc();
             $total_records = $row_count['total'];
-                // คำนวณจำนวนหน้าทั้งหมด
-                $total_pages = ceil($total_records / $limit);
+            $total_pages = ceil($total_records / $limit);
                 // ปิดการเชื่อมต่อฐานข้อมูล
                 $conn->close();
                 ?>
                 </table>
                 <div class="pagination">
-                <?php
-                // ปุ่มก่อนหน้า
-                if ($page > 1) {
-                    echo "<a href='?page=1'>หน้าแรก</a>";
-                }
-                // แสดงเลขหน้า
-                $start_page = max(1, $page - 1);  // หน้าที่เริ่มต้นแสดง
-                $end_page = min($total_pages, $page + 1);  // หน้าสุดท้ายแสดง
-                for ($i = $start_page; $i <= $end_page; $i++) {
-                    if ($i == $page) {
-                        echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
-                    } else {
-                        echo "<a href='?page=$i'>$i</a>";
+                    <?php
+                    if ($page > 1) {
+                        echo "<a href='?page=1&search=$search'>หน้าแรก</a>";
                     }
-                }
-                // ปุ่มถัดไป
-                if ($page < $total_pages) {
-                    echo "<a href='?page=" . $total_pages . "'>สุดท้าย</a>";
-                }
-                ?>
+
+                    $start_page = max(1, $page - 1);
+                    $end_page = min($total_pages, $page + 1);
+                    
+                    for ($i = $start_page; $i <= $end_page; $i++) {
+                        if ($i == $page) {
+                            echo "<span style='padding: 8px 16px; margin: 0 5px; background-color: #835EB7; color: white; border-radius: 5px;'>$i</span>";
+                        } else {
+                            echo "<a href='?page=$i&search=$search'>$i</a>"; // เพิ่ม &search=$search เพื่อให้ค้นหาคงอยู่
+                        }
+                    }
+
+                    if ($page < $total_pages) {
+                        echo "<a href='?page=" . $total_pages . "&search=$search'>สุดท้าย</a>";
+                    }
+                    ?>
         </div>
     </div>
     <script>
