@@ -230,7 +230,7 @@
         <div>
             <div class="profile">
                 <img src="https://via.placeholder.com/100" alt="User Profile">
-                <h3>Admin</h3>
+                <h3>Office</h3>
             </div>
             <ul><br>
                 <li onclick="document.location='Of-user.php'">ข้อมูลผู้ใช้งาน</li>
