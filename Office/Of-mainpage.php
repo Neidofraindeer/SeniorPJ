@@ -1,3 +1,47 @@
+<?php
+    // เชื่อมต่อกับฐานข้อมูล
+    include '../conn.php';
+    // รับค่าค้นหาจาก GET
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    // กำหนดจำนวนแถวที่ต้องการแสดง
+    $limit = 11;
+    // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    // คำนวณเริ่มต้นของการแสดงข้อมูลในตาราง
+    $start = ($page - 1) * $limit;
+    // เงื่อนไขการค้นหา
+    $search_query = "";
+    if (!empty($search)) {
+        $search_query = " AND (c.CarNumber LIKE '%$search%' 
+                            OR c.CarBrand LIKE '%$search%' 
+                            OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
+    }
+    // ดึงข้อมูลจากฐานข้อมูล
+    $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+        CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
+    FROM tb_work w
+    JOIN tb_car c ON w.Car_ID = c.Car_ID
+    JOIN tb_user u ON w.User_ID = u.User_ID
+    LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+    WHERE a.Approve_Status IN ('approved', 'pending') 
+    $search_query
+    LIMIT $limit OFFSET $start";
+    $result = $conn->query($sql);
+
+    // คำนวณจำนวนหน้าทั้งหมด
+    $sql_count = "SELECT COUNT(*) AS total FROM tb_work w
+    JOIN tb_car c ON w.Car_ID = c.Car_ID
+    JOIN tb_user u ON w.User_ID = u.User_ID
+    LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+    WHERE a.Approve_Status IN ('approved', 'pending') 
+    $search_query";
+    $result_count = $conn->query($sql_count);
+    $row_count = $result_count->fetch_assoc();
+    $total_records = $row_count['total'];
+    $total_pages = ceil($total_records / $limit);
+    // ปิดการเชื่อมต่อฐานข้อมูล
+    $conn->close();
+?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -269,34 +313,6 @@
             </thead>
             <tbody>
             <?php
-            // เชื่อมต่อกับฐานข้อมูล
-            include '../conn.php';
-            // รับค่าค้นหาจาก GET
-            $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-            // กำหนดจำนวนแถวที่ต้องการแสดง
-            $limit = 11;
-            // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
-            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            // คำนวณเริ่มต้นของการแสดงข้อมูลในตาราง
-            $start = ($page - 1) * $limit;
-            // เงื่อนไขการค้นหา
-            $search_query = "";
-            if (!empty($search)) {
-                $search_query = " AND (c.CarNumber LIKE '%$search%' 
-                                    OR c.CarBrand LIKE '%$search%' 
-                                    OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
-            }
-            // ดึงข้อมูลจากฐานข้อมูล
-            $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
-                CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
-            FROM tb_work w
-            JOIN tb_car c ON w.Car_ID = c.Car_ID
-            JOIN tb_user u ON w.User_ID = u.User_ID
-            LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
-            WHERE a.Approve_Status IN ('approved', 'pending') 
-            $search_query
-            LIMIT $limit OFFSET $start";
-            $result = $conn->query($sql);
             // แสดงข้อมูลในตาราง
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -323,20 +339,6 @@
             } else {
                 echo "<tr><td colspan='8' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
             }
-            
-            // คำนวณจำนวนหน้าทั้งหมด
-            $sql_count = "SELECT COUNT(*) AS total FROM tb_work w
-                        JOIN tb_car c ON w.Car_ID = c.Car_ID
-                        JOIN tb_user u ON w.User_ID = u.User_ID
-                        LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
-                        WHERE a.Approve_Status IN ('approved', 'pending') 
-                        $search_query";
-            $result_count = $conn->query($sql_count);
-            $row_count = $result_count->fetch_assoc();
-            $total_records = $row_count['total'];
-            $total_pages = ceil($total_records / $limit);
-                // ปิดการเชื่อมต่อฐานข้อมูล
-                $conn->close();
                 ?>
                 </table>
                 <div class="pagination">
@@ -344,7 +346,6 @@
                     if ($page > 1) {
                         echo "<a href='?page=1&search=$search'>หน้าแรก</a>";
                     }
-
                     $start_page = max(1, $page - 1);
                     $end_page = min($total_pages, $page + 1);
                     
