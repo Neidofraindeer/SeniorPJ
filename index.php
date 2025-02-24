@@ -1,42 +1,51 @@
 <?php
-// รวมไฟล์เชื่อมต่อฐานข้อมูล
+session_start();
 include 'conn.php';
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-// เตรียมคำสั่ง SQL สำหรับตรวจสอบข้อมูล
-$sql = "SELECT * FROM tb_login WHERE Username = ? AND Password = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $username, $password);
-$stmt->execute();
-$result = $stmt->get_result();
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-if ($result->num_rows > 0) {
-    // หากพบข้อมูลผู้ใช้
-    $row = $result->fetch_assoc();
-    $roleId = $row['Role_ID'];
+    // ดึงข้อมูลเฉพาะ Username จากฐานข้อมูล
+    $sql = "SELECT * FROM tb_login WHERE Username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    // ตรวจสอบสิทธิ์ตาม Role_ID
-    if ($roleId == 0) { // Admin
-        // Redirect ไปยังหน้า Admin
-        header("Location: Admin/Ad-mainpage.php");
-    } elseif ($roleId == 1) { // Office
-        // Redirect ไปยังหน้า Office
-        header("Location: Office/Of-mainpage.php");
-    } else { // Mechanic หรืออื่นๆ
-        // Redirect ไปยังหน้าอื่นๆ
-        header("Location: Mechanic/Mc-mainpage.php");
+    if ($result->num_rows > 0) {
+        // พบข้อมูลผู้ใช้
+        $row = $result->fetch_assoc();
+        $hashed_password = $row['Password']; // รหัสผ่านที่เข้ารหัสใน DB
+        $roleId = $row['Role_ID'];
+
+        // ตรวจสอบรหัสผ่าน
+        if (password_verify($password, $hashed_password)) {
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $roleId;
+
+            // เปลี่ยนเส้นทางตาม Role_ID
+            if ($roleId == 0) { // Admin
+                header("Location: Admin/Ad-mainpage.php");
+            } elseif ($roleId == 1) { // Office
+                header("Location: Office/Of-mainpage.php");
+            } else { // Mechanic หรืออื่นๆ
+                header("Location: Mechanic/Mc-mainpage.php");
+            }
+            exit();
+        } else {
+            $error = "❌ Username หรือ Password ไม่ถูกต้อง";
+        }
+    } else {
+        $error = "❌ Username หรือ Password ไม่ถูกต้อง";
     }
-} else {
-    $error = "❌ Username หรือ Password ไม่ถูกต้อง"; // กำหนดข้อความผิดพลาด
-    }
+
     $stmt->close();
 }
+
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +79,7 @@ $conn->close();
                 </div>
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" minlength="8" required>
                 </div>
                 <button type="submit">เข้าสู่ระบบ</button>
             </form>

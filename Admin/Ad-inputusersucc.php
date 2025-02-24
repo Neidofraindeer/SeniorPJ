@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['User_Picture'])) {
                          VALUES ('$firstname', '$lastname', '$nickname', '$phone', '$target_file', '$department_id')";
             if ($conn->query($sql_user) === TRUE) {
                 $user_id = $conn->insert_id; // ดึง User_ID ที่เพิ่งบันทึก
-
                 // บันทึกข้อมูลใน tb_login
                 $sql_login = "INSERT INTO tb_login (Username, Password, User_ID, Role_ID)
                               VALUES ('$username', '$password', '$user_id', '$role')";
