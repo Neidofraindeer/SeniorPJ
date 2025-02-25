@@ -53,25 +53,55 @@
             width: 100%;
             border-collapse: collapse;
         }
+
         th, td {
             text-align: left;
-            padding: 10px;
+            padding: 8px; /* ลดขนาด padding เพื่อให้ช่องเล็กลง */
             border: 1px solid #ddd;
         }
+
         th {
             background-color: #835EB7;
             color: white;
             text-align: center;
         }
-        .actions button {
-            background-color: #ddd;
+
+        th:nth-child(1), td:nth-child(1) {
+            width: 12%; /* วันที่มอบหมายงาน */
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            width: 12%; /* เวลามอบหมายงาน */
+        }
+
+        th:nth-child(3), td:nth-child(3) {
+            width: 12%; /* วันที่ส่งมอบรถ */
+        }
+
+        th:nth-child(4), td:nth-child(4) {
+            width: 10%; /* เวลาส่งมอบรถ */
+        }
+        
+        td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        td button {
+            display: block;
+            margin: 0 auto;
+            background-color: #4CAF50; /* สีเขียว */
+            color: white;
+            padding: 7px 20px;
             border: none;
-            padding: 5px 10px;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
         }
-        .actions button:hover {
-            background-color: #ccc;
+
+        td button:hover {
+            background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
         }
         /* กรอปหัวข้อฟอร์ม */
         .form-title{
@@ -112,14 +142,17 @@
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
             <a class="head">ยืนยันซ่อมเสร็จ</a>
         </div><br>
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <button class="btn-search">ค้นหา</button>
-        </div>
-        <table>
+        <form method="GET" class="search-bar">
+            <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+            <button type="submit" class="btn-search">ค้นหา</button>
+        </form>
+            <table>
             <thead>
                 <tr>
-                    <th>วันที่</th>
+                    <th>วันที่มอบหมายงาน</th>
+                    <th>เวลามอบหมายงาน</th>
+                    <th>วันที่ส่งมอบรถ</th>
+                    <th>เวลาส่งมอบรถ</th>
                     <th>รหัส</th>
                     <th>ยี่ห้อ</th>
                     <th>ทะเบียนรถ</th>
@@ -128,15 +161,61 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>ยี่ห้อ A</td>
-                    <td>กย 1111 </td>
-                    <td>ช่าง...</td>
-                    <td><button class="btn">ยืนยัน</button></td>
-                </tr>
-            
+                <?php
+                
+                // เชื่อมต่อกับฐานข้อมูล
+                include '../conn.php'; // แก้ไขเส้นทางตามความเหมาะสม
+
+                $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+                $search_query = "";
+                if (!empty($search)) {
+                    $search_query = " AND (c.CarNumber LIKE '%$search%' 
+                                        OR c.CarBrand LIKE '%$search%' 
+                                        OR w.Work_Date LIKE '%$search%'
+                                        OR w.Work_Time LIKE '%$search%'
+                                        OR r.Return_Date LIKE '%$search%'
+                                        OR r.Return_Time LIKE '%$search%'
+                                        OR c.Car_ID LIKE '%$search%'
+                                        OR w.Work_ID LIKE '%$search%'
+                                        OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
+                }
+    
+                // ดึงข้อมูลจากฐานข้อมูล tb_return
+                $sql = "SELECT r.Return_Date, r.Return_Time, w.Work_Date, w.Work_Time, c.CarNumber, c.CarBrand, c.Car_ID,
+                 w.Work_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
+                        FROM tb_return r
+                        JOIN tb_work w ON r.Work_ID = w.Work_ID
+                        JOIN tb_car c ON w.Car_ID = c.Car_ID
+                        JOIN tb_approve a ON w.Work_ID = a.Work_ID
+                        JOIN tb_user u ON w.User_ID = u.User_ID
+                        WHERE a.Approve_Status = 'returned'
+                        $search_query";
+                $result = $conn->query($sql);
+                
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['Work_Date'] . "</td>";
+                        echo "<td>" . $row['Work_Time'] . "</td>";
+                        echo "<td>" . $row['Return_Date'] . "</td>";
+                        echo "<td>" . $row['Return_Time'] . "</td>";
+                        echo "<td>" . $row['Car_ID'] . "</td>";
+                        echo "<td>" . $row['CarBrand'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['FullName'] . "</td>";
+                        echo "<td>
+                                <form action='update_status.php' method='post'>
+                                    <input type='hidden' name='Work_ID' value='" . $row['Work_ID'] . "'>
+                                    <button type='submit' class='btn-confirm'>ยืนยัน</button>
+                                </form>
+                              </td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='9' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
