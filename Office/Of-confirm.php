@@ -195,7 +195,7 @@
                 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
+                        echo "<tr onclick=\"window.location='Of-confirm-detail.php?id=" . $row['Work_ID'] . "'\" style='cursor: pointer;'>";
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Work_Time'] . "</td>";
                         echo "<td>" . $row['Return_Date'] . "</td>";

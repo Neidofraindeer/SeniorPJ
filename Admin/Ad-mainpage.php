@@ -288,7 +288,7 @@
                                         OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
                 }
                 // ดึงข้อมูลจากฐานข้อมูล
-                $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
                     CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
@@ -301,7 +301,7 @@
                 // แสดงข้อมูลในตาราง
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr onclick=\"window.location='Ad-editcar.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
+                        echo "<tr onclick=\"window.location='Ad-editcar.php?id=" . $row['Work_ID'] . "'\" style='cursor: pointer;'>";
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Work_Time'] . "</td>";
                         echo "<td>" . $row['Car_ID'] . "</td>";

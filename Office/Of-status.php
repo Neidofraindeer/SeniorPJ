@@ -159,7 +159,7 @@
                 }
 
                 /// Query ข้อมูล
-                $sql = "SELECT w.Work_Date, w.Work_Time, c.Car_ID, c.CarBrand, c.CarNumber, 
+                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarBrand, c.CarNumber, 
                                 CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, s.Status_Car
                         FROM tb_work w
                         JOIN tb_car c ON w.Car_ID = c.Car_ID
@@ -173,7 +173,7 @@
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr onclick=\"window.location='Of-status-detail.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
+                        echo "<tr onclick=\"window.location='Of-status-detail.php?id=" . $row['Work_ID'] . "'\" style='cursor: pointer;'>";
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Car_ID'] . "</td>";
                         echo "<td>" . $row['CarBrand'] . "</td>";
