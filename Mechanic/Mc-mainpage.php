@@ -7,130 +7,149 @@
 </head>
 <style>
     /* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-/* Body */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    display: flex;
-}
+    /* Body */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f9f9f9;
+        display: flex;
+    }
 
-/* Sidebar */
-.sidebar {
-    width: 240px;
-    height: 100vh;
-    background-color:  #835eb7;
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+    /* Sidebar */
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        background-color:  #835eb7;
+        color: white;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-.sidebar .profile {
-    text-align: center;
-}
+    .sidebar .profile {
+        text-align: center;
+    }
 
-.sidebar img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: white;
-    margin-bottom: 10px;
-}
+    .sidebar img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: white;
+        margin-bottom: 10px;
+    }
 
-.sidebar h3 {
-    margin: 10px 0;
-    font-size: 18px;
-}
+    .sidebar h3 {
+        margin: 10px 0;
+        font-size: 18px;
+    }
 
-.sidebar ul {
-    list-style: none;
-}
+    .sidebar ul {
+        list-style: none;
+    }
 
-.sidebar ul li {
-    margin: 15px 0;
-    font-size: 16px;
-    cursor: pointer;
-}
+    .sidebar ul li {
+        margin: 15px 0;
+        font-size: 16px;
+        cursor: pointer;
+    }
 
-.sidebar ul li:hover {
-    text-decoration: underline;
-}
+    .sidebar ul li:hover {
+        text-decoration: underline;
+    }
 
-/* Content */
-.content {
-    flex: 1;
-    padding: 20px;
-}
+    /* Content */
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
 
-.content h1 {
-    color:  #835eb7;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
+    .content h1 {
+        color:  #835eb7;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
 
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+    /* Table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-th, td {
-    border: 1px solid #ddd;
-    text-align: left;
-    padding: 10px;
-}
+    th, td {
+        border: 1px solid #ddd;
+        text-align: left;
+        padding: 10px;
+    }
 
-th {
-    background-color:  #835eb7;
-    color: white;
-    text-align: center;
-}
+    th {
+        background-color:  #835eb7;
+        color: white;
+        text-align: center;
+    }
 
-td {
-    font-size: 14px;
-}
+    td {
+        font-size: 14px;
+    }
 
-.status-approved {
-    color: green;
-    font-weight: bold;
-}
+    th:last-child, td:last-child {
+        width: 100px; /* กำหนดความกว้างของคอลัมน์ "ส่งมอบงาน" */
+        text-align: center;
+    }
 
-.status-pending {
-    color: orange;
-    font-weight: bold;
-}
-.btn {
-    background-color: #6495ED; 
-    color: white;
-    padding: 7px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-.btn:hover {
-    background-color: #3474ea; 
-}
-
-
+    .btn {
+        background-color: #6495ED; 
+        color: white;
+        padding: 7px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #3474ea; 
+    }
+    .btn-return {
+            background-color: #3474ea;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-return:hover {
+            background-color:rgb(0, 80, 229);
+        }
+        /* จัดปุ่มอนุมัติให้กลาง */
+        .btn-return-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+        tr:hover {
+            background-color:rgb(247, 242, 254);
+            transition: 0.2s;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
 
 </style>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div>
-            <div class="profile">
+        <div class="profile">
                 <img src="https://via.placeholder.com/100" alt="User Profile">
-                <h3>ปัญญา ผู้นำ</h3>
+                <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
+                <div class="welcome"><?php echo $_SESSION['fullname']; ?></div> 
             </div>
         </div>
             <ul><br>
@@ -149,41 +168,68 @@ td {
             <thead>
                 <tr class="main">
                     <th>วันที่</th>
-                    <th>รหัส</th>
-                    <th>ยี่ห้อ</th>
+                    <th>เวลา</th>
+                    <th>รหัสรถ</th>
                     <th>ทะเบียนรถ</th>
+                    <th>ยี่ห้อ</th>
+                    <th>รายละเอียดตำแหน่งที่ซ่อมแซม</th>
                     <th>ส่งมอบงาน</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>21-03-2567</td>
-                    <td>0001</td>
-                    <td>Toyota</td>
-                    <td>กข 1088 ปท</td>
-                    <td><button class="btn">ส่งมอบ</button></td>
-                </tr>
-                <tr>
-                    <td>21-03-2567</td>
-                    <td>0002</td>
-                    <td>Mitsubishi</td>
-                    <td>กข 1234 กท</td>
-                    <td><button class="btn">ส่งมอบ</button></td>
-                </tr>
-                <tr>
-                    <td>21-03-2567</td>
-                    <td>0002</td>
-                    <td>Mitsubishi</td>
-                    <td>กข 1234 กท</td>
-                    <td><button class="btn">ส่งมอบ</button></td>
-                </tr><tr>
-                    <td>21-03-2567</td>
-                    <td>0002</td>
-                    <td>Mitsubishi</td>
-                    <td>กข 1234 กท</td>
-                    <td><button class="btn">ส่งมอบ</button></td>
-                </tr>
-            </tbody>
+            <?php
+                // เชื่อมต่อกับฐานข้อมูล
+                include '../conn.php';
+                // กำหนดจำนวนแถวที่ต้องการแสดง
+                $limit = 11;
+                // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
+                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                // คำนวณเริ่มต้นของการแสดงข้อมูลในตาราง
+                $start = ($page - 1) * $limit;
+                
+                // ดึงข้อมูลจากฐานข้อมูลเฉพาะงานของผู้ที่เข้าสู่ระบบ (User_ID)
+                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, c.CarDetail, a.Approve_Status, r.Return_ID
+                FROM tb_work w
+                JOIN tb_car c ON w.Car_ID = c.Car_ID
+                LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
+                LEFT JOIN tb_return r ON w.Work_ID = r.Work_ID
+                WHERE a.Approve_Status IN ('approved', 'returned')";
+
+                $result = $conn->query($sql);
+
+                // แสดงข้อมูลในตาราง
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr onclick=\"window.location='Mc-car-detail.php?id=" . $row['Car_ID'] . "'\" style='cursor: pointer;'>";
+                        echo "<td>" . $row['Work_Date'] . "</td>";
+                        echo "<td>" . $row['Work_Time'] . "</td>";
+                        echo "<td>" . $row['Car_ID'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['CarBrand'] . "</td>";
+                        echo "<td>" . $row['CarDetail'] . "</td>";
+
+                        $status = $row['Approve_Status'] ?? 'approved';
+                        if ($status == 'approved') {
+                            echo "<td>
+                                    <form action='Mc-update-return.php' method='POST'>
+                                        <input type='hidden' name='Return_ID' value='" . $row['Return_ID'] . "'>
+                                        <input type='hidden' name='Work_ID' value='" . $row['Work_ID'] . "'>
+                                        <button type='submit' name='status' value='return' class='btn-return'>ส่งมอบ</button>
+                                    </form>
+                                </td>";
+                            } elseif ($status == 'returned') {
+                                echo "<td style='text-align: center;'>
+                                        <button class='btn-return' disabled style='background-color: #ccc;'>ส่งมอบ</button>
+                                    </td>";
+                                } else {
+                            echo "<td style='text-align: center;'>" . ucfirst($status) . "</td>";
+                        }
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                }
+                        ?>
+                    </div>
         </table>
     </div>
 </body>

@@ -228,9 +228,10 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div>
-            <div class="profile">
+        <div class="profile">
                 <img src="https://via.placeholder.com/100" alt="User Profile">
-                <h3>Admin</h3>
+                <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
+                <div class="welcome"><?php echo $_SESSION['fullname']; ?></div> 
             </div>
             <ul><br>
                 <li onclick="document.location='Ad-user.php'">ข้อมูลผู้ใช้งาน</li>
