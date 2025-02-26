@@ -158,7 +158,7 @@
     <div class="container">
         <div class="form-title">
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
-            <a class="head">ยืนยันซ่อมเสร็จ</a>
+            <a class="header"> ยืนยันซ่อมเสร็จ</a>
         </div><br>
         <form method="GET" class="search-bar">
             <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">

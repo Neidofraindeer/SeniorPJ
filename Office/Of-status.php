@@ -131,7 +131,7 @@
     <div class="container">
         <div class="form-title">
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
-            <a class="head">ติดตามสถานะ</a>
+            <a class="header"> ติดตามสถานะ</a>
         </div>
         <form method="GET" class="search-bar">
                 <input type="text" name="search" placeholder="ค้นหา..." value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>">
