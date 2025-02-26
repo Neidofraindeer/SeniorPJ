@@ -29,12 +29,25 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 10px;
         }
-        .search-bar input[type="text"] {
-            width: 70%;
+        .search-bar input[type="text"]{
+            width: 90%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+        }
+
+        .search-bar input[type="date"]{
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #726b7c;
+        }
+
+        .search-bar label {
+            align-items: center;
+            white-space: nowrap;
+            color: #646168;
         }
         .btn-search {
             background-color: #6495ED; /* สีน้ำเงิน */
@@ -44,7 +57,7 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin-right: 255px;
+            margin-right: 10px;
         }   
         .btn-search:hover {
             background-color: #3474ea;
@@ -158,7 +171,7 @@
                     <th>เวลามอบหมายงาน</th>
                     <th>วันที่ส่งมอบรถ</th>
                     <th>เวลาส่งมอบรถ</th>
-                    <th>รหัส</th>
+                    <th>รหัสรถ</th>
                     <th>ยี่ห้อ</th>
                     <th>ทะเบียนรถ</th>
                     <th>พนักงานช่าง</th>

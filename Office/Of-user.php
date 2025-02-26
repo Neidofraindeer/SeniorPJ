@@ -77,10 +77,12 @@ $total_pages = ceil($total_records / $limit);
             margin-bottom: 20px;
         }
         .search-bar input[type="text"] {
-            width: 70%;
+            flex: 1;
             padding: 10px;
+            margin-right: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
         .btn-search {
             background-color: #6495ED; /* สีน้ำเงิน */
@@ -90,8 +92,8 @@ $total_pages = ceil($total_records / $limit);
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin-right: 150px;
-        }   
+            margin-right: 10px;
+        }
         .btn-search:hover {
             background-color: #3474ea;
         }

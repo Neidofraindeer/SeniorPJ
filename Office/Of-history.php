@@ -32,7 +32,7 @@
             gap: 10px;
         }
         .search-bar input[type="text"]{
-            width: 70%;
+            width: 90%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -105,6 +105,10 @@
             font-size: 24px;
             font-style: oblique;
         }
+        tr:hover {
+            background-color:rgb(247, 242, 254);
+            transition: 0.2s;
+        }
     </style>
 </head>
 <body>
@@ -113,51 +117,72 @@
             <a onclick="document.location='Of-mainpage.php'" class="back-link">&lt;  </a>
             <a class="head"> ประวัติการซ่อมแซ่ม</a>
         </div><br>
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <label for="start-date"> วันที่: </label>
-            <input type="date" id="start-date">
-            <label for="end-date"> ถึง: </label>
-            <input type="date" id="end-date">
-            <button class="btn-search">ค้นหา</button>
-        </div>
+        <form method="GET" class="search-bar">
+            <input type="text" name="search" placeholder="ค้นหา..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+            <button type="submit" class="btn-search">ค้นหา</button>
+        </form>
         <table>
             <thead>
                 <tr>
-                    <th>วันที่สำเร็จ</th>
-                    <th>รหัส</th>
-                    <th>วันที่มอบหมาย</th>
+                    <th>วันที่มอบหมายงาน</th>
+                    <th>เวลามอบหมายงาน</th>
+                    <th>วันที่ส่งมอบรถ</th>
+                    <th>เวลาส่งมอบรถ</th>
+                    <th>รหัสรถ</th>
                     <th>ยี่ห้อ</th>
                     <th>ทะเบียนรถ</th>
                     <th>พนักงานช่าง</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>000001</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก A</td>
-                </tr>
-                <tr>
-                    <td>000002</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก B</td>
-                </tr>
-                <tr>
-                    <td>000003</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก C</td>
-                </tr>
-                <tr>
-                    <td>000004</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก D</td>
-                </tr>
-                <tr>
-                    <td>000004</td>
-                    <td>ชื่อ... นามสกุล...</td>
-                    <td>แผนก D</td>
-                </tr>
+                <?php
+                
+                // เชื่อมต่อกับฐานข้อมูล
+                include '../conn.php'; // แก้ไขเส้นทางตามความเหมาะสม
+
+                $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+                $search_query = "";
+                if (!empty($search)) {
+                    $search_query = " AND (c.CarNumber LIKE '%$search%' 
+                                        OR c.CarBrand LIKE '%$search%' 
+                                        OR w.Work_Date LIKE '%$search%'
+                                        OR w.Work_Time LIKE '%$search%'
+                                        OR r.Return_Date LIKE '%$search%'
+                                        OR r.Return_Time LIKE '%$search%'
+                                        OR c.Car_ID LIKE '%$search%'
+                                        OR w.Work_ID LIKE '%$search%'
+                                        OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
+                }
+                // ดึงข้อมูลจากฐานข้อมูล tb_return
+                $sql = "SELECT r.Return_Date, r.Return_Time, w.Work_Date, w.Work_Time, c.CarNumber, c.CarBrand, c.Car_ID,
+                 w.Work_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
+                        FROM tb_return r
+                        JOIN tb_work w ON r.Work_ID = w.Work_ID
+                        JOIN tb_car c ON w.Car_ID = c.Car_ID
+                        JOIN tb_approve a ON w.Work_ID = a.Work_ID
+                        JOIN tb_user u ON w.User_ID = u.User_ID
+                        WHERE a.Approve_Status = 'confirm'
+                        $search_query";
+                $result = $conn->query($sql);
+                
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr onclick=\"window.location='Of-history-detail.php?id=" . $row['Work_ID'] . "'\" style='cursor: pointer;'>";
+                        echo "<td>" . $row['Work_Date'] . "</td>";
+                        echo "<td>" . $row['Work_Time'] . "</td>";
+                        echo "<td>" . $row['Return_Date'] . "</td>";
+                        echo "<td>" . $row['Return_Time'] . "</td>";
+                        echo "<td>" . $row['Car_ID'] . "</td>";
+                        echo "<td>" . $row['CarBrand'] . "</td>";
+                        echo "<td>" . $row['CarNumber'] . "</td>";
+                        echo "<td>" . $row['FullName'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='9' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
