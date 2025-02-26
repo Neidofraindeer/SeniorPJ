@@ -134,6 +134,11 @@
         .btn:hover {
             background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
         }
+        tr:hover {
+            background-color:rgb(247, 242, 254);
+            transition: 0.2s;
+        }
+        
     </style>
 </head>
 <body>
@@ -180,7 +185,6 @@
                                         OR w.Work_ID LIKE '%$search%'
                                         OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
                 }
-    
                 // ดึงข้อมูลจากฐานข้อมูล tb_return
                 $sql = "SELECT r.Return_Date, r.Return_Time, w.Work_Date, w.Work_Time, c.CarNumber, c.CarBrand, c.Car_ID,
                  w.Work_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
@@ -189,7 +193,7 @@
                         JOIN tb_car c ON w.Car_ID = c.Car_ID
                         JOIN tb_approve a ON w.Work_ID = a.Work_ID
                         JOIN tb_user u ON w.User_ID = u.User_ID
-                        WHERE a.Approve_Status = 'returned'
+                        WHERE a.Approve_Status IN ('returned', 'confirm')
                         $search_query";
                 $result = $conn->query($sql);
                 
@@ -205,9 +209,10 @@
                         echo "<td>" . $row['CarNumber'] . "</td>";
                         echo "<td>" . $row['FullName'] . "</td>";
                         echo "<td>
-                                <form action='update_status.php' method='post'>
+                                <form action='Of-confirm-update.php' method='post'>
                                     <input type='hidden' name='Work_ID' value='" . $row['Work_ID'] . "'>
-                                    <button type='submit' class='btn-confirm'>ยืนยัน</button>
+                                    <button type='submit' class='btn-confirm' " . ($row['Approve_Status'] == 'confirm' ?
+                                     'disabled style="background-color: gray; cursor: not-allowed;"' : '') . "> ยืนยัน
                                 </form>
                               </td>";
                         echo "</tr>";
