@@ -66,15 +66,24 @@
             font-size: 18px;
         }
         .sidebar ul {
-            list-style: none;
+            margin-top: 60px; /* เพิ่มระยะห่างจาก profile */
         }
-        .sidebar ul li {
-            margin: 15px 0;
+        .sidebar li {
+            list-style: none;
+            
+        }
+        .sidebar  li {
             font-size: 16px;
             cursor: pointer;
+            padding:  10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0;
         }
-        .sidebar ul li:hover {
-            text-decoration: underline;
+        .sidebar  li:hover {
+            background-color:rgb(121, 86, 171);
+            text-decoration: none;
         }
         /* Content */
         .content {
@@ -229,10 +238,10 @@
     <div class="sidebar">
         <div>
         <div class="profile">
-                <img src="https://via.placeholder.com/100" alt="User Profile">
+            <img src="<?= htmlspecialchars($row['User_Picture']); ?>" alt="รูปผู้ใช้งาน" width="150"> 
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
-                <div class="welcome"><?php echo $_SESSION['fullname']; ?></div> 
-            </div>
+                <div class="welcome">ss</div> 
+            </div><br>
             <ul><br>
                 <li onclick="document.location='Ad-user.php'">ข้อมูลผู้ใช้งาน</li>
                 <li onclick="document.location='Ad-status.php'">ติดตามสถานะ</li>
@@ -241,7 +250,7 @@
             </ul>
         </div>
         <ul><br>
-            <li onclick="document.location='Ad-setting.php'">การตั้งค่า</li>
+            <li onclick="document.location='Ad-setting.php'">การตั้งค่าข้อมูลส่วนตัว</li>
             <li onclick="document.location='/SeniorPJ/index.php'">ออกจากระบบ</li>
         </ul>
     </div>
@@ -288,7 +297,7 @@
                                         OR CONCAT(u.User_Firstname, ' ', u.User_Lastname) LIKE '%$search%')";
                 }
                 // ดึงข้อมูลจากฐานข้อมูล
-                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, 
+                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand,u.User_Picture, 
                     CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, a.Approve_Status
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID

@@ -66,15 +66,24 @@
             font-size: 18px;
         }
         .sidebar ul {
-            list-style: none;
+            margin-top: 60px; /* เพิ่มระยะห่างจาก profile */
         }
-        .sidebar ul li {
-            margin: 15px 0;
+        .sidebar li {
+            list-style: none;
+            
+        }
+        .sidebar  li {
             font-size: 16px;
             cursor: pointer;
+            padding:  10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0;
         }
-        .sidebar ul li:hover {
-            text-decoration: underline;
+        .sidebar  li:hover {
+            background-color:rgb(121, 86, 171);
+            text-decoration: none;
         }
         /* Content */
         .content {
@@ -242,7 +251,7 @@
             </ul>
         </div>
         <ul><br>
-            <li onclick="document.location='Of-setting.php'">การตั้งค่า</li>
+            <li onclick="document.location='Of-setting.php'">การตั้งค่าข้อมูลส่วนตัว</li>
             <li onclick="document.location='/SeniorPJ/index.php'">ออกจากระบบ</li>
         </ul>
     </div>
