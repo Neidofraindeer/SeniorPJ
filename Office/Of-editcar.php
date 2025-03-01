@@ -120,9 +120,13 @@
         // ดึงข้อมูลจาก tb_work และ tb_car
         $sql = "SELECT w.Work_ID, w.Car_ID, w.User_ID, w.Work_Date, w.Work_Time,
                     c.CarNumber, c.CarModel, c.CarBrand, c.CarColor, c.CarDetail,
-                    c.CarPicture, c.RepairPicture, c.CarInsurance
+                    c.CarPicture, c.RepairPicture, c.CarInsurance, a.Approve_Status,
+                     CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName ,d.Department_name 
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
+                JOIN tb_approve a ON w.Work_ID = a.Work_ID
+                JOIN tb_user u ON w.User_ID = u.User_ID
+                JOIN tb_department d ON u.Department_ID = d.Department_ID
                 WHERE w.Work_ID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $Work_ID);
@@ -140,6 +144,7 @@
         exit();
     }
     $repairPictures = json_decode($row['RepairPicture'], true);
+    $approveStatus = $row['Approve_Status'];
     ?>
 <div class="container">
         <div class="form-title">
@@ -204,23 +209,29 @@
             </div>
             <div class="form-group">
                 <label>ชื่อพนักงานช่าง:</label>
-                <select name="User_ID" required>
-                    <option value="">-- เลือกพนักงานช่าง --</option>
-                    <?php
-                    // ดึงข้อมูลพนักงานจาก tb_user
-                    $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
-                            FROM tb_user u 
-                            JOIN tb_role r
-                            JOIN tb_department d ON u.Department_ID = d.Department_ID
-                            WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
-                    $result = $conn->query($sql);
-                    while ($row_emp = $result->fetch_assoc()) {
-                        // หาก User_ID ตรงกับข้อมูลที่โหลดมา ให้เลือกค่า default
-                        $selected = ($row_emp['User_ID'] == $row['User_ID']) ? 'selected' : '';
-                        echo "<option value='{$row_emp['User_ID']}' $selected>{$row_emp['FullName']} - {$row_emp['Department_name']}</option>";
-                    }
-                    ?>
-                </select>
+                <?php if ($approveStatus == 'approved'): ?>
+                    <!-- เมื่อสถานะเป็น approved จะแสดงชื่อพนักงานแทนและไม่สามารถเลือกได้ -->
+                    <input type="text" value="<?php echo $row['FullName']?> <?php echo $row['Department_name']; ?>" disabled>
+                <?php else: ?>
+                    <!-- ถ้าไม่เป็น approved จะให้เลือกพนักงาน -->
+                    <select name="User_ID" required>
+                        <option value="">-- เลือกพนักงานช่าง --</option>
+                        <?php
+                        // ดึงข้อมูลพนักงานจาก tb_user
+                        $sql = "SELECT u.User_ID, CONCAT(u.User_Firstname, ' ', u.User_Lastname) AS FullName, d.Department_name 
+                                FROM tb_user u 
+                                JOIN tb_role r
+                                JOIN tb_department d ON u.Department_ID = d.Department_ID
+                                WHERE r.Role_ID = '2' AND u.Department_ID IN (2, 3, 4, 5)";
+                        $result = $conn->query($sql);
+                        while ($row_emp = $result->fetch_assoc()) {
+                            // หาก User_ID ตรงกับข้อมูลที่โหลดมา ให้เลือกค่า default
+                            $selected = ($row_emp['User_ID'] == $row['User_ID']) ? 'selected' : '';
+                            echo "<option value='{$row_emp['User_ID']}' $selected>{$row_emp['FullName']} - {$row_emp['Department_name']}</option>";
+                        }
+                        ?>
+                    </select>
+                <?php endif; ?>
             </div>
 
             <!-- ปุ่มบันทึกและยกเลิก -->
