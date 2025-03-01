@@ -111,6 +111,8 @@
     <?php
     include '../conn.php';
 
+    
+
     // ตรวจสอบว่ามี Work_ID ถูกส่งมาหรือไม่
     if (isset($_GET['id'])) {
         $Work_ID = $_GET['id'];
@@ -137,6 +139,7 @@
         echo "<p>ไม่พบ Work_ID</p>";
         exit();
     }
+    $repairPictures = json_decode($row['RepairPicture'], true);
     ?>
 <div class="container">
         <div class="form-title">
@@ -183,7 +186,15 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <img src="<?= htmlspecialchars($row['RepairPicture']); ?>" alt="รูปตำแหน่งซ่อมแซม" width="200"> 
+                    <?php
+                    if (!empty($repairPictures) && is_array($repairPictures)) {
+                        foreach ($repairPictures as $picture) {
+                            echo "<img src='$picture' width='200px' />";
+                        }
+                    } else {
+                        echo "ไม่มีรูปภาพแสดง";
+                    } 
+                    ?> 
                     <input type="file" id="repair_photo" name="RepairPicture" multiple >
                 </div>
                 <div class="form-group">

@@ -137,6 +137,8 @@
         echo "<p>ไม่พบ Work_ID</p>";
         exit();
     }
+    
+    $repairPictures = json_decode($row['RepairPicture'], true);           
     ?>
 <div class="container">
         <div class="form-title">
@@ -183,8 +185,17 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <img src="<?= htmlspecialchars($row['RepairPicture']); ?>" alt="รูปตำแหน่งซ่อมแซม" width="200"> 
+                    <?php
+                    if (!empty($repairPictures) && is_array($repairPictures)) {
+                        foreach ($repairPictures as $picture) {
+                            echo "<img src='$picture' width='200px' />";
+                        }
+                    } else {
+                        echo "ไม่มีรูปภาพแสดง";
+                    } 
+                    ?>
                     <input type="file" id="repair_photo" name="RepairPicture" multiple >
+                    
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
@@ -208,6 +219,7 @@
                         $selected = ($row_emp['User_ID'] == $row['User_ID']) ? 'selected' : '';
                         echo "<option value='{$row_emp['User_ID']}' $selected>{$row_emp['FullName']} - {$row_emp['Department_name']}</option>";
                     }
+                    
                     ?>
                 </select>
             </div>
