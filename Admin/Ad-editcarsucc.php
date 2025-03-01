@@ -62,11 +62,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         echo "อัปเดตข้อมูลสำเร็จ";
+        
+        // อัปเดตข้อมูล User_ID ใน tb_work หากมีการเปลี่ยนแปลง
+        if ($User_ID !== null) {
+            $sqlUpdateWork = "UPDATE tb_work SET User_ID = ? WHERE Work_ID = ?";
+            $stmtUpdateWork = $conn->prepare($sqlUpdateWork);
+            $stmtUpdateWork->bind_param("ii", $User_ID, $Work_ID);
+            if ($stmtUpdateWork->execute()) {
+                echo "อัปเดตข้อมูลพนักงานช่างสำเร็จ";
+            } else {
+                echo "เกิดข้อผิดพลาดในการอัปเดตข้อมูลพนักงานช่าง: " . $stmtUpdateWork->error;
+            }
+            $stmtUpdateWork->close();
+        }
+
         header("refresh: 1; url= Ad-mainpage.php");
     } else {
         echo "เกิดข้อผิดพลาด: " . $stmt->error;
     }
     $stmt->close();
-    }
+}
 $conn->close();
 ?>
