@@ -195,7 +195,7 @@
                         echo "ไม่มีรูปภาพแสดง";
                     } 
                     ?> 
-                    <input type="file" id="repair_photo" name="RepairPicture" multiple >
+                    <input type="file" id="repair_photo" name="RepairPicture[]" multiple >
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>

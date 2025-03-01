@@ -105,6 +105,23 @@
         .form-buttons .btn-cancel:hover {
             background-color: #e53935;
         }
+        .preview-container {
+            display: flex;  /* ใช้ flexbox เพื่อจัดการการเรียงรูปภาพ */
+            flex-wrap: wrap;  /* ทำให้รูปภาพสามารถห่อหุ้มบรรทัดใหม่ได้เมื่อมีขนาดเกิน */
+            gap: 10px;  /* เพิ่มช่องว่างระหว่างรูปภาพ */
+        }
+
+        .preview-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .preview-item img {
+            width: 150px;
+
+        }
+
     </style>
 </head>
 <body>
@@ -148,7 +165,8 @@
                 <h3>ข้อมูลตำแหน่งซ่อมแซม</h3>
                 <div class="form-group">
                     <label for="repair_photo">รูป:</label>
-                    <input type="file" id="repair_photo" name="RepairPicture[]" multiple required>
+                    <input type="file" id="repair_photo" name="RepairPicture[]"  multiple required>
+                    <div id="repair-photo-preview" class="preview-container"></div>
                 </div>
                 <div class="form-group">
                     <label>รายละเอียดตำแหน่งที่ซ่อมแซม:</label>
@@ -182,5 +200,28 @@
             </div>
         </form>
     </div>
+    <script>
+        // Preview image when selecting files
+        document.getElementById('repair_photo').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('repair-photo-preview');
+            previewContainer.innerHTML = '';  // Clear any existing previews
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    const previewItem = document.createElement('div');
+                    previewItem.classList.add('preview-item');
+                    previewItem.appendChild(imgElement);
+                    previewContainer.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+
+
 </body>
 </html>

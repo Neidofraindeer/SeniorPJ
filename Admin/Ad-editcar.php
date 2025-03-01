@@ -138,7 +138,9 @@
         exit();
     }
     
-    $repairPictures = json_decode($row['RepairPicture'], true);           
+    $repairPictures = json_decode($row['RepairPicture'], true);  
+    
+                    
     ?>
 <div class="container">
         <div class="form-title">
@@ -194,7 +196,7 @@
                         echo "ไม่มีรูปภาพแสดง";
                     } 
                     ?>
-                    <input type="file" id="repair_photo" name="RepairPicture" multiple >
+                    <input type="file" id="repair_photo" name="RepairPicture[]" multiple >
                     
                 </div>
                 <div class="form-group">

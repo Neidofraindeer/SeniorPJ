@@ -34,22 +34,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          }
      }
  
-     $repair_picture_path = $row['RepairPicture']; // ค่าเดิมจาก DB
-     if (!empty($_FILES['RepairPicture']['name'])) { // ตรวจสอบว่ามีไฟล์ใหม่ถูกอัปโหลด
-         $new_repair_picture_path = "../uploads/repair/" . uniqid("repair_", true) . ".jpg";
-         if (move_uploaded_file($_FILES['RepairPicture']['tmp_name'], $new_repair_picture_path)) {
-             $repair_picture_path = $new_repair_picture_path; // ใช้ไฟล์ใหม่แทนค่าเดิม
-         } else {
-             echo "ไม่สามารถอัพโหลดรูปภาพ RepairPicture ได้";
-             exit;
-         }
-     }
+     $repair_picture_paths = [];
+    if (!empty($_FILES['RepairPicture']['name'][0])) { // ตรวจสอบว่าได้รับไฟล์ซ่อมแซมใหม่หรือไม่
+        foreach ($_FILES['RepairPicture']['name'] as $key => $name) {
+            if ($_FILES['RepairPicture']['error'][$key] == 0) {
+                $tmp_name = $_FILES['RepairPicture']['tmp_name'][$key];
+                $new_repair_picture_path = "../uploads/repair/" . uniqid("repair_", true) . ".jpg";
+                if (move_uploaded_file($tmp_name, $new_repair_picture_path)) {
+                    $repair_picture_paths[] = $new_repair_picture_path; // บันทึกรูปภาพที่อัปโหลด
+                }
+            }
+        }
+    } else {
+        // หากไม่มีการอัปโหลดไฟล์ใหม่ ให้ใช้ไฟล์เดิมจาก DB
+        $repair_picture_paths = json_decode($row['RepairPicture'], true);
+    }
+
+    // เปลี่ยนเป็น JSON String สำหรับบันทึกหลายไฟล์ในฐานข้อมูล
+    $repair_picture_paths_json = json_encode($repair_picture_paths, JSON_UNESCAPED_SLASHES);
+
      // อัปเดตข้อมูลใน tb_car
     $sql = "UPDATE tb_car 
         SET CarNumber = ?, CarBrand = ?, CarModel = ?, CarColor = ?, CarInsurance = ?, CarDetail = ?, CarPicture = ?, RepairPicture = ? 
         WHERE Car_ID = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssssi", $CarNumber, $CarBrand, $CarModel, $CarColor, $CarInsurance, $CarDetail, $car_picture_path, $repair_picture_path, $Car_ID);
+    $stmt->bind_param("ssssssssi", $CarNumber, $CarBrand, $CarModel, $CarColor, $CarInsurance, $CarDetail, $car_picture_path, $repair_picture_paths_json, $Car_ID);
 
     if ($stmt->execute()) {
         echo "อัปเดตข้อมูลสำเร็จ";
