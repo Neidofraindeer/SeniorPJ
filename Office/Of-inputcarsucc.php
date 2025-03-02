@@ -71,8 +71,8 @@ $repairPicturePathsJson = json_encode($repairPicturePaths, JSON_UNESCAPED_SLASHE
 
 
 // INSERT ข้อมูลลงใน tb_car
-$sqlCar = "INSERT INTO tb_car (User_ID, CarNumber, CarModel,  CarBrand,  CarColor, CarDetail, CarInsurance,  CarPicture, RepairPicture)
-           VALUES ('$userID', '$carNumber', '$carModel', '$carBrand', '$carColor', '$carDetail', '$carInsurance', '$carPicturePath', '$repairPicturePathsJson')";
+$sqlCar = "INSERT INTO tb_car (CarNumber, CarModel,  CarBrand,  CarColor, CarDetail, CarInsurance,  CarPicture, RepairPicture)
+           VALUES ('$carNumber', '$carModel', '$carBrand', '$carColor', '$carDetail', '$carInsurance', '$carPicturePath', '$repairPicturePathsJson')";
 if ($conn->query($sqlCar) === TRUE) {
     // ดึง Car_ID ที่เพิ่งเพิ่ม
     $carID = $conn->insert_id;
@@ -82,8 +82,8 @@ if ($conn->query($sqlCar) === TRUE) {
     $formattedDate = $workDate->format('Y-m-d');
     $workTime = date('H:i:s'); 
 
-    $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Status_ID, Department_ID, Work_Date, Work_Time)
-                VALUES ('$carID', '$userID', '$statusID', '$departmentID', '$formattedDate', '$workTime')";
+    $sqlWork = "INSERT INTO tb_work (Car_ID, User_ID, Status_ID, Work_Date, Work_Time)
+                VALUES ('$carID', '$userID', '$statusID', '$formattedDate', '$workTime')";
 
     if ($conn->query($sqlWork) === TRUE) {
         $workID = $conn->insert_id;

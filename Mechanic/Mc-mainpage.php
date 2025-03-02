@@ -212,7 +212,8 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
                 LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
                 LEFT JOIN tb_return r ON w.Work_ID = r.Work_ID
-                WHERE a.Approve_Status IN ('approved', 'returned')";
+                WHERE a.Approve_Status IN ('approved', 'returned')
+                GROUP BY w.Work_ID";
 
                 $result = $conn->query($sql);
 
@@ -236,11 +237,11 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
                                         <button type='submit' name='status' value='return' class='btn-return'>ส่งมอบ</button>
                                     </form>
                                 </td>";
-                            } elseif ($status == 'returned') {
-                                echo "<td style='text-align: center;'>
-                                        <button class='btn-return' disabled style='background-color: #ccc;'>ส่งมอบ</button>
-                                    </td>";
-                                } else {
+                        } elseif ($status == 'returned') {
+                            echo "<td style='text-align: center;'>
+                                    <button class='btn-return' disabled style='background-color: #ccc;'>ส่งมอบ</button>
+                                </td>";
+                        } else {
                             echo "<td style='text-align: center;'>" . ucfirst($status) . "</td>";
                         }
                         echo "</tr>";

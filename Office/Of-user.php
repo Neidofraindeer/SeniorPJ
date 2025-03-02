@@ -1,7 +1,6 @@
 <?php
-require '../conn.php'; // เชื่อมต่อกับฐานข้อมูล
 session_start();
-
+require '../conn.php'; // เชื่อมต่อกับฐานข้อมูล
 // เช็คว่าผู้ใช้ล็อกอินหรือไม่
 if (!isset($_SESSION['user_data'])) {
     header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
