@@ -5,17 +5,16 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-echo "Hello " . $_SESSION['username'] . "! Role: " . $_SESSION['role'];
+// แสดงชื่อผู้ใช้ที่เข้าสู่ระบบ
+echo "Welcome, " . $_SESSION['fullname']; // แสดงชื่อเต็มของผู้ใช้
 
-if ($_SESSION['role'] == 2) { 
-    header("Location: Mechanic/Mc-mainpage.php");
-    exit();
-} elseif ($_SESSION['role'] == 1) {
-    header("Location: Office/Of-mainpage.php");
-    exit();
-} elseif ($_SESSION['role'] == 0) { 
-    header("Location: Admin/Ad-mainpage.php");
-    exit();
-    
+if ($_SESSION['role'] == 'admin') {
+    echo "<br><a href='Ad-mainpage.php'>Go to Admin Page</a>";
+} elseif ($_SESSION['role'] == 'office') {
+    echo "<br><a href='Of-mainpage.php'>Go to Office Page</a>";
+} elseif ($_SESSION['role'] == 'mechanic') {
+    echo "<br><a href='Mc-mainpage.php'>Go to Mechanic Page</a>";
+} else {
+    echo "<br>Unauthorized access!";
 }
 ?>

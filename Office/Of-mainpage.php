@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+// เช็คว่าผู้ใช้ล็อกอินหรือไม่
+if (!isset($_SESSION['user_data'])) {
+    header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
+    exit();
+}
+// ตรวจสอบว่า 'profile_picture' ถูกตั้งค่าใน session หรือไม่
+$profile_picture = isset($_SESSION['user_data']['profile_picture']) ? $_SESSION['user_data']['profile_picture'] : 'default-profile.png'; // กำหนดค่าดีฟอลต์ในกรณีไม่มีรูป
+
+// ตรวจสอบว่า 'fullname' ถูกตั้งค่าใน session หรือไม่
+$fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['fullname'] : 'ผู้ใช้ไม่ระบุชื่อ';
+?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -5,6 +20,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายการมอบหมายงาน</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="login-check.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Icon ปากกา */
         .fa-pencil-alt {
@@ -236,11 +253,11 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div>
+    <div>
             <div class="profile">
-                <img src="https://via.placeholder.com/100" alt="User Profile">
+            <img src="path/to/profile/pictures/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
-                <div class="welcome"><?php echo $_SESSION['fullname']; ?></div> 
+                <h3><?php echo $fullname; ?></h3>
             </div>
             <ul><br>
                 <li onclick="document.location='Of-user.php'">ข้อมูลผู้ใช้งาน</li>
@@ -252,7 +269,7 @@
         </div>
         <ul><br>
             <li onclick="document.location='Of-setting.php'">การตั้งค่าข้อมูลส่วนตัว</li>
-            <li onclick="document.location='/SeniorPJ/index.php'">ออกจากระบบ</li>
+            <li onclick="confirmLogout()">ออกจากระบบ</li>
         </ul>
     </div>
     <!-- Content -->
@@ -377,6 +394,24 @@
             if (confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')) {
                 window.location.href = 'Of-deletework.php?id=' + workId;
             } 
+        }
+    </script>
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: "คุณแน่ใจหรือไม่?",
+                text: "คุณต้องการออกจากระบบหรือไม่?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#28a745", // สีเขียว
+                cancelButtonColor: "#d33", // สีแดง
+                confirmButtonText: "ยืนยัน",
+                cancelButtonText: "ยกเลิก"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/SeniorPJ/logout.php";
+                }
+            });
         }
     </script>
 </body>

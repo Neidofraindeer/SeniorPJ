@@ -1,52 +1,101 @@
 <?php
 session_start();
-include 'conn.php';
+include 'conn.php'; // เชื่อมต่อฐานข้อมูล
+
 $error = "";
 
+// ตรวจสอบว่ามีการส่งข้อมูลจากฟอร์มหรือไม่
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    if (!empty($_POST['username']) && !empty($_POST['password'])) { 
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-    // ดึงข้อมูลเฉพาะ Username จากฐานข้อมูล
-    $sql = "SELECT * FROM tb_login WHERE Username = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        // พบข้อมูลผู้ใช้
-        $row = $result->fetch_assoc();
-        $hashed_password = $row['Password']; // รหัสผ่านที่เข้ารหัสใน DB
-        $roleId = $row['Role_ID'];
+        $sql = "SELECT * FROM tb_login WHERE Username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        // ตรวจสอบรหัสผ่าน
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION['username'] = $username;
-            $_SESSION['role'] = $roleId;
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
 
-            // เปลี่ยนเส้นทางตาม Role_ID
-            if ($roleId == 0) { // Admin
-                header("Location: Admin/Ad-mainpage.php");
-            } elseif ($roleId == 1) { // Office
-                header("Location: Office/Of-mainpage.php");
-            } else { // Mechanic หรืออื่นๆ
-                header("Location: Mechanic/Mc-mainpage.php");
+            // ✅ ใช้ password_verify() เพื่อตรวจสอบรหัสผ่าน
+            if (password_verify($password, $row['Password'])) {
+
+            // ตรวจสอบว่า user นี้ล็อกอินอยู่หรือไม่
+            $userId = $row['User_ID'];
+            $checkLoginSql = "SELECT Logged_in FROM tb_user WHERE User_ID = ?";
+            $checkLoginStmt = $conn->prepare($checkLoginSql);
+            $checkLoginStmt->bind_param("i", $userId);
+            $checkLoginStmt->execute();
+            $checkLoginResult = $checkLoginStmt->get_result();
+            
+            if ($checkLoginResult->num_rows > 0) {
+                $loginStatus = $checkLoginResult->fetch_assoc();
+                
+                if ($loginStatus['Logged_in'] == 1) {
+                    // ถ้าผู้ใช้ล็อกอินอยู่แล้ว
+                    $error = "❌ คุณได้เข้าสู่ระบบแล้วในที่อื่น กรุณาล็อกเอาต์จากที่อื่นก่อน";
+                } else {
+                    // รีเซ็ต session id ใหม่เพื่อป้องกันการทับซ้อน
+                    session_regenerate_id(true);
+                    
+                    // อัปเดตสถานะการล็อกอินในฐานข้อมูล
+                    $updateLoginStatus = "UPDATE tb_user SET Logged_in = 1 WHERE User_ID = ?";
+                    $updateStmt = $conn->prepare($updateLoginStatus);
+                    $updateStmt->bind_param("i", $userId);
+                    $updateStmt->execute();
+
+                    // เก็บข้อมูล session
+                    $_SESSION['user_data'] = [
+                        'user_id' => $row['User_ID'],
+                        'role' => $row['Role_ID'],
+                        'fullname' => $row['fullname']
+                    ];
+
+                    // ดึงข้อมูลเพิ่มเติมจาก tb_user
+                    $userSql = "SELECT User_Firstname, User_Lastname, User_Picture FROM tb_user WHERE User_ID = ?";
+                    $userStmt = $conn->prepare($userSql);
+                    $userStmt->bind_param("i", $_SESSION['user_data']['user_id']);
+                    $userStmt->execute();
+                    $userResult = $userStmt->get_result();
+
+                    if ($userResult->num_rows > 0) {
+                        $userDetails = $userResult->fetch_assoc();
+                        $_SESSION['user_data']['fullname'] = $userDetails['User_Firstname'] . ' ' . $userDetails['User_Lastname'];
+                        $_SESSION['user_data']['profile_picture'] = $userDetails['User_Picture'];
+                    } else {
+                        $_SESSION['user_data']['fullname'] = "ไม่พบข้อมูลผู้ใช้";
+                        $_SESSION['user_data']['profile_picture'] = "default.jpg";
+                    }
+
+                    // ตั้งค่า localStorage ผ่าน JavaScript
+                    echo "<script>
+                            localStorage.setItem('user_logged_in', 'true');
+                            localStorage.setItem('user_role', '" . $_SESSION['user_data']['role'] . "');
+                          </script>";
+                    
+                    // Redirect ไปตาม Role
+                    if ($_SESSION['user_data']['role'] == 0) {
+                        echo "<script>window.location.href = 'Admin/Ad-mainpage.php';</script>";
+                    } elseif ($_SESSION['user_data']['role'] == 1) {
+                        echo "<script>window.location.href = 'Office/Of-mainpage.php';</script>";
+                    } else {
+                        echo "<script>window.location.href = 'Mechanic/Mc-mainpage.php';</script>";
+                    }
+                    exit();
+                 }
+               }
             }
-            exit();
         } else {
             $error = "❌ Username หรือ Password ไม่ถูกต้อง";
         }
-    } else {
-        $error = "❌ Username หรือ Password ไม่ถูกต้อง";
-    }
-
-    $stmt->close();
+        $stmt->close();
+    } 
 }
-
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

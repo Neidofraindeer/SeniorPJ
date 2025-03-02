@@ -1,9 +1,26 @@
+<?php
+session_start();
+
+// เช็คว่าผู้ใช้ล็อกอินหรือไม่
+if (!isset($_SESSION['user_data'])) {
+    header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
+    exit();
+}
+
+// ตรวจสอบว่า 'profile_picture' ถูกตั้งค่าใน session หรือไม่
+$profile_picture = isset($_SESSION['user_data']['profile_picture']) ? $_SESSION['user_data']['profile_picture'] : 'default-profile.png'; // กำหนดค่าดีฟอลต์ในกรณีไม่มีรูป
+
+// ตรวจสอบว่า 'fullname' ถูกตั้งค่าใน session หรือไม่
+$fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['fullname'] : 'ผู้ใช้ไม่ระบุชื่อ';
+?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายการซ่อมแซ่ม</title>
+    <script src="login-check.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
     /* Reset CSS */
@@ -151,21 +168,18 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div>
-        <div class="profile">
-                <img src="https://via.placeholder.com/100" alt="User Profile">
+            <div class="profile">
+                <!-- ใช้รูปภาพจาก session หรือ URL ที่เก็บไว้ในฐานข้อมูล -->
+                <img src="path/to/profile/pictures/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
-                <div class="welcome"><?php echo $_SESSION['fullname']; ?></div> 
+                <h3><?php echo $fullname; ?></h3>
             </div>
-        </div>
             <ul><br>
                 <li onclick="document.location='Mc-history.php'">ประวัติการซ่อมแซม</li>
                 <li onclick="document.location='Mc-setting.php'">การตั้งค่าข้อมูลส่วนตัว</li>
-                <li onclick="document.location='/SeniorPJ/index.php'">ออกจากระบบ</li>
+                <li onclick="confirmLogout()">ออกจากระบบ</li>
             </ul>
-        
     </div>
-
     <!-- Content -->
     <div class="content">
         <h1>รายการซ่อมแซ่ม</h1>
@@ -238,5 +252,23 @@
                     </div>
         </table>
     </div>
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: "คุณแน่ใจหรือไม่?",
+                text: "คุณต้องการออกจากระบบหรือไม่?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#28a745", // สีเขียว
+                cancelButtonColor: "#d33", // สีแดง
+                confirmButtonText: "ยืนยัน",
+                cancelButtonText: "ยกเลิก"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/SeniorPJ/logout.php";
+                }
+            });
+        }
+    </script>
 </body>
 </html>
