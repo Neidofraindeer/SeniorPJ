@@ -1,5 +1,12 @@
 <?php
 require '../conn.php'; // เชื่อมต่อกับฐานข้อมูล
+session_start();
+
+// เช็คว่าผู้ใช้ล็อกอินหรือไม่
+if (!isset($_SESSION['user_data'])) {
+    header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
+    exit();
+}
 
 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 
