@@ -150,6 +150,9 @@ if (!isset($_SESSION['user_data'])) {
                 include '../conn.php'; // แก้ไขเส้นทางตามความเหมาะสม
 
                 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+                $user_id = $_SESSION['user_data']['user_id'];
+                
+
 
                 $search_query = "";
                 if (!empty($search)) {
@@ -172,8 +175,13 @@ if (!isset($_SESSION['user_data'])) {
                         JOIN tb_approve a ON w.Work_ID = a.Work_ID
                         JOIN tb_user u ON w.User_ID = u.User_ID
                         WHERE a.Approve_Status = 'confirm'
+                        AND w.User_ID = ?
                         $search_query";
-                $result = $conn->query($sql);
+                        
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_id);  // ผูกค่าของ User_ID
+                $stmt->execute();
+                $result = $stmt->get_result();
                 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {

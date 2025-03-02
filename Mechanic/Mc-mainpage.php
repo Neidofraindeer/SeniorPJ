@@ -1,18 +1,19 @@
 <?php
 session_start();
 
-// เช็คว่าผู้ใช้ล็อกอินหรือไม่
 if (!isset($_SESSION['user_data'])) {
-    header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
+    // Debug (ให้ดูว่ามี session หรือไม่)
+    echo "Session lost or not set. Redirecting...";
+    exit();
+    header("Location: /SeniorPJ/index.php");
     exit();
 }
 
-// ตรวจสอบว่า 'profile_picture' ถูกตั้งค่าใน session หรือไม่
-$profile_picture = isset($_SESSION['user_data']['profile_picture']) ? $_SESSION['user_data']['profile_picture'] : 'default-profile.png'; // กำหนดค่าดีฟอลต์ในกรณีไม่มีรูป
-
-// ตรวจสอบว่า 'fullname' ถูกตั้งค่าใน session หรือไม่
-$fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['fullname'] : 'ผู้ใช้ไม่ระบุชื่อ';
+$user_id = $_SESSION['user_data']['user_id']; // กำหนดค่า user_id
+$profile_picture = $_SESSION['user_data']['profile_picture'] ?? 'default-profile.png';
+$fullname = $_SESSION['user_data']['fullname'] ?? 'ผู้ใช้ไม่ระบุชื่อ';
 ?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -170,7 +171,7 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
     <div class="sidebar">
             <div class="profile">
                 <!-- ใช้รูปภาพจาก session หรือ URL ที่เก็บไว้ในฐานข้อมูล -->
-                <img src="path/to/profile/pictures/<?php echo $profile_picture; ?>" alt="User Profile">
+                <img src="../uploads/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
                 <h3><?php echo $fullname; ?></h3>
             </div>
@@ -199,6 +200,8 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
             <?php
                 // เชื่อมต่อกับฐานข้อมูล
                 include '../conn.php';
+
+
                 // กำหนดจำนวนแถวที่ต้องการแสดง
                 $limit = 11;
                 // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1
@@ -207,12 +210,14 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
                 $start = ($page - 1) * $limit;
                 
                 // ดึงข้อมูลจากฐานข้อมูลเฉพาะงานของผู้ที่เข้าสู่ระบบ (User_ID)
-                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber, c.CarBrand, c.CarDetail, a.Approve_Status, r.Return_ID
+                $sql = "SELECT w.Work_ID, w.Work_Date, w.Work_Time, c.Car_ID, c.CarNumber,
+                 c.CarBrand, c.CarDetail, a.Approve_Status, r.Return_ID
                 FROM tb_work w
                 JOIN tb_car c ON w.Car_ID = c.Car_ID
                 LEFT JOIN tb_approve a ON w.Work_ID = a.Approve_ID
                 LEFT JOIN tb_return r ON w.Work_ID = r.Work_ID
-                WHERE a.Approve_Status IN ('approved', 'returned')
+                WHERE w.User_ID = '$user_id' 
+                AND a.Approve_Status IN ('approved', 'returned')
                 GROUP BY w.Work_ID";
 
                 $result = $conn->query($sql);

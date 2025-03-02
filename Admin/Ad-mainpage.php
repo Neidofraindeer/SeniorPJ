@@ -6,9 +6,8 @@ if (!isset($_SESSION['user_data'])) {
     header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
     exit();
 }
-
 // ตรวจสอบว่า 'profile_picture' ถูกตั้งค่าใน session หรือไม่
-$_SESSION['user_data']['User_Picture'] = !empty($userDetails['User_Picture']) ? $userDetails['User_Picture'] : "default.jpg";
+$profile_picture = isset($_SESSION['user_data']['profile_picture']) ? $_SESSION['user_data']['profile_picture'] : 'default-profile.png'; // กำหนดค่าดีฟอลต์ในกรณีไม่มีรูป
 
 // ตรวจสอบว่า 'fullname' ถูกตั้งค่าใน session หรือไม่
 $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['fullname'] : 'ผู้ใช้ไม่ระบุชื่อ';
@@ -257,7 +256,7 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
         <div>
         <div class="profile">
                 <!-- ใช้รูปภาพจาก session หรือ URL ที่เก็บไว้ในฐานข้อมูล -->
-                <img src="path/to/profile/pictures/<?php echo $User_Picture; ?>" alt="User Profile">
+                <img src="../uploads/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
                 <h3><?php echo $fullname; ?></h3>
             </div><br>

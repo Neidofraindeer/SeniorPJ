@@ -255,7 +255,7 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
     <div class="sidebar">
     <div>
             <div class="profile">
-            <img src="path/to/profile/pictures/<?php echo $profile_picture; ?>" alt="User Profile">
+            <img src="../uploads/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
                 <h3><?php echo $fullname; ?></h3>
             </div>
