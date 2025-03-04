@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION['user_data'] = [
                                 'user_id' => $user['User_ID'],
                                 'role' => $user['role'],
-                                'fullname' => $user['fullname']
+                                
                             ];
 
                             // ดึงข้อมูลเพิ่มเติมจาก tb_user (ชื่อและรูปภาพ)

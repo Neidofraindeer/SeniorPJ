@@ -31,7 +31,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
                 if ($car_stmt->execute()) {
                     // ถ้าลบสำเร็จให้ redirect ไปหน้า Ad-mainpage.php
-                    header("Location: Ad-mainpage.php");
+                    header("Location: Of-mainpage.php");
                     exit();
                 } else {
                     echo "เกิดข้อผิดพลาดในการลบข้อมูลจาก tb_car";

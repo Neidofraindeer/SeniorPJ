@@ -69,32 +69,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['user_data']['profile_picture'] = "default.jpg";
                     }
 
-                    // ตั้งค่า localStorage ผ่าน JavaScript
                     echo "<script>
                             localStorage.setItem('user_logged_in', 'true');
                             localStorage.setItem('user_role', '" . $_SESSION['user_data']['role'] . "');
+                            alert('เข้าสู่ระบบสำเร็จ'); // แสดงข้อความเมื่อเข้าสู่ระบบสำเร็จ
+                            window.location.href = getRedirectUrl(); // เปลี่ยนหน้าเว็บทันที
+                             
+                            function getRedirectUrl() {
+                                var role = " . $_SESSION['user_data']['role'] . ";
+                                if (role === 0) {
+                                    return 'Admin/Ad-mainpage.php';
+                                } else if (role === 1) {
+                                    return 'Office/Of-mainpage.php';
+                                } else {
+                                    return 'Mechanic/Mc-mainpage.php';
+                                }
+                            }
                           </script>";
-                    
-                    // Redirect ไปตาม Role
-                    if ($_SESSION['user_data']['role'] == 0) {
-                        echo "<script>
-                                setTimeout(function() {
-                                    window.location.href = 'Admin/Ad-mainpage.php';
-                                }, 2000);
-                              </script>";
-                    } elseif ($_SESSION['user_data']['role'] == 1) {
-                        echo "<script>
-                                setTimeout(function() {
-                                    window.location.href = 'Office/Of-mainpage.php';
-                                }, 2000);
-                              </script>";
-                    } else {
-                        echo "<script>
-                                setTimeout(function() {
-                                    window.location.href = 'Mechanic/Mc-mainpage.php';
-                                }, 2000);
-                              </script>";
-                    }                    
                     exit();
                  }
                }
