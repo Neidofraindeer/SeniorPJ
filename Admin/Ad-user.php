@@ -235,7 +235,7 @@ $total_pages = ceil($total_records / $limit);
             if ($result->num_rows > 0) {
                 // แสดงข้อมูลในตาราง
                 while ($row = $result->fetch_assoc()) {
-                    echo "<tr>
+                    echo "<tr onclick=\"window.location='Ad-user-detail.php?id=" . $row['User_ID'] . "'\" style='cursor: pointer;'>
                             <td style='text-align: center;'>" . $row['User_ID'] . "</td>
                             <td>" . $row['Username'] . "</td>
                             <td>" . $row['User_Firstname'] . "</td>

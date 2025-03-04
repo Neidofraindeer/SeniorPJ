@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_data'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แก้ไขข้อมูลผู้ใช้งาน</title>
+    <title>ข้อมูลผู้ใช้งาน</title>
 </head>
 <style>
     /* กำหนดรูปแบบพื้นฐาน */
@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_data'])) {
     /* กรอบฟอร์ม */
     .form-container {
         max-width: 900px;
-        height: 515px;
+        height: 550;
         margin: auto;
         border: 1px solid #ccc;
         padding: 20px;
@@ -124,11 +124,23 @@ if (!isset($_SESSION['user_data'])) {
             } else {
                 echo "ไม่พบข้อมูลผู้ใช้";
             }
-            // ดึงข้อมูลแผนกจากฐานข้อมูล
-            $dept_sql = "SELECT * FROM tb_department";
-            $departments = $conn->query($dept_sql);  // ดึงข้อมูลแผนกทั้งหมด
-            $role_sql = "SELECT * FROM tb_role";
-            $role = $conn->query($role_sql); 
+            // ดึงชื่อแผนก
+            $dept_sql = "SELECT Department_Name FROM tb_department WHERE Department_ID = ?";
+            $stmt = $conn->prepare($dept_sql);
+            $stmt->bind_param("i", $user['Department_ID']);
+            $stmt->execute();
+            $dept_result = $stmt->get_result();
+            $dept_row = $dept_result->fetch_assoc();
+            $department_name = $dept_row ? $dept_row['Department_Name'] : "ไม่ระบุ";
+
+            // ดึงชื่อสิทธิ์เข้าถึง
+            $role_sql = "SELECT Role FROM tb_role WHERE Role_ID = ?";
+            $stmt = $conn->prepare($role_sql);
+            $stmt->bind_param("i", $user['Role_ID']);
+            $stmt->execute();
+            $role_result = $stmt->get_result();
+            $role_row = $role_result->fetch_assoc();
+            $role_name = $role_row ? $role_row['Role'] : "ไม่ระบุ"; 
             // ดึงข้อมูลจาก tb_login สำหรับชื่อผู้ใช้และรหัสผ่าน
             $login_sql = "SELECT * FROM tb_login WHERE User_ID = ?";
             $login_stmt = $conn->prepare($login_sql);
@@ -147,62 +159,38 @@ if (!isset($_SESSION['user_data'])) {
         echo "ไม่มีข้อมูล User_ID";
     }
     ?>
-<form method="post" action="Ad-editusersucc.php?id=<?= $user['User_ID']; ?>" enctype="multipart/form-data">
     <div class="form-container">
             <div class="form-title">
-                <a onclick="document.location='Ad-user.php'" class="back-link">&lt; </a>
-                <a class="head"> แก้ไขข้อมูลผู้ใช้งาน</a>
-            </div>
+                <a onclick="document.location='Of-user.php'" class="back-link">&lt; </a>
+                <a class="head"> ข้อมูลผู้ใช้งาน</a>
+            </div><br><br>
             <div class="form-group">
                 <label for="photo">รูป:</label>
                 <img src="../uploads/<?= $user['User_Picture']; ?> " alt="User Picture" width="100px">
-                <input type="file" id="photo" name="User_Picture">
-                
-            </div>
-            <div class="form-group">
-                <label for="first_name">ชื่อ:</label>
-                <input type="text" id="first_name" name="User_Firstname" value="<?= $user['User_Firstname']; ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="last_name">นามสกุล:</label>
-                <input type="text" id="last_name" name="User_Lastname" value="<?= $user['User_Lastname']; ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="nickname">ชื่อเล่น:</label>
-                <input type="text" id="nickname" name="User_Nickname" value="<?= $user['User_Nickname']; ?>">
-            </div>
-            <div class="form-group">
-                <label for="phone">เบอร์โทร:</label>
-                <input type="text" id="phone" name="User_Tel" value="<?= $user['User_Tel']; ?>" required pattern="^\d{10}$">
-            </div>
-            <div class="form-group">
-                <label for="department">แผนก:</label>
-                <select id="department" name="Department_ID" required>
-                    <option value="">-- เลือกแผนก --</option>
-                    <?php while ($row = $departments->fetch_assoc()): ?>
-                        <option value="<?= $row['Department_ID'] ?>" <?= $row['Department_ID'] == $user['Department_ID'] ? 'selected' : '' ?>>
-                            <?= $row['Department_Name'] ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
+            </div><br>
             <div class="form-group">
                 <label for="username">ชื่อผู้ใช้:</label>
-                <input type="text" id="username" name="Username" value="<?= $login_data['Username']; ?>" required>
-            </div>
+                <?= $login_data['Username']; ?>
+            </div><br>
             <div class="form-group">
-                <label for="role">สิทธิ์เข้าถึง:</label>
-                <select id="role" name="Role_ID" required>
-                    <option value="">-- เลือกสิทธิ์เข้าถึง --</option>
-                    <?php while ($row = $role->fetch_assoc()): ?>
-                        <option value="<?= $row['Role_ID'] ?>" <?= $row['Role_ID'] == $login_data['Role_ID'] ? 'selected' : '' ?>>
-                            <?= $row['Role'] ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="form-actions"><br>
-                <button type="submit" class="btn-save">บันทึก</button>
+                <label for="first_name">ชื่อ:</label>
+                <?= $user['User_Firstname']; ?>
+            </div><br>
+            <div class="form-group">
+                <label for="last_name">นามสกุล:</label>
+                <?= $user['User_Lastname']; ?>
+            </div><br>
+            <div class="form-group">
+                <label for="nickname">ชื่อเล่น:</label>
+                <?= $user['User_Nickname']; ?>
+            </div><br>
+            <div class="form-group">
+                <label for="phone">เบอร์โทร:</label>
+                <?= $user['User_Tel']; ?>
+            </div><br>
+            <div class="form-group">
+                <label for="department">แผนก:</label>
+                <?= isset($dept_row['Department_Name']) ? $dept_row['Department_Name'] : "ไม่ระบุ"; ?>
             </div>
         </div>
             

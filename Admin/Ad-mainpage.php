@@ -259,8 +259,8 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
                 <img src="../uploads/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
                 <h3><?php echo $fullname; ?></h3>
-            </div><br>
-            <ul><br>
+            </div>
+            <ul>
                 <li onclick="document.location='Ad-user.php'">ข้อมูลผู้ใช้งาน</li>
                 <li onclick="document.location='Ad-status.php'">ติดตามสถานะ</li>
                 <li onclick="document.location='Ad-approve.php'">รายการอนุมัติ</li>
