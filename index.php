@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 include 'conn.php'; // เชื่อมต่อฐานข้อมูล
 
@@ -78,15 +78,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     // Redirect ไปตาม Role
                     if ($_SESSION['user_data']['role'] == 0) {
-                        echo "<script>window.location.href = 'Admin/Ad-mainpage.php';</script>";
+                        echo "<script>
+                                setTimeout(function() {
+                                    window.location.href = 'Admin/Ad-mainpage.php';
+                                }, 2000);
+                              </script>";
                     } elseif ($_SESSION['user_data']['role'] == 1) {
-                        echo "<script>window.location.href = 'Office/Of-mainpage.php';</script>";
+                        echo "<script>
+                                setTimeout(function() {
+                                    window.location.href = 'Office/Of-mainpage.php';
+                                }, 2000);
+                              </script>";
                     } else {
-                        echo "<script>window.location.href = 'Mechanic/Mc-mainpage.php';</script>";
-                    }
+                        echo "<script>
+                                setTimeout(function() {
+                                    window.location.href = 'Mechanic/Mc-mainpage.php';
+                                }, 2000);
+                              </script>";
+                    }                    
                     exit();
                  }
                }
+            }else {
+                $error = "❌ Username หรือ Password ไม่ถูกต้อง";
             }
         } else {
             $error = "❌ Username หรือ Password ไม่ถูกต้อง";
