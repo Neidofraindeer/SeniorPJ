@@ -14,25 +14,20 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         $stmt->bind_param("i", $user_id);
 
         if ($stmt->execute()) {
-            // ลบข้อมูลใน tb_login (ถ้ามี)
             $login_sql = "DELETE FROM tb_login WHERE User_ID = ?";
             $login_stmt = $conn->prepare($login_sql);
             $login_stmt->bind_param("i", $user_id);
-
+        
             if ($login_stmt->execute()) {
-                // ถ้าลบสำเร็จให้กลับไปที่หน้าข้อมูลผู้ใช้
-                header("refresh: 1; url= Ad-user.php");
+                // ลบสำเร็จ ให้เปลี่ยนเส้นทางไปยัง Ad-user.php
+                header("Location: Ad-user.php");
                 exit();
             } else {
-                echo "เกิดข้อผิดพลาดในการลบข้อมูลจาก tb_login";
+                die("เกิดข้อผิดพลาดในการลบข้อมูลจาก tb_login");
             }
         } else {
-            echo "เกิดข้อผิดพลาดในการลบข้อมูลจาก tb_user";
+            die("เกิดข้อผิดพลาดในการลบข้อมูลจาก tb_user");
         }
-    } else {
-        echo "ไม่สามารถเชื่อมต่อฐานข้อมูล";
     }
-} else {
-    echo "ไม่พบ User_ID ใน URL";
-}
+} 
 ?>

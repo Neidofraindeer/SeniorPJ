@@ -234,12 +234,12 @@ $total_pages = ceil($total_records / $limit);
             if ($result->num_rows > 0) {
                 // แสดงข้อมูลในตาราง
                 while ($row = $result->fetch_assoc()) {
-                    echo "<tr onclick=\"window.location='Of-user-detail.php?id=" . $row['User_ID'] . "'\" style='cursor: pointer;'>
+                    echo "<tr style='cursor: pointer;'>
                             <td style='text-align: center;'>" . $row['User_ID'] . "</td>
-                            <td>" . $row['Username'] . "</td>
-                            <td>" . $row['User_Firstname'] . "</td>
-                            <td>" . $row['User_Lastname'] . "</td>
-                            <td>" . $row['Department_Name'] . "</td>
+                            <td onclick=\"window.location='Of-user-detail.php?id=" . $row['User_ID'] . "'\" >" . $row['Username'] . "</td>
+                            <td onclick=\"window.location='Of-user-detail.php?id=" . $row['User_ID'] . "'\" >" . $row['User_Firstname'] . "</td>
+                            <td onclick=\"window.location='Of-user-detail.php?id=" . $row['User_ID'] . "'\" >" . $row['User_Lastname'] . "</td>
+                            <td onclick=\"window.location='Of-user-detail.php?id=" . $row['User_ID'] . "'\" >" . $row['Department_Name'] . "</td>
                             <td class='actions'>
                                 <a href='Of-edituser.php?id=" . $row['User_ID'] . "'><i class='fas fa-pencil-alt'></i></a>
                                 <a href='javascript:void(0)' onclick='deleteUser(" . $row['User_ID'] . ")'><i class='fas fa-trash-alt'></i></a>

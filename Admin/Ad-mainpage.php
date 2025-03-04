@@ -329,7 +329,7 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
                 // แสดงข้อมูลในตาราง
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr onclick=\"window.location='Ad-editcar.php?id=" . $row['Work_ID'] . "'\" style='cursor: pointer;'>";
+                        echo "<tr onclick=\"window.location='Ad-car-detail.php?id=" . $row['Work_ID'] . "'\" style='cursor: pointer;'>";
                         echo "<td>" . $row['Work_Date'] . "</td>";
                         echo "<td>" . $row['Work_Time'] . "</td>";
                         echo "<td>" . $row['Car_ID'] . "</td>";
