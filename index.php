@@ -51,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['user_data'] = [
                         'user_id' => $row['User_ID'],
                         'role' => $row['Role_ID'],
-                        'fullname' => $row['fullname']
                     ];
 
                     // ดึงข้อมูลเพิ่มเติมจาก tb_user
