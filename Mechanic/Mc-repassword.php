@@ -14,19 +14,6 @@ $user_id = $_SESSION['user_data']['user_id']; // ดึง User_ID จาก ses
 require '../conn.php';
 
 if ($conn) {
-    // ดึงข้อมูลผู้ใช้จากตาราง tb_user โดยใช้ User_ID ที่มาจาก session
-    $sql = "SELECT * FROM tb_user WHERE User_ID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id); // กำหนดประเภทของตัวแปรเป็น integer
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-    } else {
-        echo "ไม่พบข้อมูลผู้ใช้";
-    }
-
     // ดึงข้อมูลจาก tb_login สำหรับชื่อผู้ใช้และรหัสผ่าน
     $login_sql = "SELECT * FROM tb_login WHERE User_ID = ?";
     $login_stmt = $conn->prepare($login_sql);
@@ -50,7 +37,7 @@ if ($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แก้ไขข้อมูลผู้ใช้งาน</title>
+    <title>เปลี่ยนรหัสผ่าน</title>
 </head>
 <style>
     /* กำหนดรูปแบบพื้นฐาน */
@@ -145,32 +132,38 @@ if ($conn) {
     }
 </style>
 <body>
-    <form method="post" action="Ad-settingsucc.php" enctype="multipart/form-data">
+    <form method="post" action="Mc-repasswordsucc.php" enctype="multipart/form-data">
         <div class="form-title">
-            <a onclick="document.location='Ad-mainpage.php'" class="back-link">&lt; </a>
-            <a class="head"> แก้ไขข้อมูลส่วนตัว</a>
+            <a onclick="document.location='Mc-mainpage.php'" class="back-link">&lt; </a>
+            <a class="head"> เปลี่ยนรหัสผ่าน</a>
         </div>
         <div class="form-container">
-            <div class="form-group">
-                <label for="photo">รูป:</label>
-                <img src="../uploads/<?= $user['User_Picture']; ?> " alt="User Picture" width="100px">
-                <input type="file" id="photo" name="User_Picture">
+        <div class="form-group">
+                <label for="username">ชื่อผู้ใช้:</label>
+                <input type="text" id="username" name="Username" value="<?= $login_data['Username']; ?>" required readonly style="background-color: #f0f0f0;">
             </div>
             <div class="form-group">
-                <label for="first_name">ชื่อ:</label>
-                <input type="text" id="first_name" name="User_Firstname" value="<?= $user['User_Firstname']; ?>" required>
+                <label for="old_password">รหัสผ่านเดิม:</label>
+                <input type="password" id="old_password" name="old_password" minlength="8" required>
             </div>
             <div class="form-group">
-                <label for="last_name">นามสกุล:</label>
-                <input type="text" id="last_name" name="User_Lastname" value="<?= $user['User_Lastname']; ?>" required>
+                <label for="new_password">รหัสผ่านใหม่:</label>
+                <input type="password" id="new_password" name="new_password" minlength="8" required >
             </div>
             <div class="form-group">
-                <label for="nickname">ชื่อเล่น:</label>
-                <input type="text" id="nickname" name="User_Nickname" value="<?= $user['User_Nickname']; ?>">
+                <label for="confirm_password">ยืนยันรหัสผ่านใหม่:</label>
+                <input type="password" id="confirm_password" name="confirm_password" minlength="8" required >
             </div>
-            <div class="form-group">
-                <label for="phone">เบอร์โทร:</label>
-                <input type="text" id="phone" name="User_Tel" value="<?= $user['User_Tel']; ?>" required pattern="^\d{10}$">
+            <div id="message" style="margin-top: 10px;">
+                <?php 
+                    if (isset($_SESSION['error_message'])) {
+                        echo '<span style="color: red;">' . $_SESSION['error_message'] . '</span>';
+                        unset($_SESSION['error_message']); // เคลียร์ข้อความหลังแสดงผล
+                    } elseif (isset($_SESSION['success_message'])) {
+                        echo '<span style="color: green;">' . $_SESSION['success_message'] . '</span>';
+                        unset($_SESSION['success_message']); // เคลียร์ข้อความหลังแสดงผล
+                    }
+                ?>
             </div>
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>

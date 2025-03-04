@@ -268,7 +268,8 @@ $fullname = isset($_SESSION['user_data']['fullname']) ? $_SESSION['user_data']['
             </ul>
         </div>
         <ul><br>
-            <li onclick="document.location='Of-setting.php'">การตั้งค่าข้อมูลส่วนตัว</li>
+        <li onclick="document.location='Of-setting.php'">แก้ไขข้อมูลส่วนตัว</li>
+        <li onclick="document.location='Of-repassword.php'">เปลี่ยนรหัสผ่าน</li>
             <li onclick="confirmLogout()">ออกจากระบบ</li>
         </ul>
     </div>

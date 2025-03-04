@@ -131,8 +131,7 @@ $conn->close();
                     <input type="password" id="password" name="password" minlength="8" required>
                 </div>
                 <button type="submit">เข้าสู่ระบบ</button>
-            </form>
-            <p><a href="#">ลืมรหัสผ่าน?</a></p>
+            </form><br>
         </div>
     </div>
     <script src="script.js"></script> 

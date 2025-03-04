@@ -177,7 +177,8 @@ $fullname = $_SESSION['user_data']['fullname'] ?? 'ผู้ใช้ไม่�
             </div>
             <ul><br>
                 <li onclick="document.location='Mc-history.php'">ประวัติการซ่อมแซม</li>
-                <li onclick="document.location='Mc-setting.php'">การตั้งค่าข้อมูลส่วนตัว</li>
+                <li onclick="document.location='Mc-setting.php'">แก้ไขข้อมูลส่วนตัว</li>
+                <li onclick="document.location='Mc-repassword.php'">เปลี่ยนรหัสผ่าน</li>
                 <li onclick="confirmLogout()">ออกจากระบบ</li>
             </ul>
     </div>
