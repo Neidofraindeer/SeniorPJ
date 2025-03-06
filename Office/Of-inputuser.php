@@ -136,7 +136,7 @@ if (!isset($_SESSION['user_data'])) {
             </div>
             <div class="form-group">
                 <label for="nickname">ชื่อเล่น:</label>
-                <input type="text" id="nickname" name="User_Nickname">
+                <input type="text" id="nickname" name="User_Nickname" required>
             </div>
             <div class="form-group">
                 <label for="phone">เบอร์โทร:</label>

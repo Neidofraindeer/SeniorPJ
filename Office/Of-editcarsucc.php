@@ -73,15 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("ssssssssi", $CarNumber, $CarBrand, $CarModel, $CarColor, $CarInsurance, $CarDetail, $car_picture_path, $repair_picture_paths_json, $Car_ID);
 
     if ($stmt->execute()) {
-        echo "อัปเดตข้อมูลสำเร็จ";
-        
         // อัปเดตข้อมูล User_ID ใน tb_work หากมีการเปลี่ยนแปลง
         if ($User_ID !== null) {
             $sqlUpdateWork = "UPDATE tb_work SET User_ID = ? WHERE Work_ID = ?";
             $stmtUpdateWork = $conn->prepare($sqlUpdateWork);
             $stmtUpdateWork->bind_param("ii", $User_ID, $Work_ID);
             if ($stmtUpdateWork->execute()) {
-                echo "อัปเดตข้อมูลพนักงานช่างสำเร็จ";
+                echo "ข้อมูลมอบหมายงานได้ถูกอัปเดตเรียนร้อยแล้ว";
             } else {
                 echo "เกิดข้อผิดพลาดในการอัปเดตข้อมูลพนักงานช่าง: " . $stmtUpdateWork->error;
             }

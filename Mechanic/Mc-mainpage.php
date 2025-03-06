@@ -1,11 +1,9 @@
 <?php
 session_start();
 
+// เช็คว่าผู้ใช้ล็อกอินหรือไม่
 if (!isset($_SESSION['user_data'])) {
-    // Debug (ให้ดูว่ามี session หรือไม่)
-    echo "Session lost or not set. Redirecting...";
-    exit();
-    header("Location: /SeniorPJ/index.php");
+    header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
     exit();
 }
 
