@@ -1,12 +1,24 @@
 <?php
 session_start();
-
+include '../conn.php';
 // เช็คว่าผู้ใช้ล็อกอินหรือไม่
 if (!isset($_SESSION['user_data'])) {
     header("Location: /SeniorPJ/index.php"); // กลับไปหน้าเข้าสู่ระบบ
     exit();
 }
 
+$user_id = $_SESSION['user_data']['user_id']; // ดึง user_id จาก session
+$sql = "SELECT d.Department_Name 
+        FROM tb_user u
+        LEFT JOIN tb_department d ON u.Department_ID = d.Department_ID
+        WHERE u.User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$department = $result->fetch_assoc();
+
+$department_name = isset($department['Department_Name']) ? $department['Department_Name'] : 'ไม่ระบุแผนก';
 $user_id = $_SESSION['user_data']['user_id']; // กำหนดค่า user_id
 $profile_picture = $_SESSION['user_data']['profile_picture'] ?? 'default-profile.png';
 $fullname = $_SESSION['user_data']['fullname'] ?? 'ผู้ใช้ไม่ระบุชื่อ';
@@ -162,6 +174,14 @@ $fullname = $_SESSION['user_data']['fullname'] ?? 'ผู้ใช้ไม่�
             background-color: #ccc;
             cursor: not-allowed;
         }
+        .online-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color:rgb(20, 208, 64); /* สีเขียว */
+            border-radius: 50%;
+            margin-right: 8px; /* ระยะห่างจากข้อความ */
+        }
 
 </style>
 <body>
@@ -172,6 +192,7 @@ $fullname = $_SESSION['user_data']['fullname'] ?? 'ผู้ใช้ไม่�
                 <img src="../uploads/<?php echo $profile_picture; ?>" alt="User Profile">
                 <!-- แสดงคำทักทายพร้อมชื่อเต็ม -->
                 <h3><?php echo $fullname; ?></h3>
+                <h5><span class="online-indicator"></span> <?php echo $department_name; ?></h5>
             </div>
             <ul><br>
                 <li onclick="document.location='Mc-history.php'">ประวัติการซ่อมแซม</li>
@@ -197,10 +218,6 @@ $fullname = $_SESSION['user_data']['fullname'] ?? 'ผู้ใช้ไม่�
                 </tr>
             </thead>
             <?php
-                // เชื่อมต่อกับฐานข้อมูล
-                include '../conn.php';
-
-
                 // กำหนดจำนวนแถวที่ต้องการแสดง
                 $limit = 11;
                 // รับค่าหน้า (page) จาก URL ถ้าไม่มีค่าหน้า ให้ตั้งค่าเริ่มต้นเป็น 1

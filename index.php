@@ -64,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $userDetails = $userResult->fetch_assoc();
                         $_SESSION['user_data']['fullname'] = $userDetails['User_Firstname'] . ' ' . $userDetails['User_Lastname'];
                         $_SESSION['user_data']['profile_picture'] = $userDetails['User_Picture'];
+                        
                     } else {
                         $_SESSION['user_data']['fullname'] = "ไม่พบข้อมูลผู้ใช้";
                         $_SESSION['user_data']['profile_picture'] = "default.jpg";
