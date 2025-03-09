@@ -77,6 +77,7 @@ if ($conn) {
         exit();
     } else {
         echo "ไม่มีการเปลี่ยนแปลงข้อมูล";
+        header("Location: Of-mainpage.php");
     }
 } else {
     echo "ไม่สามารถเชื่อมต่อฐานข้อมูล";

@@ -172,14 +172,6 @@ if ($conn) {
                 <label for="phone">เบอร์โทร:</label>
                 <input type="text" id="phone" name="User_Tel" value="<?= $user['User_Tel']; ?>" required pattern="^\d{10}$">
             </div>
-            <div class="form-group">
-                <label for="username">ชื่อผู้ใช้:</label>
-                <input type="text" id="username" name="Username" value="<?= $login_data['Username']; ?>" required readonly style="background-color: #f0f0f0;">
-            </div>
-            <div class="form-group">
-                <label for="password">รหัสผ่าน:</label>
-                <input type="password" id="password" name="Password" value="<?= $login_data['Password']; ?>" minlength="8" required readonly style="background-color: #f0f0f0;">
-            </div>
             <div class="form-actions"><br>
                 <button type="submit" class="btn-save">บันทึก</button>
             </div>
