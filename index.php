@@ -125,36 +125,13 @@
         font-weight: 100;
         font-style: normal;
         }
-
+        
         .container {
-            display: flex;
-            justify-content: space-between; /* จัดรูปภาพทางซ้ายและฟอร์มทางขวา */
-            align-items: center; /* จัดแนวตั้งให้ตรงกลาง */
-            width: 55%; /* ปรับความกว้างของคอนเทนเนอร์หลัก */
-            max-width: 1000px; /* ขีดจำกัดความกว้าง */
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 40px;
-        }
-
-        .form-head {
-            font-family: Prompt;
-            width: 50%;
-            text-align: center;
-            color: #835EB7;
-            border-right: 2px solid #ccc;
-            padding-right: 20px;
-            margin: 0; /* ลบ margin เพื่อให้ไม่มีช่องว่าง */
-        }
-
-        .form-head img {
-           
-            margin-bottom: -10px; /* เพิ่มระยะห่างเล็กน้อยใต้ภาพ */
-        }
-
-        .login-form {
-            width: 40%; /* กำหนดความกว้างของฟอร์ม */
+            width: 350px;
         }
 
         .login-form h1 {
@@ -209,10 +186,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="form-head">
-            <img src="111.jpg" alt="">
-            <h2>การพัฒนาระบบการมอบหมายงานรถยนต์ให้กับพนักงานช่าง <br>กรณีศึกษา <br>ห้างหุ้นส่วนจำกัด อู่ดำรงค์การช่าง</h2>
-        </div>
         <div class="login-form">
             <h1>ล็อกอินเข้าสู่ระบบ</h1>
             <form action="index.php" method="POST">
